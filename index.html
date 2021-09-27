@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>enaio® webclient demo dashlet</title>
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <main class="main-container">
+      <div class="header-container">
+        <div class="header-banner">
+          <div class="header-banner-logo">
+            <img
+              alt="enaio®"
+              title="enaio®"
+              src="assets/enaio_blueline_white.png"
+            />
+          </div>
+          <div class="header-banner-text">
+            <span>Enterprise Content Management</span>
+            <span>© OPTIMAL SYSTEMS - all rights reserved</span>
+          </div>
+        </div>
+      </div>
+      <div class="section-container">
+        <div class="introduction">
+          <div>
+            <p class="section-heading">Demo Dashlet</p>
+            <p class="section-text">
+              Im enaio® webclient stellen wir Ihnen ab der Version 10.0 Service
+              Release 2 eine Möglichkeit zur Verfügung, kundenindividuelle und
+              frei gestaltbare Bereiche – sogenannte Dashlets - zu integrieren.
+              Dashlets unterstützen Sie bei der Umsetzung der
+              unterschiedlichsten Geschäftsprozesse und -szenarien, in dem sie
+              flexibel als weitere Informations- und Interaktionsmöglichkeit für
+              Benutzer kontextabhängig verfügbar gemacht werden können.
+              <br />
+              <br />
+              Für den Vorschaubereich, in dem aktuell bereits die Inhalts- und
+              Detailvorschau angezeigt werden, konfigurieren Sie individuelle
+              Dashlets, die zum Beispiel mithilfe sogenannter Dashlet-Services
+              weitere Informationsquellen einbinden (z. B. Internetseiten wie
+              Wikipedia oder Google Maps). Alternativ integrieren Sie komplette
+              Webanwendungen wie zum Beispiel den enaio® documentviewer.
+            </p>
+          </div>
+        </div>
+        <div class="events">
+          <div>
+            <p class="section-heading">Events</p>
+            <p class="section-text">
+              Arbeitet der enaio® webclient auf Event-Basis. Im Nachfolgenden
+              werden die einzelnen Events in einer Übersicht dargestellt.
+              Details zu jedem Event findet sich dann auf der jeweiligen
+              Event-Unterseite. Unten sind die aktuell verfügbaren Events:
+            </p>
+            <p>
+              <b class="notice">Hinweis:</b><br />
+              Öffnen Sie das Browser-Devtool, um ein Protokoll des Ereignisses
+              anzuzeigen.
+            </p>
+            <p class="subheading">onInit</p>
+            <p>
+              Das onInit-Event wird jedes Mal ausgelöst, sobald das Dashlet
+              aktiviert und damit sichtbar geschaltet wird. Der Payload des
+              Events enthält Informationen über den aktuellen Zustand, die es
+              dem Dashlet direkt ermöglichen, sich zu Initialisieren ohne viele
+              Methoden im Nachgang aufzurufen.
+            </p>
+            <p>
+              Weitere Informationen zu diesem Event finden Sie auf unserer
+              <a
+                target="_blank"
+                href="https://help.optimal-systems.com/enaio_develop/display/WEB/onInit"
+                >Dokumentationsseite.</a
+              >
+            </p>
+            <p class="subheading">onUpdate</p>
+            <p>
+              Das onUpdate-Event wird jedes Mal ausgelöst, sobald sich die
+              Objekt-Auswahl im enaio® webclient geändert hat. Es beinhaltet
+              dieselben Properties wie das onInit-Event.
+            </p>
+            <p>
+              Weitere Informationen zu diesem Event finden Sie auf unserer
+              <a
+                target="_blank"
+                href="https://help.optimal-systems.com/enaio_develop/display/WEB/onUpdate"
+                >Dokumentationsseite.</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="methods">
+          <div>
+            <p class="section-heading">Methoden</p>
+            <p class="section-text">
+              Dashlets können den enaio® webclient steuern und Aktionen
+              auslösen. Dies geschieht ebenfalls über die Browser-API
+              postMessage. Die Methode
+              <a
+                target="_blank"
+                href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage"
+                >window.postMessage()</a
+              >
+              ermöglicht die sichere ursprungsübergreifende Kommunikation
+              zwischen Window-Objekten; B. zwischen einer Seite und einem von
+              ihr erzeugten Pop-up oder zwischen einer Seite und einem darin
+              eingebetteten iframe. Unten sind die aktuell verfügbaren Methoden:
+            </p>
+            <p>
+              Weitere Informationen zu Methoden finden Sie auf unserer
+              <a
+                target="_blank"
+                href="https://help.optimal-systems.com/enaio_develop/display/WEB/5.4+Dashlet-Methoden"
+                >Dokumentationsseite.</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="collapsible-container">
+          <legend onclick="collapse(event)">
+            <button class="collapsible"></button>
+            <span class="content-heading">Open location</span>
+          </legend>
+          <div class="content">
+            <p>
+              Mittels der Methode openLocation wird die Skripting-Methode Open
+              Location des enaio® webclient aufgerufen, die den Standort (oder
+              eine Standortauswahl bei mehreren möglichen Standorten) für das
+              als Parameter übergebene DMS Objekt öffnet.
+            </p>
+            <p>
+              Klicken Sie auf "Beispiel 1", um den Standort im selben
+              Browserfenster zu öffnen.
+            </p>
+            <div class="content-button-container">
+              <button id="openLocation" class="inner-button">Beispiel 1</button>
+            </div>
+            <p>
+              Klicken Sie auf "Beispiel 2", um Location in einem anderen
+              Browserfenster zu öffnen.
+            </p>
+            <div class="content-button-container">
+              <button id="openLocationNewTab" class="inner-button">
+                Beispiel 2
+              </button>
+            </div>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/display/WEB/openLocation"
+                >Open location - Dokumentationsseite
+              </a>
+            </p>
+          </div>
+
+          <legend onclick="collapse(event)">
+            <button class="collapsible"></button>
+            <span class="content-heading">Open index data</span>
+          </legend>
+          <div class="content">
+            <p>
+              Mittels der Methode openIndexData wird die Skripting-Methode Show
+              Indexdata oder Edit Indexdata des enaio® webclient aufgerufen, die
+              die Indexdatenmaske für das als Parameter übergebene DMS Objekt
+              öffnet.
+            </p>
+
+            <div class="content-button-container">
+              <button id="openIndexData" class="inner-button">
+                Indexdaten öffnen
+              </button>
+            </div>
+
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/display/WEB/openIndexData"
+                >Indexdaten anzeigen - Dokumentationsseite</a
+              >
+            </p>
+          </div>
+          <legend onclick="collapse(event)">
+            <button class="collapsible"></button>
+            <span class="content-heading">Get selected objects</span>
+          </legend>
+          <div class="content">
+            <p>
+              Die Methode getSelectedObjects wird verwendet, um die aktuell
+              ausgewählten Objekte abzufragen. Sollten keine Objekte ausgewählt,
+              oder keine Trefferliste aktuell angezeigt sein, wird eine leere
+              Liste zurückgegeben.
+            </p>
+            <div class="content-button-container">
+              <button id="getSelectedObjects" class="inner-button">
+                ObjektenIds anzeigen
+              </button>
+            </div>
+            <p class="selected-objects" id="selectedObjectsContainer"></p>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/display/WEB/getSelectedObjects"
+                >Get selected objects - Dokumentationsseite</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="js/style.js"></script>
+    <script type="module" src="js/library.js"></script>
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/action.js"></script>
+  </body>
+</html>
