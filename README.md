@@ -55,5 +55,3 @@ Using the method openIndexData, the scripting method Show Indexdata or Edit Inde
 ### Get selected objects
 
 The getSelectedObjects method is used to query the currently selected objects. If no objects are selected or no hit list is currently displayed, an empty list is returned.
-
-Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/5.+Dashlet+API) documentation for more information about developing and integrating dashlets into enaio® webclient.
