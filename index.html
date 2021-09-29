@@ -51,15 +51,12 @@
           <div>
             <p class="section-heading">Events</p>
             <p class="section-text">
-              Arbeitet der enaio® webclient auf Event-Basis. Im Nachfolgenden
-              werden die einzelnen Events in einer Übersicht dargestellt.
-              Details zu jedem Event findet sich dann auf der jeweiligen
-              Event-Unterseite. Unten sind die aktuell verfügbaren Events:
+              Der enaio® webclient arbeitet auf Event-Basis.
             </p>
             <p>
-              <b class="notice">Hinweis:</b><br />
-              Öffnen Sie das Browser-Devtool, um ein Protokoll des Ereignisses
-              anzuzeigen.
+              <b class="bolder">Hinweis:</b>
+              Öffnen Sie in Ihrem Browser die Entwicklertools (Dev-Tools), um
+              ein Protokoll des Ereignisses anzuzeigen.
             </p>
             <p class="subheading">onInit</p>
             <p>
@@ -106,12 +103,14 @@
                 >window.postMessage()</a
               >
               ermöglicht die sichere ursprungsübergreifende Kommunikation
-              zwischen Window-Objekten; B. zwischen einer Seite und einem von
+              zwischen Window-Objekten; z.B. zwischen einer Seite und einem von
               ihr erzeugten Pop-up oder zwischen einer Seite und einem darin
-              eingebetteten iframe. Unten sind die aktuell verfügbaren Methoden:
+              eingebetteten iframe. Aktuell stehen Ihnen folgenden Methoden zur
+              Verfügung:
             </p>
             <p>
-              Weitere Informationen zu Methoden finden Sie auf unserer
+              Weitere Informationen zu den jeweiligen Methoden finden Sie auf
+              unserer
               <a
                 target="_blank"
                 href="https://help.optimal-systems.com/enaio_develop/display/WEB/5.4+Dashlet-Methoden"
@@ -123,51 +122,53 @@
         <div class="collapsible-container">
           <legend onclick="collapse(event)">
             <button class="collapsible"></button>
-            <span class="content-heading">Open location</span>
+            <span class="content-heading">Standort öffnen</span>
           </legend>
           <div class="content">
             <p>
-              Mittels der Methode openLocation wird die Skripting-Methode Open
-              Location des enaio® webclient aufgerufen, die den Standort (oder
-              eine Standortauswahl bei mehreren möglichen Standorten) für das
-              als Parameter übergebene DMS Objekt öffnet.
+              Mittels der Methode <b class="bolder">openLocation</b> wird die
+              Skripting-Methode Open Location des enaio® webclient aufgerufen,
+              die den Standort (oder eine Standortauswahl bei mehreren möglichen
+              Standorten) für das als Parameter übergebene DMS Objekt öffnet.
             </p>
-            <p>
-              Klicken Sie auf "Beispiel 1", um den Standort im selben
-              Browserfenster zu öffnen.
-            </p>
+
             <div class="content-button-container">
               <button id="openLocation" class="inner-button">Beispiel 1</button>
+              <p>
+                Klicken Sie auf &lt;Beispiel 1&gt;, um den Standort im selben
+                Browserfenster zu öffnen.
+              </p>
             </div>
-            <p>
-              Klicken Sie auf "Beispiel 2", um Location in einem anderen
-              Browserfenster zu öffnen.
-            </p>
+
             <div class="content-button-container">
               <button id="openLocationNewTab" class="inner-button">
                 Beispiel 2
               </button>
+              <p>
+                Klicken Sie auf &lt;Beispiel 2&gt;, um den Standort in einem
+                neuen Browserfenster zu öffnen.
+              </p>
             </div>
             <p>
               <a
                 target="_blank"
                 class="content-link"
                 href="https://help.optimal-systems.com/enaio_develop/display/WEB/openLocation"
-                >Open location - Dokumentationsseite
+                >openLocation - Dokumentationsseite
               </a>
             </p>
           </div>
 
           <legend onclick="collapse(event)">
             <button class="collapsible"></button>
-            <span class="content-heading">Open index data</span>
+            <span class="content-heading">Indexdaten öffnen</span>
           </legend>
           <div class="content">
             <p>
-              Mittels der Methode openIndexData wird die Skripting-Methode Show
-              Indexdata oder Edit Indexdata des enaio® webclient aufgerufen, die
-              die Indexdatenmaske für das als Parameter übergebene DMS Objekt
-              öffnet.
+              Mittels der Methode <b class="bolder">openIndexData</b> wird die
+              Skripting-Methode Show Indexdata oder Edit Indexdata des enaio®
+              webclient aufgerufen, die die Indexdatenmaske für das als
+              Parameter übergebene DMS Objekt öffnet.
             </p>
 
             <div class="content-button-container">
@@ -181,20 +182,20 @@
                 target="_blank"
                 class="content-link"
                 href="https://help.optimal-systems.com/enaio_develop/display/WEB/openIndexData"
-                >Indexdaten anzeigen - Dokumentationsseite</a
+                >openIndexData - Dokumentationsseite</a
               >
             </p>
           </div>
           <legend onclick="collapse(event)">
             <button class="collapsible"></button>
-            <span class="content-heading">Get selected objects</span>
+            <span class="content-heading">Ausgewählte Objekte abfragen</span>
           </legend>
           <div class="content">
             <p>
-              Die Methode getSelectedObjects wird verwendet, um die aktuell
-              ausgewählten Objekte abzufragen. Sollten keine Objekte ausgewählt,
-              oder keine Trefferliste aktuell angezeigt sein, wird eine leere
-              Liste zurückgegeben.
+              Die Methode <b class="bolder">getSelectedObjects</b> wird
+              verwendet, um die aktuell ausgewählten Objekte abzufragen. Sollten
+              keine Objekte ausgewählt, oder keine Trefferliste aktuell
+              angezeigt sein, wird eine leere Liste zurückgegeben.
             </p>
             <div class="content-button-container">
               <button id="getSelectedObjects" class="inner-button">
@@ -207,7 +208,7 @@
                 target="_blank"
                 class="content-link"
                 href="https://help.optimal-systems.com/enaio_develop/display/WEB/getSelectedObjects"
-                >Get selected objects - Dokumentationsseite</a
+                >getSelectedObjects - Dokumentationsseite</a
               >
             </p>
           </div>
