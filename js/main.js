@@ -5,7 +5,8 @@ window.addEventListener("message", handlePostMessage, false);
 
 let webclientOrigin;
 let lastSelectedEntryOsid;
-let currentSelectedOSIDs = [];
+let currentSelectedOsids = [];
+let currentSelectedObjects = [];
 let dashletName = "Dashlet";
 
 /**
@@ -59,18 +60,26 @@ function initDashlet(data) {
       "title_" + data.sessionInfo.language.toUpperCase()
     ] || "Dashlet";
   lastSelectedEntryOsid = data.lastSelectedEntry.osid;
-  currentSelectedOSIDs = data.selectedEntries.map((dmsInfo) => dmsInfo.osid);
+  currentSelectedOsids = data.selectedEntries.map((dmsInfo) => dmsInfo.osid);
+  currentSelectedObjects = data.selectedEntries.map((dmsInfo) => ({
+    objectId: dmsInfo.osid,
+    objectTypeId: dmsInfo.objectTypeId,
+  }));
   // Uncomment the below code to see an array of the hitlist's currently selected osid(s).
   // console.log(`Currently selected osids`, currentSelectedOSIDs);
 }
 
 /**
  * Opens the location in the current browser tab (or a location selection in the case of several possible locations) for the DMS object transferred as a parameter.
- * The method has no return value.
+ * @param inNewTab boolean - indicates whether or not the hit list should be opened in a new tab.
+ * @param objectId string - the osId of the DMS object.
+ * @return The method has no return value. In the event of an error, an error is triggered. This can be caught with a try-catch-block or error handler for the method.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/openLocation
  */
-async function openLocation() {
-  const payload = ["openLocation", ["false", lastSelectedEntryOsid]];
+async function openLocation(inNewTab) {
+  const objectId = lastSelectedEntryOsid;
+
+  const payload = ["openLocation", [inNewTab, objectId]];
 
   try {
     // "sendWebclientMessage" is a handler function which is responsible for posting "messages" to the enaio® webclient (see implimentation details in the library.js file).
@@ -81,28 +90,19 @@ async function openLocation() {
 }
 
 /**
- * Opens the location in a new browser tab (or a location selection in the case of several possible locations) for the DMS object transferred as a parameter.
- * The method has no return value.
- * @link https://help.optimal-systems.com/enaio_develop/display/WEB/openLocation
- */
-async function openLocationNewTab() {
-  const payload = ["openLocation", ["true", lastSelectedEntryOsid]];
-
-  try {
-    // "sendWebclientMessage" is a handler function which is responsible for posting "messages" to the enaio® webclient (see implimentation details in the library.js file).
-    await lib.sendWebclientMessage(payload, webclientOrigin);
-  } catch (error) {
-    console.log(`dashlet says: error caught in openLocation in new tab`, error);
-  }
-}
-
-/**
  * Opens the indexdata mask for the currently selected osid.
+ * @param inNewTab boolean - indicates whether or not the indexdata mask should be opened in a new tab. Default is (false).
+ * @param mode string - should the index data view be opened in read-only mode (view) or in edit mode (edit). Default is (edit) mode.
+ * @param objectId string - the osId of the DMS object.
+ * @param objectTypeId string (optional) - the objectTypeId of the DMS object. This increases the performance when opening the index data view.
  * @returns Boolean true if the objectId and objectTypeId are valid and the opening was successful. Otherwise false.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/openIndexData
  */
-async function openIndexData() {
-  const payload = ["openIndexData", ["false", "view", lastSelectedEntryOsid]];
+async function openIndexData(formData) {
+  const objectId = lastSelectedEntryOsid;
+  const params = formatFormData(formData);
+
+  const payload = ["openIndexData", [params.inNewTab, params.mode, objectId]];
 
   try {
     // "sendWebclientMessage" is a handler function which is responsible for posting "messages" to the enaio® webclient (see implimentation details in the library.js file).
@@ -131,6 +131,64 @@ async function getSelectedObjects() {
   }
 }
 
+/**
+ * Update/refresh one or more objects in an open hit list.
+ * @param string[] osIds of the DMS objects.
+ * @return The method has no return value. In the event of an error, an error is triggered. This can be caught with a try-catch-block or error handler for the method.
+ * @link https://help.optimal-systems.com/enaio_develop/display/WEB/refreshHitListObjects
+ */
+async function refreshHitListObjects() {
+  const ids = currentSelectedOsids;
+
+  const payload = ["refreshHitListObjects", [ids]];
+
+  try {
+    // "sendWebclientMessage" is a handler function which is responsible for posting "messages" to the enaio® webclient (see implimentation details in the library.js file).
+    await lib.sendWebclientMessage(payload, webclientOrigin);
+  } catch (error) {
+    console.log(`dashlet says: error caught in refreshHitListObjects`, error);
+  }
+}
+
+/**
+ * Display a mixed hit list with freely selected objects.
+ * @param inNewTab boolean (optional) - indicates whether or not the hit list should be opened in a new tab
+ * @param title string (optional) - title of the hit list
+ * @param description string (optional) - additional description (subtitle) of the hit list
+ * @param executeSingleHitAction boolean (optional) - specifies whether to execute the default action when there is a single hit
+ * @param  objects Array<{objectId: string, objectTypeId: string} - selected objects
+ * @return The method has no return value. In the event of an error, an error is triggered. This can be caught with a try-catch-block or error handler for the method.
+ * @link https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds
+ */
+async function openHitListByIds(formData) {
+  const formattedFormData = formatFormData(formData);
+  const objects = currentSelectedObjects;
+
+  const params = {
+    ...formattedFormData,
+    objects,
+  };
+
+  const payload = ["openHitListByIds", params];
+
+  try {
+    // "sendWebclientMessage" is a handler function which is responsible for posting "messages" to the enaio® webclient (see implimentation details in the library.js file).
+    await lib.sendWebclientMessage(payload, webclientOrigin);
+  } catch (error) {
+    console.log(`dashlet says: error caught in openHitListByIds`, error);
+  }
+}
+
+function formatFormData(formData) {
+  return Object.assign({}, ...formData);
+}
+
 // Export functions to be used in other JavaScript files.
 // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
-export { openLocation, openLocationNewTab, openIndexData, getSelectedObjects };
+export {
+  openLocation,
+  openIndexData,
+  getSelectedObjects,
+  refreshHitListObjects,
+  openHitListByIds,
+};
