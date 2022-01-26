@@ -122,23 +122,22 @@
               die den Standort (oder eine Standortauswahl bei mehreren möglichen
               Standorten) für das als Parameter übergebene DMS Objekt öffnet.
             </p>
-
             <div class="content-button-container">
-              <button id="openLocation" class="inner-button">Beispiel 1</button>
-              <p>
-                Klicken Sie auf &lt;Beispiel 1&gt;, um den Standort im selben
-                Browserfenster zu öffnen.
-              </p>
-            </div>
-
-            <div class="content-button-container">
-              <button id="openLocationNewTab" class="inner-button">
-                Beispiel 2
-              </button>
-              <p>
-                Klicken Sie auf &lt;Beispiel 2&gt;, um den Standort in einem
-                neuen Browserfenster zu öffnen.
-              </p>
+              <form id="openLocationForm">
+                <input
+                  type="checkbox"
+                  id="openLocationNewTab"
+                  name="openLocationNewTab"
+                  checked
+                />
+                <label for="openLocationNewTab"
+                  >In einem neuen Tab öffnen</label
+                >
+                <br /><br />
+                <button id="openLocation" class="inner-button">
+                  Standort öffnen
+                </button>
+              </form>
             </div>
             <p>
               <a
@@ -149,7 +148,6 @@
               </a>
             </p>
           </div>
-
           <legend onclick="collapse(event)">
             <button class="collapsible"></button>
             <span class="content-heading">Indexdaten öffnen</span>
@@ -163,11 +161,32 @@
             </p>
 
             <div class="content-button-container">
-              <button id="openIndexData" class="inner-button">
-                Indexdaten öffnen
-              </button>
+              <form id="openIndexDataFormForm">
+                <input
+                  type="checkbox"
+                  id="indexDataNewTab"
+                  name="inNewTab"
+                  checked
+                />
+                <label for="indexDataNewTab">In einem neuen Tab öffnen</label>
+                <br /><br />
+                <span>Mode:</span>
+                <input
+                  type="radio"
+                  id="modeChoice1"
+                  name="mode"
+                  value="edit"
+                  checked
+                />
+                <label for="modeChoice1">Edit</label>
+                <input type="radio" id="modeChoice2" name="mode" value="view" />
+                <label for="modeChoice2">View</label>
+                <br /><br />
+                <button type="submit" id="openIndexData" class="inner-button">
+                  Indexdaten öffnen
+                </button>
+              </form>
             </div>
-
             <p>
               <a
                 target="_blank"
@@ -203,6 +222,84 @@
               >
             </p>
           </div>
+          <legend onclick="collapse(event)">
+            <button class="collapsible"></button>
+            <span class="content-heading">Trefferlisten Objekte erneuern</span>
+          </legend>
+          <div class="content">
+            <p>
+              Die Methode <b class="bolder">refreshHitListObjects</b> wird
+              verwendet, um ein oder mehrere Objekte in einer offenen
+              Trefferliste zu erneuern.
+            </p>
+            <b class="bolder">Zu testen</b>
+            <p>
+              Öffnen Sie eine Trefferliste und öffnen Sie dann eine zweite
+              Registerkarte und ändern Sie die Indexdaten eines Objekts, die in
+              der Trefferliste angezeigt werden. Zurück zur Trefferliste und
+              Button drücken.
+            </p>
+            <div class="content-button-container tooltip">
+              <button id="refreshHitListObjects" class="inner-button">
+                Objekte aktualisieren
+              </button>
+            </div>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/display/WEB/refreshHitListObjects"
+                >refreshHitListObjects - Dokumentationsseite</a
+              >
+            </p>
+          </div>
+          <legend onclick="collapse(event)">
+            <button class="collapsible"></button>
+            <span class="content-heading">Trefferliste nach ID öffnen</span>
+          </legend>
+          <div class="content">
+            <p>
+              Die Methode <b class="bolder">openHitListByIds</b> wird verwendet,
+              um eine gemischte Trefferliste mit frei gewählten Objekten
+              darstellen zu können.
+            </p>
+            <div class="content-button-container">
+              <form id="openHitListByIdsForm">
+                <input type="checkbox" id="inNewTab" name="inNewTab" checked />
+                <label for="inNewTab">In einem neuen Tab öffnen</label>
+                <br /><br />
+                <input
+                  type="checkbox"
+                  id="executeSingleHitAction"
+                  name="executeSingleHitAction"
+                  checked
+                />
+                <label for="executeSingleHitAction"
+                  >SingleHitAction ausführen</label
+                >
+                <br /><br />
+                <label for="title">Titel:</label>
+                <input type="text" name="title" id="title" />
+                <br /><br />
+                <label for="description">Beschreibung:</label>
+                <input type="text" name="description" id="description" />
+                <br /><br />
+                <button id="openHitListByIds" class="inner-button">
+                  Objekte öffnen
+                </button>
+              </form>
+            </div>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds"
+                >openHitListByIds - Dokumentationsseite</a
+              >
+            </p>
+          </div>
+          <p>Gewählte Objekte:</p>
+          <p class="selected-objects" id="selectedObjects"></p>
           <p>
             Weitere Informationen zu den jeweiligen Methoden finden Sie auf
             unserer

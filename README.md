@@ -55,3 +55,17 @@ Using the method openIndexData, the scripting method Show Indexdata or Edit Inde
 ### Get selected objects
 
 The getSelectedObjects method is used to query the currently selected objects. If no objects are selected or no hit list is currently displayed, an empty list is returned.
+
+Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/5.+Dashlet+API) documentation for more information about developing and integrating dashlets into enaio® webclient.
+
+### Refresh hit list objects
+
+The refreshHitListObjects method is used to refresh one or more objects in an open hit list. To demo this feature; open any hit list, then open a second tab and modifiy an object's index data which is displayed in the hit list. Return to the first tab's hit list and press the refresh hit list button. The modified data should be updated.
+
+Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/5.+Dashlet+API) documentation for more information about developing and integrating dashlets into enaio® webclient.
+
+### Open hit list by ids
+
+The openHitListByIds method is used to be able to display a mixed hit list with freely selected objects.
+
+Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds) documentation for more information about developing and integrating dashlets into enaio® webclient.

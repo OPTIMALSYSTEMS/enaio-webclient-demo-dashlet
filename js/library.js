@@ -8,24 +8,42 @@ const alertQueue = [];
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/5.2+Kommunikation
  */
 function handleWebclientMessage(payload) {
-    if (payload.msgId && msgQueue[payload.msgId]) {
-        if (payload.data.result !== undefined) {
-            msgQueue[payload.msgId].resolve(payload.data.result);
-        } else if (payload.data.error !== undefined) {
-            msgQueue[payload.msgId].reject(payload.data.error);
-        }
+  if (payload.type == "onUpdate" || payload.type == "onInit") {
+    const selectedObjects = document.getElementById("selectedObjects");
 
-        if (alertQueue.includes(payload.msgId)) {
-            // display payload info
-            const selectedObjectsContainer = document.getElementById("selectedObjectsContainer");
-            selectedObjectsContainer.innerHTML = `${JSON.stringify(payload.data.result)}`;
-            alertQueue.splice(alertQueue.indexOf(payload.msgId), 1);
-        }
+    // display payload info
+    selectedObjects.innerHTML = `${JSON.stringify(
+      payload.data.selectedEntries.map((dmsInfo) => ({
+        objectId: dmsInfo.osid,
+        objectTypeId: dmsInfo.objectTypeId,
+      }))
+    )}`;
+  }
 
-        delete msgQueue[payload.msgId];
+  if (payload.msgId && msgQueue[payload.msgId]) {
+    if (payload.data.result !== undefined) {
+      msgQueue[payload.msgId].resolve(payload.data.result);
+    } else if (payload.data.error !== undefined) {
+      msgQueue[payload.msgId].reject(payload.data.error);
     }
 
-    return payload;
+    if (alertQueue.includes(payload.msgId)) {
+      // display payload info
+      const selectedObjectsContainer = document.getElementById(
+        "selectedObjectsContainer"
+      );
+
+      selectedObjectsContainer.innerHTML = `${JSON.stringify(
+        payload.data.result
+      )}`;
+
+      alertQueue.splice(alertQueue.indexOf(payload.msgId), 1);
+    }
+
+    delete msgQueue[payload.msgId];
+  }
+
+  return payload;
 }
 
 /**
@@ -37,32 +55,32 @@ function handleWebclientMessage(payload) {
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/5.2+Kommunikation
  */
 async function sendWebclientMessage(
-    payload,
-    targetOrigin = "*",
-    triggerAlert = false
+  payload,
+  targetOrigin = "*",
+  triggerAlert = false
 ) {
-    const msgId = Math.random().toString(36).substr(2, 8);
-    payload.push({msgId});
+  const msgId = Math.random().toString(36).substr(2, 8);
+  payload.push({ msgId });
 
-    if (triggerAlert) {
-        alertQueue.push(msgId);
-    }
+  if (triggerAlert) {
+    alertQueue.push(msgId);
+  }
 
-    let _resolve, _reject;
-    const promise = new Promise((resolve, reject) => {
-        _resolve = resolve;
-        _reject = reject;
-    });
+  let _resolve, _reject;
+  const promise = new Promise((resolve, reject) => {
+    _resolve = resolve;
+    _reject = reject;
+  });
 
-    msgQueue[msgId] = {resolve: _resolve, reject: _reject};
+  msgQueue[msgId] = { resolve: _resolve, reject: _reject };
 
-    // "window" is the Dashlet's JavaScript Window object. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window
-    // "parent" is the enaio® webclient Window object.
-    // postMessage" is the browser API used to communicate between enaio® webclient and the Dashlet. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
-    window.parent.postMessage(payload, targetOrigin);
-    return promise;
+  // "window" is the Dashlet's JavaScript Window object. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window
+  // "parent" is the enaio® webclient Window object.
+  // postMessage" is the browser API used to communicate between enaio® webclient and the Dashlet. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
+  window.parent.postMessage(payload, targetOrigin);
+  return promise;
 }
 
 // Export functions to be used in other JavaScript files.
 // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
-export {handleWebclientMessage, sendWebclientMessage};
+export { handleWebclientMessage, sendWebclientMessage };
