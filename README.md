@@ -22,7 +22,7 @@ In the enaio® webclient, from version 10.0 Service Release 2, we provide you wi
 
 For the preview area, in which the content and detailed previews are currently displayed, you can configure individual dashlets that, for example, integrate other information sources with the help of so-called dashlet services (e.g. websites such as Wikipedia or Google Maps). Alternatively, you can integrate complete web applications such as the enaio® documentviewer.
 
-## Abstraction Library for Dashlet Communication with both enaio® webclient and enaio® richclient (new)
+## Abstraction Library for Dashlet Communication (new)
 
 Abstraction Library is a critical component of this project designed to facilitate seamless communication between the dashlet and both the enaio® webclient and enaio® richclient. This library, located in the "js/library" folder, serves as a fundamental link to enhance interaction between the dashlet and the enaio® platforms.
 
