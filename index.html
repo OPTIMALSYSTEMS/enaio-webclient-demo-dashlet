@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>enaio® webclient demo dashlet</title>
+    <title>enaio® demo dashlet</title>
     <link rel="stylesheet" href="styles/main.css" />
   </head>
   <body>
@@ -27,9 +27,9 @@
       <div class="section-container">
         <div class="introduction">
           <div>
-            <p class="section-heading">Demo Dashlet</p>
+            <p class="section-heading">AbstractDemo Dashlet</p>
             <p class="section-text">
-              Im enaio® webclient stellen wir Ihnen ab der Version 10.0 Service
+              Im enaio® client stellen wir Ihnen ab der Version 10.0 Service
               Release 2 eine Möglichkeit zur Verfügung, kundenindividuelle und
               frei gestaltbare Bereiche – sogenannte Dashlets - zu integrieren.
               Dashlets unterstützen Sie bei der Umsetzung der
@@ -51,7 +51,10 @@
           <div>
             <p class="section-heading">Events</p>
             <p class="section-text">
-              Der enaio® webclient arbeitet auf Event-Basis.
+              <b class="bolder">Hinweis:</b>
+              Der enaio® webclient arbeitet auf Event-Basis. In diesem Beispiel
+              haben wir im Dashlet für den enaio® richclient eine ähnliche
+              Event-Basis eingebaut.
             </p>
             <p class="notice">
               <b class="bolder">Hinweis:</b>
@@ -77,7 +80,7 @@
             <p class="subheading">onUpdate</p>
             <p>
               Das onUpdate-Event wird jedes Mal ausgelöst, sobald sich die
-              Objekt-Auswahl im enaio® webclient geändert hat. Es beinhaltet
+              Objekt-Auswahl im enaio® client geändert hat. Es beinhaltet
               dieselben Properties wie das onInit-Event.
             </p>
             <p>
@@ -94,20 +97,31 @@
           <div>
             <p class="section-heading">Methoden</p>
             <p class="section-text">
-              Dashlets können den enaio® webclient steuern und Aktionen
-              auslösen. Dies geschieht ebenfalls über die Browser-API
+              Dashlets können den enaio® client steuern und Aktionen auslösen.
+              Für dieses Dashletbeispiel, haben wir nur Methoden verwendet, die
+              auch in beiden clients verwendet werden können. Die angebotenen
+              Methoden können sich also von client zu client unterscheiden.
+            </p>
+            <p class="subheading">Webclient</p>
+            <p>
+              Dies geschieht im enaio® webclient über die Browser-API
               postMessage. Die Methode
               <a
                 target="_blank"
                 href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage"
-                >window.postMessage()</a
+                ><strong>window.postMessage()</strong></a
               >
               ermöglicht die sichere ursprungsübergreifende Kommunikation
               zwischen Window-Objekten; z.B. zwischen einer Seite und einem von
               ihr erzeugten Pop-up oder zwischen einer Seite und einem darin
-              eingebetteten iframe. Aktuell stehen Ihnen folgenden Methoden zur
-              Verfügung:
+              eingebetteten iframe.
             </p>
+            <p class="subheading">Richclient</p>
+            <p>
+              Für den enaio® richclient steht das Objekt
+              <strong>window.osClient</strong> dafür bereit.
+            </p>
+            <p>Aktuell stehen Ihnen folgenden Methoden zur Verfügung:</p>
           </div>
         </div>
         <div class="collapsible-container">
@@ -118,9 +132,10 @@
           <div class="content">
             <p>
               Mittels der Methode <b class="bolder">openLocation</b> wird die
-              Skripting-Methode Open Location des enaio® webclient aufgerufen,
-              die den Standort (oder eine Standortauswahl bei mehreren möglichen
-              Standorten) für das als Parameter übergebene DMS Objekt öffnet.
+              Skripting-Methode Open Location des jeweiligen enaio® clients
+              aufgerufen, die den Standort (oder eine Standortauswahl bei
+              mehreren möglichen Standorten) für das als Parameter übergebene
+              DMS Objekt öffnet.
             </p>
             <div class="content-button-container">
               <form id="openLocationForm">
@@ -131,7 +146,7 @@
                   checked
                 />
                 <label for="openLocationNewTab"
-                  >In einem neuen Tab öffnen</label
+                  >In einem neuen Tab öffnen (Webclient)</label
                 >
                 <br /><br />
                 <button id="openLocation" class="inner-button">
@@ -144,7 +159,15 @@
                 target="_blank"
                 class="content-link"
                 href="https://help.optimal-systems.com/enaio_develop/display/WEB/openLocation"
-                >openLocation - Dokumentationsseite
+                >openLocation - Webclient Dokumentationsseite
+              </a>
+            </p>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
+                >osjxOpenLocation - Richclient Dokumentationsseite
               </a>
             </p>
           </div>
@@ -155,9 +178,9 @@
           <div class="content">
             <p>
               Mittels der Methode <b class="bolder">openIndexData</b> wird die
-              Skripting-Methode Show Indexdata oder Edit Indexdata des enaio®
-              webclient aufgerufen, die die Indexdatenmaske für das als
-              Parameter übergebene DMS Objekt öffnet.
+              Skripting-Methode Show Indexdata oder Edit Indexdata des
+              jeweiligen enaio® clients aufgerufen, die die Indexdatenmaske für
+              das als Parameter übergebene DMS Objekt öffnet.
             </p>
 
             <div class="content-button-container">
@@ -168,7 +191,9 @@
                   name="inNewTab"
                   checked
                 />
-                <label for="indexDataNewTab">In einem neuen Tab öffnen</label>
+                <label for="indexDataNewTab"
+                  >In einem neuen Tab öffnen (Webclient)</label
+                >
                 <br /><br />
                 <span>Mode:</span>
                 <input
@@ -192,8 +217,16 @@
                 target="_blank"
                 class="content-link"
                 href="https://help.optimal-systems.com/enaio_develop/display/WEB/openIndexData"
-                >openIndexData - Dokumentationsseite</a
+                >openIndexData - Webclient Dokumentationsseite</a
               >
+            </p>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
+                >osjxOpenDataSheet - Richclient Dokumentationsseite
+              </a>
             </p>
           </div>
           <legend onclick="collapse(event)">
@@ -218,8 +251,16 @@
                 target="_blank"
                 class="content-link"
                 href="https://help.optimal-systems.com/enaio_develop/display/WEB/getSelectedObjects"
-                >getSelectedObjects - Dokumentationsseite</a
+                >getSelectedObjects - Webclient Dokumentationsseite</a
               >
+            </p>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
+                >osjxGetSelectedObjects - Richclient Dokumentationsseite
+              </a>
             </p>
           </div>
           <legend onclick="collapse(event)">
@@ -231,8 +272,9 @@
           <div class="content">
             <p>
               Die Methode <b class="bolder">refreshHitListObjects</b> wird
-              verwendet, um ein oder mehrere Objekte in einer offenen
-              Trefferliste zu aktualisieren.
+              verwendet, um ein (im Richclient und Webclient) oder auch mehrere
+              Objekte (im Webclient) in einer offenen Trefferliste zu
+              aktualisieren.
             </p>
             <b class="bolder">Zu testen</b>
             <p>
@@ -252,8 +294,16 @@
                 target="_blank"
                 class="content-link"
                 href="https://help.optimal-systems.com/enaio_develop/display/WEB/refreshHitListObjects"
-                >refreshHitListObjects - Dokumentationsseite</a
+                >refreshHitListObjects - Webclient Dokumentationsseite</a
               >
+            </p>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
+                >osjxRefreshObjectInLists - Richclient Dokumentationsseite
+              </a>
             </p>
           </div>
           <legend onclick="collapse(event)">
@@ -269,7 +319,9 @@
             <div class="content-button-container">
               <form id="openHitListByIdsForm">
                 <input type="checkbox" id="inNewTab" name="inNewTab" checked />
-                <label for="inNewTab">In einem neuen Tab öffnen</label>
+                <label for="inNewTab"
+                  >In einem neuen Tab öffnen (Webclient)</label
+                >
                 <br /><br />
                 <input
                   type="checkbox"
@@ -278,13 +330,13 @@
                   checked
                 />
                 <label for="executeSingleHitAction"
-                  >SingleHitAction ausführen</label
+                  >SingleHitAction ausführen (Webclient)</label
                 >
                 <br /><br />
                 <label for="title">Titel:</label>
                 <input type="text" name="title" id="title" />
                 <br /><br />
-                <label for="description">Beschreibung:</label>
+                <label for="description">Beschreibung (Webclient):</label>
                 <input type="text" name="description" id="description" />
                 <br /><br />
                 <button id="openHitListByIds" class="inner-button">
@@ -297,27 +349,45 @@
                 target="_blank"
                 class="content-link"
                 href="https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds"
-                >openHitListByIds - Dokumentationsseite</a
+                >openHitListByIds - Webclient Dokumentationsseite</a
               >
+            </p>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
+                >osjxOpenResultList - Richclient Dokumentationsseite
+              </a>
             </p>
           </div>
           <p>Gewählte Objekte:</p>
           <p class="selected-objects" id="selectedObjects"></p>
           <p>
-            Weitere Informationen zu den jeweiligen Methoden finden Sie auf
-            unserer
+            Weitere Informationen zu den jeweiligen Methoden des jeweiligen
+            enaio® clients finden Sie auf unserer Dokumentationsseite
             <a
               target="_blank"
               href="https://help.optimal-systems.com/enaio_develop/display/WEB/5.4+Dashlet-Methoden"
-              >Dokumentationsseite.</a
+              >des Webclients</a
+            >
+            und
+            <a
+              target="_blank"
+              href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
+              >des Richclients.</a
             >
           </p>
         </div>
       </div>
     </main>
+  </body>
+  <footer>
     <script src="js/style.js"></script>
-    <script type="module" src="js/library.js"></script>
+    <script type="module" src="js/library/libraryWebClient.js"></script>
+    <script type="module" src="js/library/libraryRichClient.js"></script>
+    <script type="module" src="js/library/library.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/action.js"></script>
-  </body>
+  </footer>
 </html>
