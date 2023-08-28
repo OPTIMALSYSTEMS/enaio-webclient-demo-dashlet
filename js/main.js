@@ -17,6 +17,11 @@ function initDashlet(data) {
     objectId: dmsInfo.osid,
     objectTypeId: dmsInfo.objectTypeId,
   }));
+  
+  // display selected objects
+  const selectedObjects = document.getElementById("selectedObjects");
+  selectedObjects.innerHTML = JSON.stringify(currentSelectedObjects);
+
   // Uncomment the below code to see an array of the hitlist's currently selected osid(s).
   // console.log(`Currently selected osids`, currentSelectedOSIDs);
 }

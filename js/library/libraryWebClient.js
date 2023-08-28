@@ -99,18 +99,6 @@ function handlePostMessage(event) {
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/5.2+Kommunikation
  */
 function handleWebclientMessage(payload) {
-    if (payload.type == "onUpdate" || payload.type == "onInit") {
-        const selectedObjects = document.getElementById("selectedObjects");
-
-        // display payload info
-        selectedObjects.innerHTML = `${JSON.stringify(
-            payload.data.selectedEntries.map((dmsInfo) => ({
-                objectId: dmsInfo.osid,
-                objectTypeId: dmsInfo.objectTypeId,
-            }))
-        )}`;
-    }
-
     if (payload.msgId && msgQueue[payload.msgId]) {
         if (payload.data.result !== undefined) {
             msgQueue[payload.msgId].resolve(payload.data.result);
@@ -120,15 +108,8 @@ function handleWebclientMessage(payload) {
 
         if (alertQueue.includes(payload.msgId)) {
             // display payload info
-            const selectedObjectsContainer = document.getElementById(
-                "selectedObjectsContainer"
-            );
-
-            selectedObjectsContainer.innerHTML = `${JSON.stringify(
-                payload.data.result
-            )}`;
-
-            alertQueue.splice(alertQueue.indexOf(payload.msgId), 1);
+			alertQueue.splice(alertQueue.indexOf(payload.msgId), 1);
+            alert(JSON.stringify(payload.data.result));
         }
 
         delete msgQueue[payload.msgId];
