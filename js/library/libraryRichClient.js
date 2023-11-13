@@ -3,8 +3,15 @@
  */
 let onInitCallback = null;
 let onUpdateCallback = null;
-let onInitUpdateRegistered = false;
-let cache = null; // load static data from richclient only one time
+let dashletCache = null; // static data from rich client only one time for a dashlet
+let modalDialog = false;
+
+/**
+ * Once the code of the modal dialog is loaded we directly register for the rich client
+ * init functions to not miss them. With them, we decide if we are a modal dialog or not
+ * even if the modal dialog is not registering an init function itself.
+ */
+addEventListener("load", registerOnInitUpdate);
 
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
@@ -13,7 +20,6 @@ let cache = null; // load static data from richclient only one time
  */
 function registerOnInitCallback(callback) {
     onInitCallback = callback;
-    registerOnInitUpdate();
 }
 
 /**
@@ -22,25 +28,57 @@ function registerOnInitCallback(callback) {
  * @param {Function} callback The callback
  */
 function registerOnUpdateCallback(callback) {
+	if (modalDialog) {
+		throw "Modal dialogs do not trigger a update event. Please do not register one.";
+	}
+	
     onUpdateCallback = callback;
-    registerOnInitUpdate();
 }
 
 /**
- * Providing only necessary information for this richclient dashlet example.
+ * Providing only necessary information for this rich client dashlet example.
  * We are converting it to be like the webclient structure.
+ *
+ * @param {Object} data initialize data from the rich client.
+ * @private
  */
 async function internalOnInitUpdate(data) {
-    if (cache === null) {
-        cache = {};
-        cache.dashletCaption = window.osClient.osjxGetDashletCaption();
-        cache.uri = window.osClient.osjxGetDashletURL();
-        cache.languageGuiSelected = window.osClient.osjxGetEnvironment(24);
-        cache.languageObjectDefinition = window.osClient.osjxGetEnvironment(33);
-        cache.wfOrgId = window.osClient.osjxGetEnvironment(19);
-        cache.mail = window.osClient.osjxGetEnvironment(16);
-        cache.username = window.osClient.osjxGetEnvironment(3);
-        cache.groups = window.osClient.osjxGetEnvironment(11);
+	if (data.selectedEntry) {
+		if (onUpdateCallback != null) {
+			// Unregister onUpdateCallback because it is not available and write a message to console.
+			console.error("Modal dialogs do not trigger a update event. Please do not register one.");
+			onUpdateCallback = null;
+		}
+		
+		modalDialog = true;
+		internalOnInitModalDialog(data);
+	} else {
+		await internalOnInitUpdateDashlet(data);
+	}
+}
+
+/**
+ * Method which is called if the rich client send the initialize event for a dashlet.
+ * The initialize event is also fired in case of an update. The rich client only know
+ * one event. We distinguish then. The onInit event is unregistered after first processing.
+ * From then on all events are redirected to the update callback. The code inside enrich
+ * the rich client data as much as possible to be equal to the webclient data.
+ *
+ * @param {Object} data initialize data from the rich client.
+ * @private
+ */
+async function internalOnInitUpdateDashlet(data) {
+	if (dashletCache === null) {
+        dashletCache = {};
+        dashletCache.dashletCaption = window.osClient.osjxGetDashletCaption();
+        dashletCache.uri = window.osClient.osjxGetDashletURL();
+        dashletCache.languageGuiSelected = window.osClient.osjxGetEnvironment(35);
+        dashletCache.languageObjectDefinition = window.osClient.osjxGetEnvironment(33);
+        dashletCache.wfOrgId = window.osClient.osjxGetEnvironment(19);
+        dashletCache.mail = window.osClient.osjxGetEnvironment(16);
+        dashletCache.username = window.osClient.osjxGetEnvironment(3);
+        dashletCache.groups = window.osClient.osjxGetEnvironment(11);
+        dashletCache.fullname = window.osClient.osjxGetEnvironment(14);
     }
 
     const selectedEntries = await getSelectedObjects();
@@ -51,24 +89,24 @@ async function internalOnInitUpdate(data) {
     }
 
     // map data for webClient structure
-    const mappedData = {
+    const mappedData= {
         activeCustomDashlet: {
-            objectTypes: null, // no information from enaio richclient
-            platforms: null, // no information from enaio richclient
-            uri: cache.uri,
-            title_DE: cache.dashletCaption,
-            title_EN: cache.dashletCaption,
-            title_FR: cache.dashletCaption,
-            iconId: null, // no information from enaio richclient
-            users: null, // no information from enaio richclient
-            groups: null, // no information from enaio richclient
+            objectTypes: null, // no information from enaio rich client
+            platforms: null, // no information from enaio rich client
+            uri: dashletCache.uri,
+            title_DE: dashletCache.dashletCaption,
+            title_EN: dashletCache.dashletCaption,
+            title_FR: dashletCache.dashletCaption,
+            iconId: null, // no information from enaio rich client
+            users: null, // no information from enaio rich client
+            groups: null, // no information from enaio rich client
         },
         lastSelectedEntry: {
-            hasVariants: null, // no information from enaio richclient
-            mainType: null, // no information from enaio richclient
+            hasVariants: null, // no information from enaio rich client
+            mainType: null, // no information from enaio rich client
             objectTypeId: data.objecttype,
             osid: data.objectident,
-            objectType: null // no information from enaio richclient
+            objectType: null // no information from enaio rich client
         },
         osDashletInit: {
             objectident: data.objectident,
@@ -83,63 +121,69 @@ async function internalOnInitUpdate(data) {
         selectedEntries: selectedEntries
             .map(f => ({osid: f.objectId, objectTypeId: f.objectTypeId})),
         sessionInfo: {
-            language: cache.languageGuiSelected.substring(0, 2), // only "fr" instead of "fra"
-            languageObjectDefinition: cache.languageObjectDefinition.split("_")[0], // only "de" instead of "de_DE"
+            language: dashletCache.languageGuiSelected.substring(0, 2), // only "fr" instead of "fra"
+            languageObjectDefinition: dashletCache.languageObjectDefinition.split("_")[0], // only "de" instead of "de_DE"
             sessionGuid: data.sessionguid,
             clientType: "rich_client",
             baseUrl: location.origin
         },
         userInfo: {
-            email: cache.mail,
-            fullname: cache.fullname,
-            groups: cache.groups.split(";"),
-            name: cache.username,
+            email: dashletCache.mail,
+            fullname: dashletCache.fullname,
+            groups: dashletCache.groups.split(";"),
+            name: dashletCache.username,
             osGuid: data.userguid,
             userId: data.userid,
-            wfGuid: null, // no information from enaio richclient
-            wfOrdId: cache.wfOrgId
+            wfGuid: null, // no information from enaio rich client
+            wfOrdId: dashletCache.wfOrgId
         },
         context: null
     }
 
     // execute registered events with mapped data.
-	// onInitCallback is called once. Afterwards we set it to null and then onUpdateCallback is called.
+	// onInitCallback is called once. Afterward we set it to null and then onUpdateCallback is called.
     if (onInitCallback != null) {
         onInitCallback(mappedData);
         onInitCallback = null;
     } else if (onUpdateCallback != null) {
         onUpdateCallback(mappedData);
     }
-
-    // display payload info
-    const selectedObjectsHTMLElement = document.getElementById("selectedObjects");
-    selectedObjectsHTMLElement.innerHTML = `${JSON.stringify(selectedEntries)}`;
 }
 
 /**
- * Embed a function to the html file as the richclient looks up for a function
- * named osDashletInit in it.
- * For this example we find that this is a clean solution instead of placing it
- * directly into the html file.
+ * Handle the onInit event for modal dialogs and call a callback function if one is registered.
+ *
+ * @param {Object} data initialize data from the rich client.
+ * @private
+ */
+function internalOnInitModalDialog(data) {
+	if (onInitCallback != null) {
+        onInitCallback(data);
+        onInitCallback = null;
+	}
+}
+
+/**
+ * Embed a function to the html file as the rich client looks up for a function
+ * named osDashletInit in it. For this example we find that this is a clean solution
+ * instead of placing it directly into the html file.
+ *
+ * @private
  */
 function registerOnInitUpdate() {
-    if (onInitUpdateRegistered === false) {
-        window.internalOnInitUpdate = internalOnInitUpdate;
+    window.internalOnInitUpdate = internalOnInitUpdate;
 
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.innerText = "function osDashletInit(data) { window.internalOnInitUpdate(data); }";
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.innerText = "function osDashletInit(data) { window.internalOnInitUpdate(data); } function onInit(data) { window.internalOnInitUpdate(data); }";
 
-        document.getElementsByTagName('head')[0].appendChild(script);
-
-        onInitUpdateRegistered = true;
-    }
+    document.getElementsByTagName('head')[0].appendChild(script);
 }
 
 /**
  * Entry method for sending commands to the rich client. The payload is the one for enaio web client.
  * It must be converted before sending it to rich client and the response must also be converted back.
- * This method is async even if the method is synchronus. It must be compatible to web client implementation.
+ * This method is async even if the method is synchronous. It must be compatible to web client implementation.
  * and the web client is async an
  *
  * @param {*} payload web client format
@@ -147,34 +191,47 @@ function registerOnInitUpdate() {
  */
 async function sendToRichClient(payload) {
     switch (payload[0]) {
-        case "openIndexData":
-            return openIndexData(payload);
-        case "openLocation":
-            return openLocation(payload);
-        case "getSelectedObjects":
-            return getSelectedObjects(payload);
-        case "refreshHitListObjects":
-            return refreshHitListObjects(payload);
-        case "openHitListByIds":
-            return openHitListByIds(payload);
+        case "openIndexData": 			return openIndexData(payload);
+        case "openLocation":  			return openLocation(payload);
+        case "getSelectedObjects":		return getSelectedObjects(payload);
+        case "refreshHitListObjects": 	return refreshHitListObjects(payload);
+        case "openHitListByIds":      	return openHitListByIds(payload);
+        case "getFieldValueByInternal": return getFieldValueByInternal(payload);
+		case "setFieldValueByInternal": return setFieldValueByInternal(payload);
+		case "getEnvironment":			return getEnvironment();
+        case "closeModalDialog":        return closeModalDialog(payload);
     }
 }
 
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
 async function openLocation(payload) {
-    // const inNewTab = payload[1][0];
-    const osid = Number(payload[1][1]);
-
-    await window.osClient.osjxOpenLocation(osid);
+    // const inNewTab = payload[1][0]; // Only as reminder but not supported by the rich client.
+    const osId = Number(payload[1][1]);
+    await window.osClient.osjxOpenLocation(osId);
 }
 
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
 async function openIndexData(payload) {
-    // const inNewTab = payload[1][0];
-    const osid = Number(payload[1][2]);
+    // const inNewTab = payload[1][0]; // Only as reminder but not supported by the rich client.
+    const osId = Number(payload[1][2]);
     const readonly = payload[1][1].toLowerCase() === "view";
 
-    await window.osClient.osjxOpenDataSheet(osid, readonly);
+    await window.osClient.osjxOpenDataSheet(osId, readonly);
 }
 
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
 async function getSelectedObjects() {
     const selectedObjects = await window.osClient.osjxGetSelectedObjects();
     return selectedObjects
@@ -185,12 +242,23 @@ async function getSelectedObjects() {
         }));
 }
 
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
 async function refreshHitListObjects(payload) {
-    const osid = Number(payload[1][0][0]); // we can only send 1 id
-
-    await window.osClient.osjxRefreshObjectInLists(osid);
+    for (const objectToRefresh of payload[1]) {
+        const osId = Number(objectToRefresh[0]);
+        await window.osClient.osjxRefreshObjectInLists(osId);
+    }
 }
 
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
 async function openHitListByIds(payload) {
     const ids = payload[1].objects;
     const title = payload[1].title.length === 0 ? "Gemischte Trefferliste" : payload[1].title;
@@ -203,6 +271,70 @@ async function openHitListByIds(payload) {
     await window.osClient.osjxOpenResultList(JSON.stringify(request));
 }
 
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
+async function getFieldValueByInternal(payload) {
+	return JSON.parse(await window.osClient.getFieldValueByInternal(payload[1][0]));
+}
+
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
+async function setFieldValueByInternal(payload) {
+	return JSON.parse(await window.osClient.setFieldValueByInternal(payload[1][0]));
+}
+
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
+async function getEnvironment() {
+	return JSON.parse(await window.osClient.getEnvironment());
+}
+
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
+async function closeModalDialog(payload) {
+    await window.osClient.closeModalDialog(payload[1][0]);
+}
+
+/**
+ * Return true if we are running inside a modal dialog. If we are running inside a dashlet the return is false.
+ */
+function isModalDialog() {
+    return modalDialog;
+}
+
+/**
+ * This function is only for the unit-tests to reset the rich client library to its original state
+ */
+function reset() {
+    modalDialog = false;
+    onInitCallback = () => {};
+    onUpdateCallback = () => {};
+    dashletCache = null;
+
+    delete window.osClient;
+}
+
 // Export functions to be used in other JavaScript files.
 // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
-export {registerOnInitCallback, registerOnUpdateCallback, sendToRichClient};
+export {
+	registerOnInitCallback, 
+	registerOnUpdateCallback, 
+	sendToRichClient,
+	isModalDialog,
+
+    // Only for Unit-Tests
+    registerOnInitUpdate,	
+    reset
+};
