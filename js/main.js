@@ -1,7 +1,5 @@
 ﻿import * as lib from "./library/library.js";
 
-let lastSelectedEntryOsid;
-let currentSelectedOsids = [];
 let currentSelectedObjects = [];
 let dashletName = "Dashlet";
 
@@ -10,20 +8,15 @@ let dashletName = "Dashlet";
  * @param data an object which contains enaio® webclient properties that the dashlet can use to enrich itself.
  */
 function initDashlet(data) {
-  dashletName = data.activeCustomDashlet["title_" + data.sessionInfo.language.toUpperCase()] || "Dashlet";
-  lastSelectedEntryOsid = data.lastSelectedEntry.osid;
-  currentSelectedOsids = data.selectedEntries.map((dmsInfo) => dmsInfo.osid);
-  currentSelectedObjects = data.selectedEntries.map((dmsInfo) => ({
-    objectId: dmsInfo.osid,
-    objectTypeId: dmsInfo.objectTypeId,
-  }));
-  
-  // display selected objects
-  const selectedObjects = document.getElementById("selectedObjects");
-  selectedObjects.innerHTML = JSON.stringify(currentSelectedObjects);
+    dashletName = data.activeCustomDashlet["title_" + data.sessionInfo.language.toUpperCase()] || "Dashlet";
+    currentSelectedObjects = data.selectedEntries.map((dmsInfo) => ({
+      objectId: dmsInfo.osid,
+      objectTypeId: dmsInfo.objectTypeId,
+    }));
 
-  // Uncomment the below code to see an array of the hitlist's currently selected osid(s).
-  // console.log(`Currently selected osids`, currentSelectedOSIDs);
+    // display selected objects
+    const selectedObjects = document.getElementById("selectedObjects");
+    selectedObjects.innerHTML = JSON.stringify(currentSelectedObjects);
 }
 
 /**
@@ -39,49 +32,49 @@ lib.registerOnInitCallback(initDashlet, "*");
 lib.registerOnUpdateCallback(initDashlet, "*");
 
 async function openLocation(inNewTab) {
-  const objectId = lastSelectedEntryOsid;
-  await lib.openLocation(inNewTab, objectId);
+    for (const currentSelectedObject of currentSelectedObjects) {
+        await lib.openLocation(inNewTab, currentSelectedObject.objectId, currentSelectedObject.objectTypeId);
+    }
 }
 
 async function openIndexData(formData) {
-  const objectId = lastSelectedEntryOsid;
-  const params = formatFormData(formData);
-  return await lib.openIndexData(params.inNewTab, params.mode, objectId);
+    const params = formatFormData(formData);
+
+    for (const currentSelectedObject of currentSelectedObjects) {
+        lib.openIndexData(params.inNewTab, params.mode, currentSelectedObject.objectId, currentSelectedObject.objectTypeId);
+    }
 }
 
 async function getSelectedObjects() {
-  const retVal = await lib.getSelectedObjects();
-  let str = "";
+    const retVal = await lib.getSelectedObjects();
+    let str = "";
 
-  for (const temp of retVal) {
-    str += `\n${temp.objectId}, ${temp.objectTypeId}`;
-  }
+    for (const temp of retVal) {
+      str += `\n${temp.objectId}, ${temp.objectTypeId}`;
+    }
 
-  alert(str);
+    alert(str);
 }
 
 async function refreshHitListObjects() {
-  const ids = currentSelectedOsids;
-  await lib.refreshHitListObjects(ids);
+    await lib.refreshHitListObjects(currentSelectedObjects.map(x => x.objectId));
 }
 
 async function openHitListByIds(formData) {
-  const params = formatFormData(formData);
-  const objects = currentSelectedObjects;
-	
-  await lib.openHitListByIds(objects,params.inNewTab, params.title, params.description, params.executeSingleHitAction);
+    const params = formatFormData(formData);
+    await lib.openHitListByIds(currentSelectedObjects, params.inNewTab, params.title, params.description, params.executeSingleHitAction);
 }
 
 function formatFormData(formData) {
-  return Object.assign({}, ...formData);
+    return Object.assign({}, ...formData);
 }
 
 // Export functions to be used in other JavaScript files.
 // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
 export {
-  openLocation,
-  openIndexData,
-  getSelectedObjects,
-  refreshHitListObjects,
-  openHitListByIds,
+    openLocation,
+    openIndexData,
+    getSelectedObjects,
+    refreshHitListObjects,
+    openHitListByIds,
 };
