@@ -7,13 +7,6 @@ let dashletCache = null; // static data from rich client only one time for a das
 let modalDialog = false;
 
 /**
- * Once the code of the modal dialog is loaded we directly register for the rich client
- * init functions to not miss them. With them, we decide if we are a modal dialog or not
- * even if the modal dialog is not registering an init function itself.
- */
-addEventListener("load", registerOnInitUpdate);
-
-/**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  *
  * @param {Function} callback
@@ -29,7 +22,7 @@ function registerOnInitCallback(callback) {
  */
 function registerOnUpdateCallback(callback) {
 	if (modalDialog) {
-		throw "Modal dialogs do not trigger a update event. Please do not register one.";
+		throw "Modal dialogs does not trigger a update event. Please do not register one.";
 	}
 	
     onUpdateCallback = callback;
@@ -46,7 +39,7 @@ async function internalOnInitUpdate(data) {
 	if (data.selectedEntry) {
 		if (onUpdateCallback != null) {
 			// Unregister onUpdateCallback because it is not available and write a message to console.
-			console.error("Modal dialogs do not trigger a update event. Please do not register one.");
+			console.error("Modal dialogs does not trigger a update event. Please do not register one.");
 			onUpdateCallback = null;
 		}
 		
@@ -181,6 +174,13 @@ function registerOnInitUpdate() {
 }
 
 /**
+ * Call the method directly to register ourselves directly on the window object.
+ * A addEventListener("load", registerOnInitUpdate); would be nicer, but it is too late.
+ * Then we miss the rich client call which we want to intercept.
+ */
+registerOnInitUpdate();
+
+/**
  * Entry method for sending commands to the rich client. The payload is the one for enaio web client.
  * It must be converted before sending it to rich client and the response must also be converted back.
  * This method is async even if the method is synchronous. It must be compatible to web client implementation.
@@ -211,7 +211,13 @@ async function sendToRichClient(payload) {
 async function openLocation(payload) {
     // const inNewTab = payload[1][0]; // Only as reminder but not supported by the rich client.
     const osId = Number(payload[1][1]);
-    await window.osClient.osjxOpenLocation(osId);
+    const objectTypeId = Number(payload[1][2]);
+
+    if ((objectTypeId >>> 16) === 0) {
+        await window.osClient.osjxOpenObject(osId);
+    } else {
+        await window.osClient.osjxOpenLocation(osId);
+    }
 }
 
 /**
