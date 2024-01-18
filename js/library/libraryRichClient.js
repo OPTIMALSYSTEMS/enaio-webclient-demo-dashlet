@@ -74,7 +74,16 @@ async function internalOnInitUpdateDashlet(data) {
         dashletCache.fullname = window.osClient.osjxGetEnvironment(14);
     }
 
-    const selectedEntries = await getSelectedObjects();
+    let selectedEntries = await getSelectedObjects();
+
+    if (selectedEntries == null || selectedEntries.length === 0 || selectedEntries[0].objectId === "" || selectedEntries[0].objectId === void 0) {
+        // On opening an index data mask for a different ECM object out of the dashlet the selectedEntries has one element
+        // but the objectId and objectTypeId are empty. We fix this by assigning the information from the init event.
+        selectedEntries = [{
+            "objectId": data.objectident,
+            "objectTypeId": data.objecttype
+        }];
+    }
 
     // get base url
     if (typeof location.origin === 'undefined') {
