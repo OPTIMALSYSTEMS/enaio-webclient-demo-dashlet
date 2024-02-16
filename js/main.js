@@ -12,6 +12,8 @@ function initDashlet(data) {
     currentSelectedObjects = data.selectedEntries.map((dmsInfo) => ({
       objectId: dmsInfo.osid,
       objectTypeId: dmsInfo.objectTypeId,
+	  objectType: dmsInfo.objectType,
+	  mainType: dmsInfo.mainType
     }));
 
     // display selected objects

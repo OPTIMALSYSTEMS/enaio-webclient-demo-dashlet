@@ -75,14 +75,31 @@ async function internalOnInitUpdateDashlet(data) {
     }
 
     let selectedEntries = await getSelectedObjects();
+    let lastObjectType = {
+        mainType: 0,
+        objectType: "UNKNOWN"
+    };
 
     if (selectedEntries == null || selectedEntries.length === 0 || selectedEntries[0].objectId === "" || selectedEntries[0].objectId === void 0) {
         // On opening an index data mask for a different ECM object out of the dashlet the selectedEntries has one element
         // but the objectId and objectTypeId are empty. We fix this by assigning the information from the init event.
         selectedEntries = [{
-            "objectId": data.objectident,
-            "objectTypeId": data.objecttype
+            objectId: data.objectident,
+            objectTypeId: data.objecttype
         }];
+    }
+
+    // For search masks we have a selected object with objectId zero. There isn't a selected object.
+    if (selectedEntries.length === 1 && selectedEntries[0].objectId === "0" && selectedEntries[0].objectTypeId === "0") {
+        selectedEntries = [];
+    }
+
+    for (const selectedEntry of selectedEntries) {
+        addObjectTypeAndMainType(selectedEntry);
+
+        if (selectedEntry.objectId === data.objectident) {
+            lastObjectType = selectedEntry;
+        }
     }
 
     // get base url
@@ -105,10 +122,10 @@ async function internalOnInitUpdateDashlet(data) {
         },
         lastSelectedEntry: {
             hasVariants: null, // no information from enaio rich client
-            mainType: null, // no information from enaio rich client
+            mainType: lastObjectType.mainType,
             objectTypeId: data.objecttype,
             osid: data.objectident,
-            objectType: null // no information from enaio rich client
+            objectType: lastObjectType.objectType
         },
         osDashletInit: {
             objectident: data.objectident,
@@ -120,8 +137,12 @@ async function internalOnInitUpdateDashlet(data) {
             pagecount: data.pagecount,
             searchterm: data.searchterm
         },
-        selectedEntries: selectedEntries
-            .map(f => ({osid: f.objectId, objectTypeId: f.objectTypeId})),
+        selectedEntries: selectedEntries.map(f => ({
+            osid: f.objectId,
+            objectTypeId: f.objectTypeId,
+            objectType: f.objectType,
+            mainType: f.mainType
+        })),
         sessionInfo: {
             language: dashletCache.languageGuiSelected.substring(0, 2), // only "fr" instead of "fra"
             languageObjectDefinition: dashletCache.languageObjectDefinition.split("_")[0], // only "de" instead of "de_DE"
@@ -209,6 +230,7 @@ async function sendToRichClient(payload) {
 		case "setFieldValueByInternal": return setFieldValueByInternal(payload);
 		case "getEnvironment":			return getEnvironment();
         case "closeModalDialog":        return closeModalDialog(payload);
+        case "setDialogCaption":        return setDialogCaption(payload);
     }
 }
 
@@ -249,12 +271,15 @@ async function openIndexData(payload) {
  */
 async function getSelectedObjects() {
     const selectedObjects = await window.osClient.osjxGetSelectedObjects();
-    return selectedObjects
-        .split(";")
-        .map(f => ({
-            objectId: f.split(",")[0],
-            objectTypeId: f.split(",")[1]
-        }));
+    return selectedObjects.split(";").map(f => {
+        const split = f.split(",");
+        const retVal = {
+            objectId: split[0],
+            objectTypeId: split[1]
+        };
+        addObjectTypeAndMainType(retVal);
+        return retVal;
+    });
 }
 
 /**
@@ -320,6 +345,32 @@ async function getEnvironment() {
  */
 async function closeModalDialog(payload) {
     await window.osClient.closeModalDialog(payload[1][0]);
+}
+
+/**
+ * Documentation see library.js
+ *
+ * @private
+ */
+async function setDialogCaption(payload) {
+    return window.osClient.setDialogCaption(payload[1][0]);
+}
+
+/**
+ * Calculate the mainType and objectType from objectTypeId and add the properties to the
+ * hand in object.
+ *
+ * @param selectedObject The object to extend
+ */
+function addObjectTypeAndMainType(selectedObject) {
+    // In WebClient it is a string. Therefore toString();
+    selectedObject.mainType = (selectedObject.objectTypeId >>> 16).toString();
+
+    switch (selectedObject.mainType) {
+        case "0": selectedObject.objectType = "FOLDER"; break;
+        case "99": selectedObject.objectType = "REGISTER"; break;
+        default: selectedObject.objectType = "DOCUMENT"; break;
+    }
 }
 
 /**

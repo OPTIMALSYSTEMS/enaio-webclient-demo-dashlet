@@ -47,7 +47,7 @@ async function openIndexData(inNewTab, mode, objectId, objectTypeId = undefined)
 	if (isModalDialog()) {
 		throw "Not implemented for modal dialog";
 	}
-	
+
 	return sendClientMessage(["openIndexData", [inNewTab, mode, objectId, objectTypeId]]);
 }
 
@@ -66,7 +66,7 @@ async function openLocation(inNewTab, objectId, objectTypeId = undefined, parent
 	if (isModalDialog()) {
 		throw "Not implemented for modal dialog";
 	}
-	
+
 	await sendClientMessage(["openLocation", [inNewTab, objectId, objectTypeId, parentId, parentTypeId]]);
 }
 
@@ -84,7 +84,7 @@ async function getSelectedObjects() {
 	if (isModalDialog()) {
 		throw "Not implemented for modal dialog";
 	}
-	
+
 	return sendClientMessage(["getSelectedObjects", []]);
 }
 
@@ -99,7 +99,7 @@ async function refreshHitListObjects(osIds) {
 	if (isModalDialog()) {
 		throw "Not implemented for modal dialog";
 	}
-	
+
 	await sendClientMessage(["refreshHitListObjects", [osIds]]);
 }
 
@@ -118,8 +118,8 @@ async function openHitListByIds(objects, inNewTab = false, title = "", subTitle 
 	if (isModalDialog()) {
 		throw "Not implemented for modal dialog";
 	}
-	
-	await sendClientMessage(["openHitListByIds", { 
+
+	await sendClientMessage(["openHitListByIds", {
 		objects,
 		inNewTab,
 		title,
@@ -142,7 +142,7 @@ async function getFieldValueByInternal(json) {
 	if (!isModalDialog()) {
 		throw "Not implemented for dashlets";
 	}
-	
+
 	return sendClientMessage(["getFieldValueByInternal", [jsonObjectToString(json)]]);
 }
 
@@ -173,12 +173,27 @@ async function getEnvironment() {
 	if (!isModalDialog()) {
 		throw "Not implemented for dashlets";
 	}
-	
+
 	return sendClientMessage(["getEnvironment", []]);
 }
 
 /**
- * Closes the modal dialog
+ * This function is only available for modal dialogs. It sets the caption of the dialog to the provided value.
+ *
+ * @param {string} newDialogCaption - The caption to be set for the modal dialog. Defaults to an empty string if no value is provided.
+ * @throws {string} Throws a string error message if the function is used outside of a modal dialog context.
+ * @remarks The caption is set as an array for webclient compatibility. The rich client only accepts a string.
+ */
+function setDialogCaption(newDialogCaption = "") {
+	if (!isModalDialog()) {
+		throw "Not implemented for dashlets";
+	}
+	
+	return sendClientMessage(["setDialogCaption", [newDialogCaption]]);
+}
+
+/**
+ * Cancel the modal dialog
  *
  * @param buttonScriptReturnValue The numeric value which should be sent to the button script
  */
@@ -201,8 +216,8 @@ async function sendClientMessage(payload) {
 	try {
 		if (window.osClient) {
 			return libRichClient.sendToRichClient(payload);
-		} 
-		
+		}
+
 		return libWebClient.sendWebclientMessage(payload);
 	} catch (error) {
 		console.log(`dashlet says: error caught in ${payload[0]}`, error);
@@ -238,9 +253,49 @@ function isModalDialog() {
 	if (window.osClient) {
 		return libRichClient.isModalDialog();
 	}
-	
+
 	return libWebClient.isModalDialog();
 }
+
+// This will store the value for the onCanCancel behavior.
+// It's initialized to a default value to ensure it's always callable.
+let onCanCancelValue = 1;
+
+/**
+ * Registers the callback for the ESC key event.
+ *
+ * @param {Function} valueFunction - A function that returns the current value for the callback.
+ */
+function registerOnCanCancelCallback(valueFunction) {
+	return new Promise((resolve, reject) => {
+		// Delay is necessary to ensure the availability of the function.
+		setTimeout(() => {
+			if (!isModalDialog()) {
+				reject("Not implemented for dashlets");
+			} else {
+				// We assign the function passed from main.js to onCanCancelValue.
+				// This allows the function to be updated dynamically from main.js.
+				onCanCancelValue = valueFunction;
+				resolve();
+			}
+		}, 1000);
+	});
+}
+
+// Event listener for the ESC key.
+window.addEventListener('keydown', function (event) {
+	// Check if the ESC key was pressed, and the modal dialog is active.
+	if (event.key === "Escape" && !window.osClient && isModalDialog()) {
+		// Retrieve the current onCanCancelValue by calling the function.
+		const currentValue = typeof onCanCancelValue == 'function' ? onCanCancelValue() : onCanCancelValue;
+		// If the value is not 2, we close the modal dialog.
+		if (currentValue !== 2) {
+			closeModalDialog(currentValue);
+		} else {
+			console.warn("ESC key event is disabled.");
+		}
+	}
+});
 
 // Export functions to be used in other JavaScript files.
 // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
@@ -248,9 +303,10 @@ export {
 	// Event Callbacks
 	registerOnInitCallback,
 	registerOnUpdateCallback,
+	registerOnCanCancelCallback,
 
 	// Methods Dashlets
-	openIndexData, 
+	openIndexData,
 	openLocation,
 	getSelectedObjects,
 	refreshHitListObjects,
@@ -260,5 +316,9 @@ export {
 	// Methods modal dialogs
 	getFieldValueByInternal,
 	setFieldValueByInternal,
-	getEnvironment
+	getEnvironment,
+	setDialogCaption,
+
+	// export for unit tests
+	isModalDialog
 };
