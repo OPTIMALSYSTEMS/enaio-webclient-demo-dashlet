@@ -24,7 +24,7 @@ For the preview area, in which the content and detailed previews are currently d
 
 ## Abstraction Library for Dashlet Communication (new)
 
-Abstraction Library is a critical component of this project designed to facilitate seamless communication between the dashlet and both the enaio® webclient and enaio® richclient. This library, located in the "js/library" folder, serves as a fundamental link to enhance interaction between the dashlet and the enaio® platforms.
+Abstraction Library is a critical component of this project designed to facilitate seamless communication between the dashlet and both the enaio® webclient and enaio® richclient. This library which is an npm package can be downloaded and installed from [here](https://www.npmjs.com/package/@enaio-client/communication-library), serves as a fundamental link to enhance interaction between the dashlet and the enaio® platforms.
 
 ### Purpose
 
@@ -46,7 +46,7 @@ To fully leverage the capabilities of this library, we strongly recommend integr
 
 ### Location
 
-Locate the Abstraction Library in the "js/library" folder within the project directory. Its organized structure makes it easily accessible for integration into your dashlet's codebase and for effortless updates in the future.
+Locate the Abstraction Library [here](https://www.npmjs.com/package/@enaio-client/communication-library). Its organized structure makes it easily accessible for integration into your dashlet's codebase and for effortless updates in the future.
 
 ## Events
 
