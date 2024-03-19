@@ -24,29 +24,11 @@ For the preview area, in which the content and detailed previews are currently d
 
 ## Abstraction Library for Dashlet Communication (new)
 
-Abstraction Library is a critical component of this project designed to facilitate seamless communication between the dashlet and both the enaio® webclient and enaio® richclient. This library which is an npm package can be downloaded and installed from [here](https://www.npmjs.com/package/@enaio-client/communication-library), serves as a fundamental link to enhance interaction between the dashlet and the enaio® platforms.
+Abstraction Library is a critical component of this project designed to facilitate seamless communication between the dashlet and both the enaio® webclient and enaio® richclient. This library, available as an npm package accessible [here](https://www.npmjs.com/package/@enaio-client/communication-library), serves as a foundational bridge, enhancing interaction between the dashlet and the enaio® platforms.
 
 ### Purpose
 
-The Abstraction Library is primarily intended to simplify and streamline the process of communication between the dashlet and both the enaio® webclient and enaio® richclient. By adopting this library, the integration of the dashlet into both platforms becomes a cohesive and straightforward endeavor, all while maintaining a unified codebase.
-
-### Features
-
-- **Enhanced Interaction**: The Abstraction Library acts as an intermediary layer that facilitates smooth and effective communication between the dashlet and the enaio® platforms. This ensures that the dashlet can effortlessly harness the capabilities of both the enaio® webclient and enaio® richclient.
-
-- **Unified Experience**: By incorporating this library, you ensure a consistent user experience for your dashlet, regardless of whether it's used within the enaio® webclient or enaio® richclient. This uniformity minimizes disparities and provides a cohesive interface across platforms.
-
-### Usage
-
-To fully leverage the capabilities of this library, we strongly recommend integrating it into all your dashlet implementations. Doing so offers the following advantages:
-
-1. **Simplified Integration**: The Abstraction Library abstracts the intricacies of communication, significantly reducing the complexity of integrating your dashlet into both the enaio® webclient and enaio® richclient.
-
-2. **Enhanced Compatibility**: Adopting the library ensures smooth compatibility between the dashlet and both the enaio® webclient and enaio® richclient, mitigating potential compatibility challenges.
-
-### Location
-
-Locate the Abstraction Library [here](https://www.npmjs.com/package/@enaio-client/communication-library). Its organized structure makes it easily accessible for integration into your dashlet's codebase and for effortless updates in the future.
+The Abstraction Library is primarily intended to simplify and streamline the process of communication between the dashlet  and both the enaio® webclient and enaio® richclient. By adopting this library, the integration of the dashlet into both platforms becomes a cohesive and straightforward endeavor, all while maintaining a unified codebase.
 
 ## Events
 
