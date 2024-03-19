@@ -77,3 +77,29 @@ Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_d
 The openHitListByIds method is used to be able to display a mixed hit list with freely selected objects.
 
 Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds) documentation for more information about developing and integrating dashlets into enaio® webclient.
+
+### Installation
+
+1. **Clone the Repository**
+    ```sh
+    git clone https://github.com/OPTIMALSYSTEMS/enaio-webclient-demo-dashlet.git
+    ```
+
+2. **Navigate to the Project Directory**
+    ```sh
+    cd enaio-webclient-demo-dashlet
+    ```
+
+3. **Install Necessary Packages**
+    ```sh
+    npm install
+    ```
+4. **Start The Project**
+    ```sh
+    npm start
+    ```
+Voilà! You're primed to launch the project.
+
+## Usage
+
+The project's foundation lies in vanilla HTML, CSS, and JavaScript. Adherence to the existing code style is appreciated. To visualize live changes during development, we are utilizing a static file server [Live Server](https://www.npmjs.com/package/live-server). With the server active, establish a connection via the enaio® Editor's on-click event for an index mask.
