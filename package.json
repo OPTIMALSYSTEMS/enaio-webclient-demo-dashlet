@@ -1,0 +1,41 @@
+{
+    "name": "enaio-webclient-demo-dashlet",
+    "version": "1.0.0",
+    "description": "A demonstration project showcasing the varied functionalities of enaio® webclient dashlet technology",
+    "main": "src/js/main.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/OPTIMALSYSTEMS/enaio-webclient-demo-dashlet",
+        "branch": "main",
+        "directory": "/"
+    },
+    "scripts": {
+        "start": "live-server . --port=5500 -o"
+    },
+    "keywords": [
+        "web",
+        "frontend",
+        "javascript"
+    ],
+    "author": "OPTIMAL SYSTEMS GmbH <github@optimal-systems.de>",
+    "license": "Apache License 2.0",
+    "homepage": "https://github.com/OPTIMALSYSTEMS/enaio-webclient-demo-dashlet#readme",
+    "devDependencies": {
+        "gh-pages": "^3.2.3",
+        "karma": "^6.4.2",
+        "karma-chrome-launcher": "^3.2.0",
+        "karma-jasmine": "^5.1.0",
+        "karma-webpack": "^5.0.0",
+        "live-server": "^1.2.2"
+    },
+    "private": true,
+    "browserslist": [
+        "defaults"
+    ],
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "dependencies": {
+        "@enaio-client/communication-library": "^1.2.101"
+    }
+}
