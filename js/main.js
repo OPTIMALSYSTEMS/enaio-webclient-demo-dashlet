@@ -1,4 +1,4 @@
-﻿import * as lib from "./library/library.js";
+﻿import * as lib from '../../node_modules/@enaio-client/communication-library/dist/module.js';
 
 let currentSelectedObjects = [];
 let dashletName = "Dashlet";
@@ -12,6 +12,8 @@ function initDashlet(data) {
     currentSelectedObjects = data.selectedEntries.map((dmsInfo) => ({
       objectId: dmsInfo.osid,
       objectTypeId: dmsInfo.objectTypeId,
+	  objectType: dmsInfo.objectType,
+	  mainType: dmsInfo.mainType
     }));
 
     // display selected objects
