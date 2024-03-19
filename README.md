@@ -99,7 +99,3 @@ Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_d
     npm start
     ```
 Voilà! You're primed to launch the project.
-
-## Usage
-
-The project's foundation lies in vanilla HTML, CSS, and JavaScript. Adherence to the existing code style is appreciated. To visualize live changes during development, we are utilizing a static file server [Live Server](https://www.npmjs.com/package/live-server). With the server active, establish a connection via the enaio® Editor's on-click event for an index mask.
