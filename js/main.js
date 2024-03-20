@@ -1,4 +1,4 @@
-﻿import * as lib from '../node_modules/@enaio-client/communication-library/dist/module.js';
+﻿import * as lib from '../../node__modules/@enaio-client/communication-library/dist/module.js';
 
 let currentSelectedObjects = [];
 let dashletName = "Dashlet";
