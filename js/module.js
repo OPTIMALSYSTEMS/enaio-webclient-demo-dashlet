@@ -516,7 +516,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
  */ function $49fc9f948b8cbadc$export$8f1480d0136598a3(onInitCallback, trustedOrigin = "*") {
     //TODO: Automate the insertion of the version number
-    console.log(`Current Comm Lib version number: 2.0.0`);
+    console.log(`Current Communication library version number: 2.0.1-rc2`);
     if (window.osClient) $ba1d324185edb72e$export$8f1480d0136598a3(onInitCallback);
     else $464c878707ea8907$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
 }
