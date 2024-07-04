@@ -347,12 +347,16 @@ let $ba1d324185edb72e$var$modalDialog = false;
             return $ba1d324185edb72e$var$getFieldValueByInternal(payload);
         case "setFieldValueByInternal":
             return $ba1d324185edb72e$var$setFieldValueByInternal(payload);
+        case "setWorkflowVariableByName":
+            return $ba1d324185edb72e$var$setWorkflowVariableByName(payload);
         case "getEnvironment":
             return $ba1d324185edb72e$var$getEnvironment();
         case "closeModalDialog":
             return $ba1d324185edb72e$var$closeModalDialog(payload);
         case "setDialogCaption":
             return $ba1d324185edb72e$var$setDialogCaption(payload);
+        case "getWorkflowVariableByName":
+            return $ba1d324185edb72e$var$getWorkflowVariableByName(payload);
     }
 }
 /**
@@ -436,6 +440,13 @@ let $ba1d324185edb72e$var$modalDialog = false;
  * Documentation see communication-library.js
  *
  * @private
+ */ async function $ba1d324185edb72e$var$setWorkflowVariableByName(payload) {
+    return JSON.parse(await window.osClient.setWorkflowVariableByName(payload[1][0]));
+}
+/**
+ * Documentation see communication-library.js
+ *
+ * @private
  */ async function $ba1d324185edb72e$var$getEnvironment() {
     return JSON.parse(await window.osClient.getEnvironment());
 }
@@ -452,6 +463,13 @@ let $ba1d324185edb72e$var$modalDialog = false;
  * @private
  */ async function $ba1d324185edb72e$var$setDialogCaption(payload) {
     return window.osClient.setDialogCaption(payload[1][0]);
+}
+/**
+ * Documentation see communication-library.js
+ *
+ * @private
+ */ async function $ba1d324185edb72e$var$getWorkflowVariableByName(payload) {
+    return JSON.parse(await window.osClient.getWorkflowVariableByName(payload[1][0]));
 }
 /**
  * Calculate the mainType and objectType from objectTypeId and add the properties to the
@@ -497,6 +515,8 @@ let $ba1d324185edb72e$var$modalDialog = false;
  * Use "*" to allow every target origin. Example: https://enaio.company-name.de.
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
  */ function $49fc9f948b8cbadc$export$8f1480d0136598a3(onInitCallback, trustedOrigin = "*") {
+    //TODO: Automate the insertion of the version number
+    console.log(`Current Comm Lib version number: 2.0.0`);
     if (window.osClient) $ba1d324185edb72e$export$8f1480d0136598a3(onInitCallback);
     else $464c878707ea8907$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
 }
@@ -628,6 +648,23 @@ let $ba1d324185edb72e$var$modalDialog = false;
     ]);
 }
 /**
+ * Fetches the value of a specific workflow variable by its name. This function is only available for modal dialogs.
+ * The return value of the function depends on the type of the workflow variable being queried.
+ *
+ * @param {object} json - A JSON object containing the `name` of the workflow variable.
+ * @return {Promise<string|Array<Array<string>>>} - A promise that resolves to the value of the workflow variable. The type of the return value can be a string or an array of arrays of strings, depending on the variable's type.
+ * @link https://help.optimal-systems.com/enaio_develop/display/WEB/getWorkflowVariableByName - For more information regarding the return value based on the field type.
+ * @throws {string} - Throws an error message if the function is invoked outside of a modal dialog context, as it is not implemented for dashlets.
+ */ async function $49fc9f948b8cbadc$export$b3ed74af647c74bd(json) {
+    if (!$49fc9f948b8cbadc$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
+    return $49fc9f948b8cbadc$var$sendClientMessage([
+        "getWorkflowVariableByName",
+        [
+            $49fc9f948b8cbadc$var$jsonObjectToString(json)
+        ]
+    ]);
+}
+/**
  * Only available for modal dialogs.
  * Set the value of a field given by its internal name in the open index data mask behind the modal dialog.
  * The current value of the index data mask field is completely replaced by the new value.
@@ -639,6 +676,24 @@ let $ba1d324185edb72e$var$modalDialog = false;
     if (!$49fc9f948b8cbadc$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
     return $49fc9f948b8cbadc$var$sendClientMessage([
         "setFieldValueByInternal",
+        [
+            $49fc9f948b8cbadc$var$jsonObjectToString(json)
+        ]
+    ]);
+}
+/**
+ * Only available for modal dialogs.
+ * Sets a workflow variable by its name.
+ * The current value of the workflow variable is completely replaced by the new value.
+ *
+ * @param json A json object with the variable name and value.
+ * @throws {string} If the function is used outside of a modal dialog.
+ * @returns The answer of the client.
+ * @async
+ */ async function $49fc9f948b8cbadc$export$23c49f97b8cbcd5b(json) {
+    if (!$49fc9f948b8cbadc$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
+    return $49fc9f948b8cbadc$var$sendClientMessage([
+        "setWorkflowVariableByName",
         [
             $49fc9f948b8cbadc$var$jsonObjectToString(json)
         ]
@@ -769,11 +824,13 @@ const $49fc9f948b8cbadc$var$CommunicationLibrary = {
     setFieldValueByInternal: $49fc9f948b8cbadc$export$50c2e2f825ad7b4b,
     getEnvironment: $49fc9f948b8cbadc$export$57570b1603cf6adb,
     setDialogCaption: $49fc9f948b8cbadc$export$74da6a16c6928c4d,
+    getWorkflowVariableByName: // Methods for Workflows
+    $49fc9f948b8cbadc$export$b3ed74af647c74bd,
     isModalDialog: // export for unit tests
     $49fc9f948b8cbadc$export$cebb092bf393cc5
 };
 var $49fc9f948b8cbadc$export$2e2bcd8739ae039 = $49fc9f948b8cbadc$var$CommunicationLibrary;
 
 
-export {$49fc9f948b8cbadc$export$8f1480d0136598a3 as registerOnInitCallback, $49fc9f948b8cbadc$export$4172dbddf28736a3 as registerOnUpdateCallback, $49fc9f948b8cbadc$export$c80888c0f1760f07 as openIndexData, $49fc9f948b8cbadc$export$cebb092bf393cc5 as isModalDialog, $49fc9f948b8cbadc$export$47c4a703efa8e61e as openLocation, $49fc9f948b8cbadc$export$96f907581d671890 as getSelectedObjects, $49fc9f948b8cbadc$export$89d12ae34746cff2 as refreshHitListObjects, $49fc9f948b8cbadc$export$5b5fa3829992783b as openHitListByIds, $49fc9f948b8cbadc$export$468316c75afcb0f3 as getFieldValueByInternal, $49fc9f948b8cbadc$export$50c2e2f825ad7b4b as setFieldValueByInternal, $49fc9f948b8cbadc$export$57570b1603cf6adb as getEnvironment, $49fc9f948b8cbadc$export$74da6a16c6928c4d as setDialogCaption, $49fc9f948b8cbadc$export$f290980283620b4a as closeModalDialog, $49fc9f948b8cbadc$export$e12a024d8ae2e5c as registerOnCanCancelCallback, $49fc9f948b8cbadc$export$2e2bcd8739ae039 as default};
+export {$49fc9f948b8cbadc$export$8f1480d0136598a3 as registerOnInitCallback, $49fc9f948b8cbadc$export$4172dbddf28736a3 as registerOnUpdateCallback, $49fc9f948b8cbadc$export$c80888c0f1760f07 as openIndexData, $49fc9f948b8cbadc$export$cebb092bf393cc5 as isModalDialog, $49fc9f948b8cbadc$export$47c4a703efa8e61e as openLocation, $49fc9f948b8cbadc$export$96f907581d671890 as getSelectedObjects, $49fc9f948b8cbadc$export$89d12ae34746cff2 as refreshHitListObjects, $49fc9f948b8cbadc$export$5b5fa3829992783b as openHitListByIds, $49fc9f948b8cbadc$export$468316c75afcb0f3 as getFieldValueByInternal, $49fc9f948b8cbadc$export$b3ed74af647c74bd as getWorkflowVariableByName, $49fc9f948b8cbadc$export$50c2e2f825ad7b4b as setFieldValueByInternal, $49fc9f948b8cbadc$export$23c49f97b8cbcd5b as setWorkflowVariableByName, $49fc9f948b8cbadc$export$57570b1603cf6adb as getEnvironment, $49fc9f948b8cbadc$export$74da6a16c6928c4d as setDialogCaption, $49fc9f948b8cbadc$export$f290980283620b4a as closeModalDialog, $49fc9f948b8cbadc$export$e12a024d8ae2e5c as registerOnCanCancelCallback, $49fc9f948b8cbadc$export$2e2bcd8739ae039 as default};
 //# sourceMappingURL=module.js.map
