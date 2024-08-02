@@ -287,6 +287,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
         },
         context: null
     };
+    console.log("\uD83D\uDE80 ~ internalOnInitUpdateDashlet ~ mappedData:", mappedData);
     // execute registered events with mapped data.
     // onInitCallback is called once. Afterward we set it to null and then onUpdateCallback is called.
     if ($ba1d324185edb72e$var$onInitCallback != null) {
@@ -507,6 +508,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
 }
 
 
+const $49fc9f948b8cbadc$var$version = "2.0.1-rc2";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
@@ -515,8 +517,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
  * Use "*" to allow every target origin. Example: https://enaio.company-name.de.
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
  */ function $49fc9f948b8cbadc$export$8f1480d0136598a3(onInitCallback, trustedOrigin = "*") {
-    //TODO: Automate the insertion of the version number
-    console.log(`Current Communication library version number: 2.0.1-rc2`);
+    console.log(`Current Communication library version number: ${$49fc9f948b8cbadc$var$version}`);
     if (window.osClient) $ba1d324185edb72e$export$8f1480d0136598a3(onInitCallback);
     else $464c878707ea8907$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
 }
