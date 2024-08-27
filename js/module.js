@@ -203,7 +203,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
         $ba1d324185edb72e$var$dashletCache = {};
         $ba1d324185edb72e$var$dashletCache.dashletCaption = window.osClient.osjxGetDashletCaption();
         $ba1d324185edb72e$var$dashletCache.uri = window.osClient.osjxGetDashletURL();
-        $ba1d324185edb72e$var$dashletCache.languageGuiSelected = window.osClient.osjxGetEnvironment(35);
+        $ba1d324185edb72e$var$dashletCache.languageGuiSelected = window.osClient.osjxGetEnvironment(24) || "de";
         $ba1d324185edb72e$var$dashletCache.languageObjectDefinition = window.osClient.osjxGetEnvironment(33);
         $ba1d324185edb72e$var$dashletCache.wfOrgId = window.osClient.osjxGetEnvironment(19);
         $ba1d324185edb72e$var$dashletCache.mail = window.osClient.osjxGetEnvironment(16);
@@ -287,7 +287,6 @@ let $ba1d324185edb72e$var$modalDialog = false;
         },
         context: null
     };
-    console.log("\uD83D\uDE80 ~ internalOnInitUpdateDashlet ~ mappedData:", mappedData);
     // execute registered events with mapped data.
     // onInitCallback is called once. Afterward we set it to null and then onUpdateCallback is called.
     if ($ba1d324185edb72e$var$onInitCallback != null) {
@@ -508,7 +507,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
 }
 
 
-const $49fc9f948b8cbadc$var$version = "2.0.1-rc2";
+const $49fc9f948b8cbadc$var$version = "2.0.1-rc5";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
