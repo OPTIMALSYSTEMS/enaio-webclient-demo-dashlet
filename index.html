@@ -1,390 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>enaio® demo dashlet</title>
-    <link rel="stylesheet" href="styles/main.css" />
-  </head>
-  <body>
-    <main class="main-container">
-      <div class="header-container">
-        <div class="header-banner">
-          <div class="header-banner-logo">
-            <img
-              alt="enaio®"
-              title="enaio®"
-              src="assets/enaio_blueline_white.png"
-            />
-          </div>
-          <div class="header-banner-text">
-            <span>Enterprise Content Management</span>
-            <span>© OPTIMAL SYSTEMS - all rights reserved</span>
-          </div>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>enaio® webclient demo dashlet</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+  <header>
+    <div class="header-container">
+      <div class="header-banner">
+        <div class="header-banner-logo">
+          <img src="assets/enaio_logo_white.png" alt="enaio®" title="enaio®">
+        </div>
+        <div class="header-banner-text">
+          <span>Enterprise Content Management</span>
+          <span>© OPTIMAL SYSTEMS - all rights reserved</span>
         </div>
       </div>
-      <div class="section-container">
-        <div class="introduction">
-          <div>
-            <p class="section-heading">AbstractDemo Dashlet</p>
-            <p class="section-text">
-              Im enaio® client stellen wir Ihnen ab der Version 10.0 Service
-              Release 2 eine Möglichkeit zur Verfügung, kundenindividuelle und
-              frei gestaltbare Bereiche – sogenannte Dashlets - zu integrieren.
-              Dashlets unterstützen Sie bei der Umsetzung der
-              unterschiedlichsten Geschäftsprozesse und -szenarien, in dem sie
-              flexibel als weitere Informations- und Interaktionsmöglichkeit für
-              Benutzer kontextabhängig verfügbar gemacht werden können.
-              <br />
-              <br />
-              Für den Vorschaubereich, in dem aktuell bereits die Inhalts- und
-              Detailvorschau angezeigt werden, konfigurieren Sie individuelle
-              Dashlets, die zum Beispiel mithilfe sogenannter Dashlet-Services
-              weitere Informationsquellen einbinden (z. B. Internetseiten wie
-              Wikipedia oder Google Maps). Alternativ integrieren Sie komplette
-              Webanwendungen wie zum Beispiel den enaio® documentviewer.
-            </p>
-          </div>
-        </div>
-        <div class="events">
-          <div>
-            <p class="section-heading">Events</p>
-            <p class="section-text">
-              <b class="bolder">Hinweis:</b>
-              Der enaio® webclient arbeitet auf Event-Basis. In diesem Beispiel
-              haben wir im Dashlet für den enaio® richclient eine ähnliche
-              Event-Basis eingebaut.
-            </p>
-            <p class="notice">
-              <b class="bolder">Hinweis:</b>
-              Öffnen Sie in Ihrem Browser die Entwicklertools (Dev-Tools), um
-              ein Protokoll des Ereignisses anzuzeigen.
-            </p>
-            <p class="subheading">onInit</p>
-            <p>
-              Das onInit-Event wird jedes Mal ausgelöst, sobald das Dashlet
-              aktiviert und damit sichtbar geschaltet wird. Der Payload des
-              Events enthält Informationen über den aktuellen Zustand, die es
-              dem Dashlet direkt ermöglichen, sich zu Initialisieren ohne viele
-              Methoden im Nachgang aufzurufen.
-            </p>
-            <p>
-              Weitere Informationen zu diesem Event finden Sie auf unserer
-              <a
-                target="_blank"
-                href="https://help.optimal-systems.com/enaio_develop/display/WEB/onInit"
-                >Dokumentationsseite.</a
-              >
-            </p>
-            <p class="subheading">onUpdate</p>
-            <p>
-              Das onUpdate-Event wird jedes Mal ausgelöst, sobald sich die
-              Objekt-Auswahl im enaio® client geändert hat. Es beinhaltet
-              dieselben Properties wie das onInit-Event.
-            </p>
-            <p>
-              Weitere Informationen zu diesem Event finden Sie auf unserer
-              <a
-                target="_blank"
-                href="https://help.optimal-systems.com/enaio_develop/display/WEB/onUpdate"
-                >Dokumentationsseite.</a
-              >
-            </p>
-          </div>
-        </div>
-        <div class="methods">
-          <div>
-            <p class="section-heading">Methoden</p>
-            <p class="section-text">
-              Dashlets können den enaio® client steuern und Aktionen auslösen.
-              Für dieses Dashletbeispiel, haben wir nur Methoden verwendet, die
-              auch in beiden clients verwendet werden können. Die angebotenen
-              Methoden können sich also von client zu client unterscheiden.
-            </p>
-            <p class="subheading">Webclient</p>
-            <p>
-              Dies geschieht im enaio® webclient über die Browser-API
-              postMessage. Die Methode
-              <a
-                target="_blank"
-                href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage"
-                ><strong>window.postMessage()</strong></a
-              >
-              ermöglicht die sichere ursprungsübergreifende Kommunikation
-              zwischen Window-Objekten; z.B. zwischen einer Seite und einem von
-              ihr erzeugten Pop-up oder zwischen einer Seite und einem darin
-              eingebetteten iframe.
-            </p>
-            <p class="subheading">Richclient</p>
-            <p>
-              Für den enaio® richclient steht das Objekt
-              <strong>window.osClient</strong> dafür bereit.
-            </p>
-            <p>Aktuell stehen Ihnen folgenden Methoden zur Verfügung:</p>
-          </div>
-        </div>
-        <div class="collapsible-container">
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading">Standort öffnen</span>
-          </legend>
-          <div class="content">
-            <p>
-              Mittels der Methode <b class="bolder">openLocation</b> wird die
-              Skripting-Methode Open Location des jeweiligen enaio® clients
-              aufgerufen, die den Standort (oder eine Standortauswahl bei
-              mehreren möglichen Standorten) für das als Parameter übergebene
-              DMS Objekt öffnet.
-            </p>
-            <div class="content-button-container">
-              <form id="openLocationForm">
-                <input
-                  type="checkbox"
-                  id="openLocationNewTab"
-                  name="openLocationNewTab"
-                  checked
-                />
-                <label for="openLocationNewTab"
-                  >In einem neuen Tab öffnen (Webclient)</label
-                >
-                <br /><br />
-                <button id="openLocation" class="inner-button">
-                  Standort öffnen
-                </button>
-              </form>
-            </div>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/display/WEB/openLocation"
-                >openLocation - Webclient Dokumentationsseite
-              </a>
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxOpenLocation - Richclient Dokumentationsseite
-              </a>
-            </p>
-          </div>
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading">Indexdaten öffnen</span>
-          </legend>
-          <div class="content">
-            <p>
-              Mittels der Methode <b class="bolder">openIndexData</b> wird die
-              Skripting-Methode Show Indexdata oder Edit Indexdata des
-              jeweiligen enaio® clients aufgerufen, die die Indexdatenmaske für
-              das als Parameter übergebene DMS Objekt öffnet.
-            </p>
+    </div>
+  </header>
 
-            <div class="content-button-container">
-              <form id="openIndexDataFormForm">
-                <input
-                  type="checkbox"
-                  id="indexDataNewTab"
-                  name="inNewTab"
-                  checked
-                />
-                <label for="indexDataNewTab"
-                  >In einem neuen Tab öffnen (Webclient)</label
-                >
-                <br /><br />
-                <span>Mode:</span>
-                <input
-                  type="radio"
-                  id="modeChoice1"
-                  name="mode"
-                  value="edit"
-                  checked
-                />
-                <label for="modeChoice1">Edit</label>
-                <input type="radio" id="modeChoice2" name="mode" value="view" />
-                <label for="modeChoice2">View</label>
-                <br /><br />
-                <button type="submit" id="openIndexData" class="inner-button">
-                  Indexdaten öffnen
-                </button>
-              </form>
-            </div>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/display/WEB/openIndexData"
-                >openIndexData - Webclient Dokumentationsseite</a
-              >
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxOpenDataSheet - Richclient Dokumentationsseite
-              </a>
-            </p>
-          </div>
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading">Ausgewählte Objekte abfragen</span>
-          </legend>
-          <div class="content">
-            <p>
-              Die Methode <b class="bolder">getSelectedObjects</b> wird
-              verwendet, um die aktuell ausgewählten Objekte abzufragen. Sollten
-              keine Objekte ausgewählt, oder keine Trefferliste aktuell
-              angezeigt sein, wird eine leere Liste zurückgegeben.
-            </p>
-            <div class="content-button-container">
-              <button id="getSelectedObjects" class="inner-button">
-                Objekt-IDs anzeigen
-              </button>
-            </div>
-            <p class="selected-objects" id="selectedObjectsContainer"></p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/display/WEB/getSelectedObjects"
-                >getSelectedObjects - Webclient Dokumentationsseite</a
-              >
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxGetSelectedObjects - Richclient Dokumentationsseite
-              </a>
-            </p>
-          </div>
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading"
-              >Trefferlisten Objekte aktualisieren</span
-            >
-          </legend>
-          <div class="content">
-            <p>
-              Die Methode <b class="bolder">refreshHitListObjects</b> wird
-              verwendet, um ein (im Richclient und Webclient) oder auch mehrere
-              Objekte (im Webclient) in einer offenen Trefferliste zu
-              aktualisieren.
-            </p>
-            <b class="bolder">Zu testen</b>
-            <p>
-              Öffnen Sie eine Trefferliste. Öffnen Sie dann eine zweite
-              Registerkarte und ändern die Indexdaten eines Objekts, welches in
-              der geöffneten Trefferliste angezeigt wird. Gehen Sie zurück zur
-              Trefferliste und drücken Sie die Schaltfläche < Objekte
-              aktualisieren >.
-            </p>
-            <div class="content-button-container tooltip">
-              <button id="refreshHitListObjects" class="inner-button">
-                Objekte aktualisieren
-              </button>
-            </div>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/display/WEB/refreshHitListObjects"
-                >refreshHitListObjects - Webclient Dokumentationsseite</a
-              >
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxRefreshObjectInLists - Richclient Dokumentationsseite
-              </a>
-            </p>
-          </div>
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading">Trefferliste nach ID öffnen</span>
-          </legend>
-          <div class="content">
-            <p>
-              Die Methode <b class="bolder">openHitListByIds</b> wird verwendet,
-              um eine gemischte Trefferliste mit frei gewählten Objekten
-              darstellen zu können.
-            </p>
-            <div class="content-button-container">
-              <form id="openHitListByIdsForm">
-                <input type="checkbox" id="inNewTab" name="inNewTab" checked />
-                <label for="inNewTab"
-                  >In einem neuen Tab öffnen (Webclient)</label
-                >
-                <br /><br />
-                <input
-                  type="checkbox"
-                  id="executeSingleHitAction"
-                  name="executeSingleHitAction"
-                  checked
-                />
-                <label for="executeSingleHitAction"
-                  >SingleHitAction ausführen (Webclient)</label
-                >
-                <br /><br />
-                <label for="title">Titel:</label>
-                <input type="text" name="title" id="title" />
-                <br /><br />
-                <label for="description">Beschreibung (Webclient):</label>
-                <input type="text" name="description" id="description" />
-                <br /><br />
-                <button id="openHitListByIds" class="inner-button">
-                  Objekte öffnen
-                </button>
-              </form>
-            </div>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds"
-                >openHitListByIds - Webclient Dokumentationsseite</a
-              >
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxOpenResultList - Richclient Dokumentationsseite
-              </a>
-            </p>
-          </div>
-          <p>Gewählte Objekte:</p>
-          <p class="selected-objects" id="selectedObjects"></p>
-          <p>
-            Weitere Informationen zu den jeweiligen Methoden des jeweiligen
-            enaio® clients finden Sie auf unserer Dokumentationsseite
-            <a
-              target="_blank"
-              href="https://help.optimal-systems.com/enaio_develop/display/WEB/5.4+Dashlet-Methoden"
-              >des Webclients</a
-            >
-            und
-            <a
-              target="_blank"
-              href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-              >des Richclients.</a
-            >
+  <main class="main-container">
+
+    <!-- Introduction section explaining about the Modal Dialog Addon -->
+    <section class="section-container">
+      <div class="introduction">
+        <p class="section-heading">Demo Modal Dialog Addon</p>
+        <p class="section-text">
+          Das Modal Dialog Addon ist eine neue Funktion, mittels derer Sie eine externe Webseite, die unter demselben
+          Hostnamen gehostet ist, in einem modalen Dialog öffnen können. Die Webseite im modalen Dialog kann über eine
+          API mit dem enaio® webclient interagieren und Daten austauschen. Weitere Einzelheiten finden Sie in der
+          <a target="_blank" href="https://help.optimal-systems.com/enaio_develop/x/ZwCxB"> Dokumentation. </a>
+        </p>
+      </div>
+
+      <!-- Method overview section -->
+      <div class="methods">
+        <div>
+          <p class="section-heading">Methoden</p>
+          <p class="section-text">
+            Das Modal Addon umfasst die folgenden Methoden:
           </p>
         </div>
       </div>
-    </main>
-  </body>
-  <footer>
-    <script src="js/style.js"></script>
-    <script type="module" src="js/main.js"></script>
-    <script type="module" src="js/action.js"></script>
-  </footer>
+
+      <!-- Section about onInit event -->
+      <section class=" collapsible-section">
+        <header class="section-header">
+          <h2 class="method-title">onInit</h2>
+          <div class="collapsible-icon">˄</div>
+        </header>
+        <div class="content">
+          <p>
+            Das onInit-Event wird jedes Mal ausgelöst, sobald der modale Dialog geöffnet wird. Der Payload des Events enthält Informationen über das aktuell geöffnete Objekt der Indexdatenmaske und den Kontext, aus dem die Indexdatenmaske geöffnet wurde. Weitere
+            Einzelheiten zur <a target="_blank"
+              href="https://help.optimal-systems.com/enaio_develop/x/cQCxB">Dokumentation</a>.
+          </p>
+          </p>
+          <p>
+            Syntax: <em class="bolder italic">onInit()</em>
+          </p>
+          <div class="result-contianer">
+            <p>
+              Response:
+            </p>
+            <p id="onInit_response"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section about getEnvironment method -->
+      <section class=" collapsible-section">
+        <header class="section-header">
+          <h2 class="method-title">getEnvironment</h2>
+          <div class="collapsible-icon">˄</div>
+        </header>
+        <div class="content">
+          <p>
+            Die Methode getEnvironment stellt grundlegende Informationen zur Umgebung zur Verfügung. Weitere
+            Einzelheiten zur <a target="_blank"
+              href="https://help.optimal-systems.com/enaio_develop/x/QYAHBQ">Dokumentation</a>.
+          </p>
+          </p>
+          <p>
+            Syntax: <em class="bolder italic">getEnvironment()</em>
+          </p>
+          <div class="content-button-container">
+            <div class="button-container">
+              <button id="getEnvironment" class="inner-button">Get Environment Data</button>
+              <button class="clear-button">Clear</button>
+            </div>
+          </div>
+          <div class="result-contianer">
+            <p>
+              Response:
+            </p>
+            <p id="getEnvironment_response"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section about getFieldValueByInternal method -->
+      <section class="collapsible-section">
+        <header class="section-header">
+          <h2 class="method-title">getFieldValueByInternal</h2>
+          <div class="collapsible-icon">˄</div>
+        </header>
+        <div class="content">
+          <p>
+            Die Methode getFieldValueByInternal ermöglicht es, auf Daten von Feldern der Indexdatenmaske, aus welcher
+            der modale Dialog geöffnet wurde, zuzugreifen, sodass diese im modalen Dialog verwendet werden können.
+            Weitere Einzelheiten zur <a target="_blank"
+              href="https://help.optimal-systems.com/enaio_develop/x/dwCxB">Dokumentation</a>.
+          </p>
+          </p>
+          <p>
+            Syntax: <em class="bolder italic">getFieldValueByInternal(internalFieldName)</em>
+          </p>
+          <div class="content-button-container">
+            <div class="fields-container">
+              <div>
+                <label for="internalFieldName">Field Internal Name:&nbsp;</label>
+                <input type="text" name="Internal Field Name" id="internalFieldName">
+              </div>
+            </div>
+            <div class="button-container">
+              <button id="getFieldValueByInternal" class="inner-button">Get Value By Internal Name</button>
+              <button class="clear-button">Clear</button>
+            </div>
+          </div>
+          <div class="result-contianer">
+            <p>
+              Response:
+            </p>
+            <p id="getFieldValueByInternal_response"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section about setFieldValueByInternal method -->
+      <section class="collapsible-section">
+        <header class="section-header">
+          <h2 class="method-title">setFieldValueByInternal</h2>
+          <div class="collapsible-icon">˄</div>
+        </header>
+        <div class="content">
+          <p>
+            Die Methode setFieldValueByInternal ermöglicht es Daten in Felder der Indexdatenmaske, aus welcher der
+            modale Dialog geöffnet wurde, zu schreiben. Weitere Einzelheiten zur <a target="_blank"
+              href="https://help.optimal-systems.com/enaio_develop/x/IIAHBQ">Dokumentation</a>.
+          </p>
+          </p>
+          <p>
+            Syntax: <em class="bolder italic">setFieldValueByInternal(internalFieldName, value)</em>
+          </p>
+          <div class="content-button-container">
+            <div class="fields-container">
+              <div>
+                <label for="internalSetFieldName">Field Internal Name:&nbsp;</label>
+                <input type="text" name="Internal Set Field Name" id="internalSetFieldName" value="">
+              </div>
+              <div>
+                <label for="internalFieldValue">Value:&nbsp;</label>
+                <input type="text" name="Internal Field Value" id="internalFieldValue" value="">
+              </div>
+            </div>
+            <div class="button-container">
+              <button id="setFieldValueByInternal" class="inner-button">Set Value By Internal</button>
+              <button class="clear-button">Clear</button>
+            </div>
+          </div>
+          <div class="result-contianer">
+            <p>
+              Response:
+            </p>
+            <p id="setFieldValueByInternal_response"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section about closeModalDialog function -->
+      <section class="collapsible-section">
+        <header class="section-header">
+          <h2 class="method-title">closeModalDialog</h2>
+          <div class="collapsible-icon">˄</div>
+        </header>
+        <div class="content">
+          <p>
+            Die Methode closeModalDialog ermöglicht es, den modalen Dialog zu schließen und weitere Aktionen nach dem Schließen per Script durchführen zu lassen. Weitere Einzelheiten zur <a target="_blank"
+            href="https://help.optimal-systems.com/enaio_develop/x/CYA9BQ">Dokumentation</a>.
+          </p>
+          </p>
+          <p>
+            Syntax: <em class="bolder italic">closeModalDialog(value)</em>
+          </p>
+          <div class="content-button-container">
+            <div class="button-container">
+              <button id="closeModalSave" class="inner-button">Speichern (value = 1)</button>
+              <button id="closeModalCancel" class="inner-button">Abbrechen (value = 2)</button>
+            </div>
+          </div>
+          <br>
+        </div>
+      </section>
+
+      <!-- Section about onCanCancel function -->
+      <section class="collapsible-section">
+        <header class="section-header">
+          <h2 class="method-title">onCanCancel</h2>
+          <div class="collapsible-icon">˄</div>
+        </header>
+        <div class="content">
+          <p>
+            Das Ereignis onCanCancel dient als Registrierungsmechanismus, der während der Initialisierungsphase aufgerufen werden sollte. Sie ermöglicht die Entscheidung, ob der modale Dialog beim Auftreten eines ESC-Tastenereignisses innerhalb eines modalen Dialog-Add-ons beendet oder seine Anzeige beibehalten werden soll. Weitere Einzelheiten zur <a target="_blank"
+              href="https://help.optimal-systems.com/enaio_develop/x/-oCiBQ">Dokumentation</a>.
+              
+          </p>
+          </p>
+          <p>
+            Syntax: <em class="bolder italic">lib.registerOnCanCancelCallback(() => value)</em>
+          </p>
+          <div class="content-button-container">
+            <p>Klicken Sie auf eine der Schaltflächen, um den Wert zuzuweisen, und drücken Sie dann die ESC-Taste, um das Verhalten zu beobachten.</p>
+            <div class="button-container">
+              <button id="onCanCancelEnable" class="inner-button">ESC-Tastenereignis einschalten (value = 1)</button>
+              <button id="onCanCancelDisable" class="inner-button">ESC-Tastenereignis deaktivieren (value = 2)</button>
+            </div>
+          </div>
+          <br>
+        </div>
+      </section>
+
+      <!-- Section about setDialogCaption method -->
+      <section class="collapsible-section">
+        <header class="section-header">
+          <h2 class="method-title">setDialogCaption</h2>
+          <div class="collapsible-icon">˄</div>
+        </header>
+        <div class="content">
+          <p>
+            Die Methode setDialogCaption ermöglicht Entwicklern, den Titel des Dialogfelds dynamisch anzupassen, selbst nachdem das modale Dialogfeld geöffnet wurde. Dies bietet eine höhere Flexibilität bei der Gestaltung der Benutzererfahrung im Kontext des Projekts. 
+            Weitere Einzelheiten zur <a target="_blank"
+              href="https://help.optimal-systems.com/enaio_develop/x/QYGiBQ">Dokumentation</a>.
+          </p>
+          </p>
+          <p>
+            Syntax: <em class="bolder italic">setDialogCaption(value)</em>
+          </p>
+          <div class="content-button-container">
+            <div class="fields-container">
+              <div>
+                <label for="captionName">New Caption:&nbsp;</label>
+                <input type="text" name="New Caption" id="captionName">
+              </div>
+            </div>
+            <div class="button-container">
+              <button id="setDialogCaption" class="inner-button">Set Dialog Caption</button>
+              <button class="clear-button">Clear</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+      <!-- Section about getWorkflowVariableByName method -->
+      <section class="collapsible-section">
+        <header class="section-header">
+          <h2 class="method-title">getWorkflowVariableByName</h2>
+          <div class="collapsible-icon">˄</div>
+        </header>
+        <div class="content">
+          <p>
+            Die Methode getWorkflowVariableByName ermöglicht den Zugriff auf Daten von Workflow-Variablen in der Workflow-Maske, aus der der modale Dialog geöffnet wurde. Dies ermöglicht die Verwendung dieser Variablen innerhalb des modalen Dialogs. Weitere Informationen entnehmen Sie bitte der Dokumentation <a target="_blank"
+            href="https://help.optimal-systems.com/enaio_develop/x/o4OiBQ">Dokumentation</a>.
+          </p>
+          </p>
+          <p>
+            Syntax: <em class="bolder italic">getWorkflowVariableByName(name)</em>
+          </p>
+          <div class="content-button-container">
+            <div class="fields-container">
+              <div>
+                <label for="wfVariableName">Variable Name:&nbsp;</label>
+                <input type="text" name="Field Name" id="wfVariableName">
+              </div>
+            </div>
+            <div class="button-container">
+              <button id="getWorkflowVariableByName" class="inner-button">Get Value By Name</button>
+              <button class="clear-button">Clear</button>
+            </div>
+          </div>
+          <div class="result-contianer">
+            <p>
+              Response:
+            </p>
+            <p id="getWorkflowVariableByName_response"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section about setWorkflowVariableByName method -->
+      <section class="collapsible-section">
+        <header class="section-header">
+          <h2 class="method-title">setWorkflowVariableByName</h2>
+          <div class="collapsible-icon">˄</div>
+        </header>
+        <div class="content">
+          <p>
+            Die Methode setWorkflowVariableByName ermöglicht es, Daten in Workflow-Variablen der Workflow-Maske, aus der der modale Dialog geöffnet wurde, zu schreiben. Dies ermöglicht die Aktualisierung dieser Variablen innerhalb des modalen Dialogs. Weitere Informationen entnehmen Sie bitte der Dokumentation <a
+              target="_blank" href="https://help.optimal-systems.com/enaio_develop/x/o4OiBQ">Dokumentation</a>.
+          </p>
+          </p>
+          <p>
+            Syntax: <em class="bolder italic">setWorkflowVariableByName(name, value)</em>
+          </p>
+          <div class="content-button-container">
+            <div class="fields-container">
+              <div>
+                <label for="wfSetVariableName">Variable Name:&nbsp;</label>
+                <input type="text" name="Variable Name" id="wfSetVariableName">
+              </div>
+              <div>
+                <label for="wfSetVariableValue">Value:&nbsp;</label>
+                <input type="text" name="Variable Value" id="wfSetVariableValue" value="">
+              </div>
+            </div>
+            <div class="button-container">
+              <button id="setWorkflowVariableByName" class="inner-button">Set Value By Name</button>
+              <button class="clear-button">Clear</button>
+            </div>
+          </div>
+          <div class="result-contianer">
+            <p>
+              Response:
+            </p>
+            <p id="setWorkflowVariableByName_response"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- A generic close button to close the modal dialog for convenience -->
+      <div class="content-button-container">
+        <div class="button-container close-button-general">
+          <button id="closeModalGeneral" class="inner-button">Close</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- JavaScript files for different functionalities and styles -->
+  <!-- Style related scripts -->
+  <script type="module" src="js/style.js"></script>
+
+  <!-- Main script to manage functionalities and actions -->
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/action.js"></script>
+
+</body>
+
 </html>

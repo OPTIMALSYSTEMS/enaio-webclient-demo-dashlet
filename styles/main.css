@@ -1,20 +1,26 @@
 @font-face {
   font-family: "enaioOpenSans";
-  src: url(./font/OpenSans-Regular-webfont.eot); /* IE9 Compat Modes */
-  src: url(./font/OpenSans-Regular-webfont.eot?#iefix)
-      format("embedded-opentype"),
-    /* IE6-IE8 */ url(./font/OpenSans-Regular-webfont.woff) format("woff"),
-    /* Pretty Modern Browsers */ url(./font/OpenSans-Regular-webfont.ttf)
-      format("truetype"),
+  src: url(./font/OpenSans-Regular-webfont.eot);
+  /* IE9 Compat Modes */
+  src: url(./font/OpenSans-Regular-webfont.eot?#iefix) format("embedded-opentype"),
+    /* IE6-IE8 */
+    url(./font/OpenSans-Regular-webfont.woff) format("woff"),
+    /* Pretty Modern Browsers */
+    url(./font/OpenSans-Regular-webfont.ttf) format("truetype"),
     /* Safari, Android, iOS */
-      url(./font/OpenSans-Regular-webfont.svg#robotolight) format("svg"); /* Legacy iOS */
+    url(./font/OpenSans-Regular-webfont.svg#robotolight) format("svg");
+  /* Legacy iOS */
 }
 
 :root {
   --white: #ffffff;
+  --black: #000000;
   --enaio-color-gradient1: #1a9ed4;
   --enaio-color-gradient2: #0092e1;
   --enaio-color-gradient3: #0083cb;
+  --color-border-defaultNew: #bbb;
+  --color-accent-gray: #f1f1f1;
+  --color-outline-main: #777;
 }
 
 body {
@@ -25,26 +31,17 @@ body {
   font-family: "enaioOpenSans", Arial, Sans-Serif;
   font-size: 12.5px;
   font-style: normal;
-  color: #777;
+  color: var(--color-outline-main);
   font-weight: 400;
 }
 
 .header-banner {
-  background: var(--enaio-color-gradient1);
-  background: linear-gradient(
-    225deg,
-    var(--enaio-color-gradient1) 0%,
-    var(--enaio-color-gradient2) 66%,
-    var(--enaio-color-gradient3)
-  );
-  background: -webkit-linear-gradient(
-    225deg,
-    var(--enaio-color-gradient1) 0%,
-    var(--enaio-color-gradient2) 66%,
-    var(--enaio-color-gradient3)
-  );
+  background-color: var(--enaio-color-gradient3);
   color: var(--white);
-  display: flex;
+  display: flex !important;
+  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header-banner .header-banner-text {
@@ -52,15 +49,10 @@ body {
   flex-direction: column;
   align-self: end;
   text-align: right;
-  padding: 16px 32px;
 }
 
 .header-banner-text span {
   color: var(--white);
-}
-
-.header-banner .header-banner-logo {
-  padding: 48px 32px 0 32px;
 }
 
 .main-container,
@@ -79,6 +71,8 @@ body {
 
 .header-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .section-container {
@@ -114,15 +108,35 @@ body {
 
 .content-button-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+
+  .close-button-general{
+    flex-direction: row-reverse;
+  }
+}
+
+.fields-container {
+  display: flex;
   align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.fields-container>div {
+  margin-right: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .content .content-link {
   color: var(--enaio-color-gradient1);
 }
 
-.inner-button {
+.inner-button,
+.clear-button {
   height: 32px;
   background-color: var(--enaio-color-gradient3);
   border: transparent;
@@ -138,6 +152,17 @@ body {
 
 .inner-button:hover {
   background-color: var(--enaio-color-gradient1);
+}
+
+.clear-button {
+  background-color: var(--white);
+  border: 1px solid var(--color-border-defaultNew);
+  color: var(--color-outline-main);
+}
+
+.clear-button:hover {
+  background-color: var(--enaio-color-gradient1);
+  color: var(--white);
 }
 
 .collapsible {
@@ -179,4 +204,86 @@ legend.active .collapsible:after {
 
 .notice {
   margin: 6px 0px 22px;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* Collapsible Sections */
+.collapsible-section {
+  margin-bottom: 32px;
+  border: 1px solid var(--color-border-defaultNew);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-header {
+  background-color: var(--enaio-color-gradient3);
+  color: var(--white);
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.method-title {
+  margin: 0;
+  font-size: 18px;
+  color: var(--white);
+}
+
+.collapsible-icon {
+  font-size: 18px;
+  color: var(--white);
+}
+
+.collapsible-section .section-header .collapsible-icon {
+  transition: transform 0.3s ease-in-out;
+  transform: rotate(180deg);
+}
+
+.collapsible-section.active .section-header .collapsible-icon {
+  transform: rotate(0deg);
+}
+
+
+.collapsible {
+  background-color: var(--white);
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+  padding-left: 0;
+}
+
+.active,
+.collapsible:hover {
+  background-color: var(--white);
+}
+
+.collapsible:after {
+  content: "˄";
+}
+
+legend.active .collapsible:after {
+  content: "˅";
+}
+
+/* Hide content by default */
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.collapsible-section.active .content {
+  padding: 8px;
+}
+
+/* Display content when the section is active */
+.collapsible-section.active .content {
+  max-height: 1000px;
 }

@@ -1,11 +1,11 @@
 {
-    "name": "enaio-webclient-demo-dashlet",
+    "name": "enaio-webclient-demo-modal-dialog-addon",
     "version": "1.0.0",
-    "description": "A demonstration project showcasing the varied functionalities of enaio® webclient dashlet technology",
+    "description": "A demonstration project showcasing the varied functionalities of the newly introduced modal dialog add-ons feature in the enaio® webclient.",
     "main": "src/js/main.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/OPTIMALSYSTEMS/enaio-webclient-demo-dashlet",
+        "url": "https://github.com/OPTIMALSYSTEMS/enaio-webclient-demo-modal-dialog-addon",
         "branch": "main",
         "directory": "/"
     },
@@ -19,7 +19,7 @@
     ],
     "author": "OPTIMAL SYSTEMS GmbH <github@optimal-systems.de>",
     "license": "Apache License 2.0",
-    "homepage": "https://github.com/OPTIMALSYSTEMS/enaio-webclient-demo-dashlet#readme",
+    "homepage": "https://github.com/OPTIMALSYSTEMS/enaio-webclient-demo-modal-dialog-addon#readme",
     "devDependencies": {
         "gh-pages": "^3.2.3",
         "karma": "^6.4.2",
@@ -36,6 +36,6 @@
         "node": ">=14.0.0"
     },
     "dependencies": {
-        "@enaio-client/communication-library": "^1.2.101"
+        "@enaio-client/communication-library": "2.0.2-rc5"
     }
 }

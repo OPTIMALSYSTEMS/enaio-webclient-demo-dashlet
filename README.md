@@ -1,93 +1,68 @@
-# enaio® webclient demo dashlet
+# enaio® Webclient Demo Modal Dialog Addon
 
 ## License
 
-Copyright 2023 OPTIMAL SYSTEMS GmbH
+Copyright © 2023 OPTIMAL SYSTEMS GmbH
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
-
-```
-http://www.apache.org/licenses/LICENSE-2.0
-```
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+This software is licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0). Ensure you comply with the License when using this software. It's distributed without warranties or conditions, either express or implied. Consult the License specifics related to permissions and limitations.
 
 ## Documentation
 
-Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/5.+Dashlet+API) documentation for more information about developing and integrating dashlets into enaio® webclient.
+For comprehensive details on developing and integrating custom modal dialogs into enaio® webclient, refer to our official [Modal Dialog API documentation](https://help.optimal-systems.com/enaio_develop/x/XQCxB).
 
 ## Introduction
 
-In the enaio® webclient, from version 10.0 Service Release 2, we provide you with the option of integrating customer-specific and freely configurable areas - so-called dashlets. Dashlets support you in the implementation of a wide variety of business processes and scenarios by making them available as additional information and interaction options for users, depending on the context.
+Starting from version 11.10 FINAL, enaio® webclient has introduced the ability to open bespoke and fully designable modal dialogs. These dialogs enable the integration of external webpages hosted under the same hostname and facilitate seamless interaction through an API for data exchange. Explore the [documentation](https://help.optimal-systems.com/enaio_develop/x/ZwCxB) for more details.
 
-For the preview area, in which the content and detailed previews are currently displayed, you can configure individual dashlets that, for example, integrate other information sources with the help of so-called dashlet services (e.g. websites such as Wikipedia or Google Maps). Alternatively, you can integrate complete web applications such as the enaio® documentviewer.
+Utilize the formHelper method "openModalDialog" to launch a custom modal dialog. Provide the URL, and optionally its title and size, as parameters. The modal dialogs support comprehensive interaction via API, covering various methods and events for a dynamic and flexible user experience.
+
+To bridge communication between a modal dialog and the enaio® webclient, we offer the Modal Dialog API. It's enriched with special events and methods that enhance information exchange and interaction.
 
 ## Abstraction Library for Dashlet Communication (new)
 
-Abstraction Library is a critical component of this project designed to facilitate seamless communication between the dashlet and both the enaio® webclient and enaio® richclient. This library, available as an npm package accessible [here](https://www.npmjs.com/package/@enaio-client/communication-library), serves as a foundational bridge, enhancing interaction between the dashlet and the enaio® platforms.
+Abstraction Library is a critical component of this project designed to facilitate seamless communication between the modal dialog and both the enaio® webclient and enaio® richclient. This library, available as an npm package accessible [here](https://www.npmjs.com/package/@enaio-client/communication-library), serves as a foundational bridge, enhancing interaction between the modal dialog and the enaio® platforms.
 
 ### Purpose
 
-The Abstraction Library is primarily intended to simplify and streamline the process of communication between the dashlet  and both the enaio® webclient and enaio® richclient. By adopting this library, the integration of the dashlet into both platforms becomes a cohesive and straightforward endeavor, all while maintaining a unified codebase.
+The Abstraction Library is primarily intended to simplify and streamline the process of communication between the modal dialog  and both the enaio® webclient and enaio® richclient. By adopting this library, the integration of the modal dialog  into both platforms becomes a cohesive and straightforward endeavor, all while maintaining a unified codebase.
 
 ## Events
 
-The enaio® webclient works on an event basis. The individual events are shown in an overview below. Details about each event can then be found on the respective event subpage. Below are the currently available events:
+In the enaio® webclient, modal dialogs interact with the main application through a series of events, facilitating a dynamic and responsive user experience. The key events include:
 
-### onInit
-
-The onInit event is triggered every time the dashlet is activated and thus made visible. The payload of the event contains information about the current status, which enables the dashlet to initialize itself directly without having to call many methods afterwards.
-
-You can find more information about this event on our [documentation page](https://help.optimal-systems.com/enaio_develop/display/WEB/onInit).
-
-### onUpdate
-
-The onUpdate event is triggered every time the object selection has changed in the enaio® webclient. It contains the same properties as the onInit event.
-
-You can find more information about this event on our [documentation page](https://help.optimal-systems.com/enaio_develop/display/WEB/onUpdate).
+- **onInit**: Activated as soon as the modal dialog becomes visible to the user, this event allows the dialog to initialize itself with context-specific information, ensuring a seamless integration at runtime. Find out more in the [onInit event documentation](https://help.optimal-systems.com/enaio_develop/x/cQCxB).
+  
+- **onCanCancel**: This event enables the modal dialog to handle cancellation actions, such as when a user presses the ESC key. It's crucial for implementing conditional logic that determines whether the dialog can be closed based on the current state or other criteria. Learn more about it in the [onCanCancel event documentation](https://help.optimal-systems.com/enaio_develop/x/-oCiBQ).
 
 ## Methods
 
-Dashlets can control the enaio® webclient and trigger actions. The techique behind the communication to the enaio® webclient is done via the browser API postMessage [window.postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage). To simplify the communication the abstraction library is encapsulating this and provide the currently available asynchronous methods:
+The enaio® webclient provides a comprehensive set of API methods for modal dialogs, allowing for intricate interactions and data exchange between the dialog and the webclient. These methods include:
 
-For more information on methods, see our [documentation page](https://help.optimal-systems.com/enaio_develop/display/WEB/5.4+Dashlet-Methoden).
+- **getEnvironment()**: Offers a snapshot of the current environmental settings within the enaio® webclient, such as user details and language preferences, empowering the modal dialog with context-aware capabilities. Access the method's [documentation here](https://help.optimal-systems.com/enaio_develop/x/QYAHBQ).
 
-### Open location
+- **getFieldValueByInternal(internalFieldName)**: Facilitates the retrieval of specific field values from the active index data screen, enabling modal dialogs to access and display relevant data dynamically. Dive into the specifics in the [getFieldValueByInternal method documentation](https://help.optimal-systems.com/enaio_develop/x/dwCxB).
 
-The openLocation method is used to call the enaio® webclient's Open Location scripting method, which opens the location (or a location selection if there are several possible locations) for the DMS object transferred as a parameter.
+- **setFieldValueByInternal(internalFieldName, value)**: This method allows the modal dialog to update field values on the active index data screen, making it possible to alter index data directly from the dialog. Detailed information can be found in the [setFieldValueByInternal method documentation](https://help.optimal-systems.com/enaio_develop/x/IIAHBQ).
 
-### Open index data
+- **closeModalDialog(value)**: Defines the action to close the modal dialog, optionally performing additional tasks upon closure. This method is essential for ending the dialog session in a controlled manner. More details are available in the [closeModalDialog method documentation](https://help.optimal-systems.com/enaio_develop/x/CYA9BQ).
 
-Using the method openIndexData, the scripting method Show Indexdata or Edit Indexdata of the enaio® webclient is called, which opens the index data mask for the DMS object transferred as a parameter.
+- **setDialogCaption(value)**: Adjusts the title of the modal dialog dynamically at runtime, offering flexibility in how the dialog is presented to the user based on the current context or user actions. Read more about this method in the [setDialogCaption method documentation](https://help.optimal-systems.com/enaio_develop/x/QYGiBQ).
 
-### Get selected objects
+- **getWorkflowVariableByName(name)**: Enables the modal dialog to query and retrieve data from specific workflow mask variables, facilitating a deeper integration with the underlying business processes. For further details, refer to the [getWorkflowVariableByName method documentation](https://help.optimal-systems.com/enaio_develop/x/o4OiBQ).
 
-The getSelectedObjects method is used to query the currently selected objects. If no objects are selected or no hit list is currently displayed, an empty list is returned.
+- **setWorkflowVariableByName(nameOfTheWorkflowVariable, valueForTheWorkflowVariable)**: Enables values to be written to workflow variables for the current workflow activity and therefore also to the respective linked field on the workflow screen, refer to the [setWorkflowVariableByName method documentation](https://help.optimal-systems.com/enaio_develop/display/WEB/setWorkflowVariableByName).
 
-Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/5.+Dashlet+API) documentation for more information about developing and integrating dashlets into enaio® webclient.
 
-### Refresh hit list objects
-
-The refreshHitListObjects method is used to refresh one or more objects in an open hit list. To demo this feature; open any hit list, then open a second tab and modifiy an object's index data which is displayed in the hit list. Return to the first tab's hit list and press the refresh hit list button. The modified data should be updated.
-
-Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/5.+Dashlet+API) documentation for more information about developing and integrating dashlets into enaio® webclient.
-
-### Open hit list by ids
-
-The openHitListByIds method is used to be able to display a mixed hit list with freely selected objects.
-
-Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds) documentation for more information about developing and integrating dashlets into enaio® webclient.
-
-### Installation
+## Installation
 
 1. **Clone the Repository**
     ```sh
-    git clone https://github.com/OPTIMALSYSTEMS/enaio-webclient-demo-dashlet.git
+    git clone https://github.com/OPTIMALSYSTEMS/enaio-webclient-demo-modal-dialog-addon.git
     ```
 
 2. **Navigate to the Project Directory**
     ```sh
-    cd enaio-webclient-demo-dashlet
+    cd enaio-webclient-demo-modal-dialog-addon
     ```
 
 3. **Install Necessary Packages**

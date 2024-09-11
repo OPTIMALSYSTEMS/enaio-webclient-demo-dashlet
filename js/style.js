@@ -1,23 +1,30 @@
 /**
- * A user-interface function for controlling the dashlet content area. The method has no return value.
- * @param event a pointer event object representing the HTML element that the user clicked.
- * @link https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events
+ * Initializes collapsible functionality for sections.
+ * Each section toggles its content visibility when its header is clicked.
  */
-function collapse(event) {
-  // "content" refers to the area of the dashlet where information about events/methods is displayed.
-  let content;
+function initializeCollapsibles() {
+  const collapsibles = document.querySelectorAll('.collapsible-section');
 
-  if (event.target.localName === "legend") {
-    content = event.target.nextElementSibling;
-    event.target.classList.toggle("active");
-  } else {
-    content = event.target.parentNode.nextElementSibling;
-    event.target.parentNode.classList.toggle("active");
-  }
+  collapsibles.forEach((collapsible) => {
+    const header = collapsible.querySelector('.section-header');
+    const content = collapsible.querySelector('.content');
 
-  if (content.style.maxHeight) {
-    content.style.maxHeight = null;
-  } else {
-    content.style.maxHeight = "unset";
-  }
+    /**
+     * Toggles the visibility of the content of a collapsible section.
+     */
+    function toggleCollapsibleContent() {
+      collapsible.classList.toggle('active');
+
+      if (collapsible.classList.contains('active')) {
+        content.style.maxHeight = '100%';
+      } else {
+        content.style.maxHeight = '0';
+      }
+    }
+
+    header.addEventListener('click', toggleCollapsibleContent);
+  });
 }
+
+// Initialize the collapsible functionality.
+initializeCollapsibles(); 
