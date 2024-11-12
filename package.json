@@ -36,6 +36,6 @@
         "node": ">=14.0.0"
     },
     "dependencies": {
-        "@enaio-client/communication-library": "^1.2.101"
+        "@enaio-client/communication-library": "2.0.2-rc5"
     }
 }

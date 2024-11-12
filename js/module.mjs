@@ -203,7 +203,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
         $ba1d324185edb72e$var$dashletCache = {};
         $ba1d324185edb72e$var$dashletCache.dashletCaption = window.osClient.osjxGetDashletCaption();
         $ba1d324185edb72e$var$dashletCache.uri = window.osClient.osjxGetDashletURL();
-        $ba1d324185edb72e$var$dashletCache.languageGuiSelected = window.osClient.osjxGetEnvironment(35);
+        $ba1d324185edb72e$var$dashletCache.languageGuiSelected = window.osClient.osjxGetEnvironment(24) || "de";
         $ba1d324185edb72e$var$dashletCache.languageObjectDefinition = window.osClient.osjxGetEnvironment(33);
         $ba1d324185edb72e$var$dashletCache.wfOrgId = window.osClient.osjxGetEnvironment(19);
         $ba1d324185edb72e$var$dashletCache.mail = window.osClient.osjxGetEnvironment(16);
@@ -367,7 +367,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
     // const inNewTab = payload[1][0]; // Only as reminder but not supported by the rich client.
     const osId = Number(payload[1][1]);
     const objectTypeId = Number(payload[1][2]);
-    if (objectTypeId >>> 16 === 0) await window.osClient.osjxOpenObject(osId);
+    if (objectTypeId && objectTypeId >>> 16 === 0) await window.osClient.osjxOpenObject(osId);
     else await window.osClient.osjxOpenLocation(osId);
 }
 /**
@@ -507,6 +507,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
 }
 
 
+const $49fc9f948b8cbadc$var$version = "2.0.2-rc7";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
@@ -515,8 +516,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
  * Use "*" to allow every target origin. Example: https://enaio.company-name.de.
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
  */ function $49fc9f948b8cbadc$export$8f1480d0136598a3(onInitCallback, trustedOrigin = "*") {
-    //TODO: Automate the insertion of the version number
-    console.log(`Current Communication library version number: 2.0.1-rc2`);
+    console.log(`Current Communication library version number: ${$49fc9f948b8cbadc$var$version}`);
     if (window.osClient) $ba1d324185edb72e$export$8f1480d0136598a3(onInitCallback);
     else $464c878707ea8907$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
 }
@@ -807,30 +807,7 @@ window.addEventListener("keydown", function(event) {
         else console.warn("ESC key event is disabled.");
     }
 });
-const $49fc9f948b8cbadc$var$CommunicationLibrary = {
-    registerOnInitCallback: // Event Callbacks
-    $49fc9f948b8cbadc$export$8f1480d0136598a3,
-    registerOnUpdateCallback: $49fc9f948b8cbadc$export$4172dbddf28736a3,
-    registerOnCanCancelCallback: $49fc9f948b8cbadc$export$e12a024d8ae2e5c,
-    openIndexData: // Methods Dashlets
-    $49fc9f948b8cbadc$export$c80888c0f1760f07,
-    openLocation: $49fc9f948b8cbadc$export$47c4a703efa8e61e,
-    getSelectedObjects: $49fc9f948b8cbadc$export$96f907581d671890,
-    refreshHitListObjects: $49fc9f948b8cbadc$export$89d12ae34746cff2,
-    openHitListByIds: $49fc9f948b8cbadc$export$5b5fa3829992783b,
-    closeModalDialog: $49fc9f948b8cbadc$export$f290980283620b4a,
-    getFieldValueByInternal: // Methods modal dialogs
-    $49fc9f948b8cbadc$export$468316c75afcb0f3,
-    setFieldValueByInternal: $49fc9f948b8cbadc$export$50c2e2f825ad7b4b,
-    getEnvironment: $49fc9f948b8cbadc$export$57570b1603cf6adb,
-    setDialogCaption: $49fc9f948b8cbadc$export$74da6a16c6928c4d,
-    getWorkflowVariableByName: // Methods for Workflows
-    $49fc9f948b8cbadc$export$b3ed74af647c74bd,
-    isModalDialog: // export for unit tests
-    $49fc9f948b8cbadc$export$cebb092bf393cc5
-};
-var $49fc9f948b8cbadc$export$2e2bcd8739ae039 = $49fc9f948b8cbadc$var$CommunicationLibrary;
 
 
-export {$49fc9f948b8cbadc$export$8f1480d0136598a3 as registerOnInitCallback, $49fc9f948b8cbadc$export$4172dbddf28736a3 as registerOnUpdateCallback, $49fc9f948b8cbadc$export$c80888c0f1760f07 as openIndexData, $49fc9f948b8cbadc$export$cebb092bf393cc5 as isModalDialog, $49fc9f948b8cbadc$export$47c4a703efa8e61e as openLocation, $49fc9f948b8cbadc$export$96f907581d671890 as getSelectedObjects, $49fc9f948b8cbadc$export$89d12ae34746cff2 as refreshHitListObjects, $49fc9f948b8cbadc$export$5b5fa3829992783b as openHitListByIds, $49fc9f948b8cbadc$export$468316c75afcb0f3 as getFieldValueByInternal, $49fc9f948b8cbadc$export$b3ed74af647c74bd as getWorkflowVariableByName, $49fc9f948b8cbadc$export$50c2e2f825ad7b4b as setFieldValueByInternal, $49fc9f948b8cbadc$export$23c49f97b8cbcd5b as setWorkflowVariableByName, $49fc9f948b8cbadc$export$57570b1603cf6adb as getEnvironment, $49fc9f948b8cbadc$export$74da6a16c6928c4d as setDialogCaption, $49fc9f948b8cbadc$export$f290980283620b4a as closeModalDialog, $49fc9f948b8cbadc$export$e12a024d8ae2e5c as registerOnCanCancelCallback, $49fc9f948b8cbadc$export$2e2bcd8739ae039 as default};
-//# sourceMappingURL=module.js.map
+export {$49fc9f948b8cbadc$export$8f1480d0136598a3 as registerOnInitCallback, $49fc9f948b8cbadc$export$4172dbddf28736a3 as registerOnUpdateCallback, $49fc9f948b8cbadc$export$c80888c0f1760f07 as openIndexData, $49fc9f948b8cbadc$export$cebb092bf393cc5 as isModalDialog, $49fc9f948b8cbadc$export$47c4a703efa8e61e as openLocation, $49fc9f948b8cbadc$export$96f907581d671890 as getSelectedObjects, $49fc9f948b8cbadc$export$89d12ae34746cff2 as refreshHitListObjects, $49fc9f948b8cbadc$export$5b5fa3829992783b as openHitListByIds, $49fc9f948b8cbadc$export$468316c75afcb0f3 as getFieldValueByInternal, $49fc9f948b8cbadc$export$b3ed74af647c74bd as getWorkflowVariableByName, $49fc9f948b8cbadc$export$50c2e2f825ad7b4b as setFieldValueByInternal, $49fc9f948b8cbadc$export$23c49f97b8cbcd5b as setWorkflowVariableByName, $49fc9f948b8cbadc$export$57570b1603cf6adb as getEnvironment, $49fc9f948b8cbadc$export$74da6a16c6928c4d as setDialogCaption, $49fc9f948b8cbadc$export$f290980283620b4a as closeModalDialog, $49fc9f948b8cbadc$export$e12a024d8ae2e5c as registerOnCanCancelCallback};
+//# sourceMappingURL=module.mjs.map

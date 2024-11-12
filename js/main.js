@@ -1,6 +1,6 @@
 ﻿// Below is only for demo purposes. Github Pages only supports static site hosting.
 // In a production environment, import from the npm library as explained here https://www.npmjs.com/package/@enaio-client/communication-library
-import * as lib from './module.js';
+import * as lib from './module.mjs';
 
 let currentSelectedObjects = [];
 let dashletName = "Dashlet";
@@ -10,6 +10,7 @@ let dashletName = "Dashlet";
  * @param data an object which contains enaio® webclient properties that the dashlet can use to enrich itself.
  */
 function initDashlet(data) {
+    console.log("🚀 ~ initDashlet ~ data:", data)
     dashletName = data.activeCustomDashlet["title_" + data.sessionInfo.language.toUpperCase()] || "Dashlet";
     currentSelectedObjects = data.selectedEntries.map((dmsInfo) => ({
       objectId: dmsInfo.osid,
