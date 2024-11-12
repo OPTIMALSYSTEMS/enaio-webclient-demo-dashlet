@@ -367,7 +367,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
     // const inNewTab = payload[1][0]; // Only as reminder but not supported by the rich client.
     const osId = Number(payload[1][1]);
     const objectTypeId = Number(payload[1][2]);
-    if (objectTypeId >>> 16 === 0) await window.osClient.osjxOpenObject(osId);
+    if (objectTypeId && objectTypeId >>> 16 === 0) await window.osClient.osjxOpenObject(osId);
     else await window.osClient.osjxOpenLocation(osId);
 }
 /**
@@ -507,7 +507,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
 }
 
 
-const $49fc9f948b8cbadc$var$version = "2.0.2-rc6";
+const $49fc9f948b8cbadc$var$version = "2.0.2-rc7";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
