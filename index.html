@@ -361,6 +361,31 @@
               </a>
             </p>
           </div>
+          <legend onclick="collapse(event)">
+            <button class="collapsible"></button>
+            <span class="content-heading">Session Timeout zurücksetzen</span>
+          </legend>
+          <div class="content">
+            <p>
+              Die Methode <b class="bolder">resetSessionTimeout</b> wird verwendet,
+              um den Session-Timeout-Timer zurückzusetzen. Dies ist nützlich, wenn
+              Sie verhindern möchten, dass die Benutzersitzung während längerer
+              Aktivitäten im Dashlet abläuft.
+            </p>
+            <div class="content-button-container">
+              <button id="resetSessionTimeout" class="inner-button">
+                Session Timeout zurücksetzen
+              </button>
+            </div>
+            <p>
+              <a
+                target="_blank"
+                class="content-link"
+                href="https://help.optimal-systems.com/enaio_develop/display/WEB/resetSessionTimeout"
+                >resetSessionTimeout - Webclient Dokumentationsseite</a
+              >
+            </p>
+          </div>
           <p>Gewählte Objekte:</p>
           <p class="selected-objects" id="selectedObjects"></p>
           <p>

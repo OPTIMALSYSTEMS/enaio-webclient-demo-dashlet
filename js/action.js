@@ -22,6 +22,10 @@ document
   .getElementById("openHitListByIds")
   .addEventListener("click", processForm, false);
 
+  document
+  .getElementById("resetSessionTimeout")
+  .addEventListener("click", action.resetSessionTimeout, false);
+
 function processForm(clicked) {
   if (clicked.target.id === "openHitListByIds") {
     const openHitListByIdsForm = document.getElementById(
