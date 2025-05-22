@@ -152,7 +152,10 @@ window.addEventListener("message", $464c878707ea8907$export$221b191fcfaf22a, fal
 
 
 /**
- * This library manage the communication between dashlet and rich client.
+ * This library manages the communication between dashlet and rich client. It provides a bridge between 
+ * the dashlet and the rich client, ensuring that dashlets can operate in a consistent way regardless of 
+ * whether they are running in the web or rich client environment. It also includes mechanisms for testing
+ * and for handling differences between modal dialogs and standard dashlets.
  */ let $ba1d324185edb72e$var$onInitCallback = null;
 let $ba1d324185edb72e$var$onUpdateCallback = null;
 let $ba1d324185edb72e$var$dashletCache = null; // static data from rich client only one time for a dashlet
@@ -260,7 +263,11 @@ let $ba1d324185edb72e$var$modalDialog = false;
             sessionguid: data.sessionguid,
             regenerate: data.regenerate,
             pagecount: data.pagecount,
-            searchterm: data.searchterm
+            searchterm: data.searchterm,
+            folderid: data.folderid,
+            foldertype: data.foldertype,
+            registerid: data.registerid,
+            registertype: data.registertype
         },
         selectedEntries: selectedEntries.map((selectedEntry)=>({
                 osid: selectedEntry.objectId,
@@ -268,6 +275,12 @@ let $ba1d324185edb72e$var$modalDialog = false;
                 objectType: selectedEntry.objectType,
                 mainType: selectedEntry.mainType
             })),
+        locationInformation: {
+            folderid: data.folderid,
+            foldertype: data.foldertype,
+            registerid: data.registerid,
+            registertype: data.registertype
+        },
         sessionInfo: {
             language: $ba1d324185edb72e$var$dashletCache.languageGuiSelected.substring(0, 2),
             languageObjectDefinition: $ba1d324185edb72e$var$dashletCache.languageObjectDefinition.split("_")[0],
@@ -507,7 +520,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
 }
 
 
-const $49fc9f948b8cbadc$var$version = "2.0.3-rc.1";
+const $49fc9f948b8cbadc$var$version = "2.0.4-rc1";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
