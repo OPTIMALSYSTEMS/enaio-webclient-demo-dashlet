@@ -271,7 +271,8 @@ let $ba1d324185edb72e$var$modalDialog = false;
                 objectType: selectedEntry.objectType,
                 mainType: selectedEntry.mainType
             })),
-        locationInfo: {
+        locationInfo: data.registerid == null && data.registertype == null // DODO-25150
+         ? {} : {
             objectId: data.registerid,
             objectTypeId: data.registertype
         },
