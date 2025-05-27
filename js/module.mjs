@@ -263,11 +263,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
             sessionguid: data.sessionguid,
             regenerate: data.regenerate,
             pagecount: data.pagecount,
-            searchterm: data.searchterm,
-            folderid: data.folderid,
-            foldertype: data.foldertype,
-            registerid: data.registerid,
-            registertype: data.registertype
+            searchterm: data.searchterm
         },
         selectedEntries: selectedEntries.map((selectedEntry)=>({
                 osid: selectedEntry.objectId,
@@ -275,11 +271,9 @@ let $ba1d324185edb72e$var$modalDialog = false;
                 objectType: selectedEntry.objectType,
                 mainType: selectedEntry.mainType
             })),
-        locationInformation: {
-            folderid: data.folderid,
-            foldertype: data.foldertype,
-            registerid: data.registerid,
-            registertype: data.registertype
+        locationInfo: {
+            objectId: data.registerid,
+            objectTypeId: data.registertype
         },
         sessionInfo: {
             language: $ba1d324185edb72e$var$dashletCache.languageGuiSelected.substring(0, 2),
