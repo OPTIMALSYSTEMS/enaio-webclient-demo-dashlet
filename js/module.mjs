@@ -509,14 +509,10 @@ let $ba1d324185edb72e$var$modalDialog = false;
     $ba1d324185edb72e$var$dashletCache = null;
     delete window.osClient;
 }
-// Helper function to determine locationInfo
 function $ba1d324185edb72e$var$getLocationInfo(data) {
-    // Notes *DO NOT REMOVE*: 
-    // If an empty register is inside another register, the locationInfo points to the root 
-    // folder, not the parent of the empty register - we dont have this info from BC team
     // folder is at the root - no parent information available
     if (data.folderid === data.objectident && data.foldertype === data.objecttype) return {};
-    // registers/documents inside the root folder
+    // registers inside the root folder
     if (data.objectident === data.registerid && data.objecttype === data.registertype) return {
         objectId: data.folderid,
         objectTypeId: data.foldertype
@@ -525,6 +521,11 @@ function $ba1d324185edb72e$var$getLocationInfo(data) {
     if (data.registerid != null && data.registertype != null) return {
         objectId: data.registerid,
         objectTypeId: data.registertype
+    };
+    // If folderid/foldertype are present, use them
+    if (data.folderid != null && data.foldertype != null) return {
+        objectId: data.folderid,
+        objectTypeId: data.foldertype
     };
     // Fallback to empty object
     return {};
