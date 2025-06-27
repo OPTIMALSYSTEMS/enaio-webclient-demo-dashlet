@@ -62,7 +62,7 @@ window.addEventListener("message", $464c878707ea8907$export$221b191fcfaf22a, fal
     // Extract the "type" and "data" properties for further processing.
     // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
     const { type: type, data: data } = $464c878707ea8907$var$handleWebclientMessage(event.data);
-    delete data.dapi; // abstraction layer is taking care of it.
+    data === null || data === void 0 ? true : delete data.dapi; // abstraction layer is taking care of it.
     if (type === "onInit") {
         $464c878707ea8907$var$detectDashletModalDialog(data);
         // Do initialization work here.
@@ -152,7 +152,10 @@ window.addEventListener("message", $464c878707ea8907$export$221b191fcfaf22a, fal
 
 
 /**
- * This library manage the communication between dashlet and rich client.
+ * This library manages the communication between dashlet and rich client. It provides a bridge between 
+ * the dashlet and the rich client, ensuring that dashlets can operate in a consistent way regardless of 
+ * whether they are running in the web or rich client environment. It also includes mechanisms for testing
+ * and for handling differences between modal dialogs and standard dashlets.
  */ let $ba1d324185edb72e$var$onInitCallback = null;
 let $ba1d324185edb72e$var$onUpdateCallback = null;
 let $ba1d324185edb72e$var$dashletCache = null; // static data from rich client only one time for a dashlet
@@ -268,6 +271,7 @@ let $ba1d324185edb72e$var$modalDialog = false;
                 objectType: selectedEntry.objectType,
                 mainType: selectedEntry.mainType
             })),
+        locationInfo: $ba1d324185edb72e$var$getLocationInfo(data),
         sessionInfo: {
             language: $ba1d324185edb72e$var$dashletCache.languageGuiSelected.substring(0, 2),
             languageObjectDefinition: $ba1d324185edb72e$var$dashletCache.languageObjectDefinition.split("_")[0],
@@ -505,9 +509,30 @@ let $ba1d324185edb72e$var$modalDialog = false;
     $ba1d324185edb72e$var$dashletCache = null;
     delete window.osClient;
 }
+function $ba1d324185edb72e$var$getLocationInfo(data) {
+    // folder is at the root - no parent information available
+    if (data.folderid === data.objectident && data.foldertype === data.objecttype) return {};
+    // registers inside the root folder
+    if (data.objectident === data.registerid && data.objecttype === data.registertype) return {
+        objectId: data.folderid,
+        objectTypeId: data.foldertype
+    };
+    // If registerid/registertype are present, use them
+    if (data.registerid != null && data.registertype != null) return {
+        objectId: data.registerid,
+        objectTypeId: data.registertype
+    };
+    // If folderid/foldertype are present, use them
+    if (data.folderid != null && data.foldertype != null) return {
+        objectId: data.folderid,
+        objectTypeId: data.foldertype
+    };
+    // Fallback to empty object
+    return {};
+}
 
 
-const $49fc9f948b8cbadc$var$version = "2.0.2-rc7";
+const $49fc9f948b8cbadc$var$version = "2.0.4-rc1";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
@@ -740,6 +765,18 @@ const $49fc9f948b8cbadc$var$version = "2.0.2-rc7";
     ]);
 }
 /**
+ * Reset the session timeout for the current user session.
+ * 
+ * @returns {Promise<void>} The method has no return value. In the event of an error, an error is triggered. This can be caught with a try-catch-block or error handler for the method.
+ * @link https://help.optimal-systems.com/enaio_develop/display/WEB/resetSessionTimeout
+ */ async function $49fc9f948b8cbadc$export$c3d283c41bbe930c() {
+    if (window.osClient) return; // there is no session timeout in the rich client
+    await $49fc9f948b8cbadc$var$sendClientMessage([
+        "resetSessionTimeout",
+        []
+    ]);
+}
+/**
  * Send a command either to the web client or rich client and return the response.
  * 
  * @private
@@ -809,5 +846,5 @@ window.addEventListener("keydown", function(event) {
 });
 
 
-export {$49fc9f948b8cbadc$export$8f1480d0136598a3 as registerOnInitCallback, $49fc9f948b8cbadc$export$4172dbddf28736a3 as registerOnUpdateCallback, $49fc9f948b8cbadc$export$c80888c0f1760f07 as openIndexData, $49fc9f948b8cbadc$export$cebb092bf393cc5 as isModalDialog, $49fc9f948b8cbadc$export$47c4a703efa8e61e as openLocation, $49fc9f948b8cbadc$export$96f907581d671890 as getSelectedObjects, $49fc9f948b8cbadc$export$89d12ae34746cff2 as refreshHitListObjects, $49fc9f948b8cbadc$export$5b5fa3829992783b as openHitListByIds, $49fc9f948b8cbadc$export$468316c75afcb0f3 as getFieldValueByInternal, $49fc9f948b8cbadc$export$b3ed74af647c74bd as getWorkflowVariableByName, $49fc9f948b8cbadc$export$50c2e2f825ad7b4b as setFieldValueByInternal, $49fc9f948b8cbadc$export$23c49f97b8cbcd5b as setWorkflowVariableByName, $49fc9f948b8cbadc$export$57570b1603cf6adb as getEnvironment, $49fc9f948b8cbadc$export$74da6a16c6928c4d as setDialogCaption, $49fc9f948b8cbadc$export$f290980283620b4a as closeModalDialog, $49fc9f948b8cbadc$export$e12a024d8ae2e5c as registerOnCanCancelCallback};
+export {$49fc9f948b8cbadc$export$8f1480d0136598a3 as registerOnInitCallback, $49fc9f948b8cbadc$export$4172dbddf28736a3 as registerOnUpdateCallback, $49fc9f948b8cbadc$export$c80888c0f1760f07 as openIndexData, $49fc9f948b8cbadc$export$cebb092bf393cc5 as isModalDialog, $49fc9f948b8cbadc$export$47c4a703efa8e61e as openLocation, $49fc9f948b8cbadc$export$96f907581d671890 as getSelectedObjects, $49fc9f948b8cbadc$export$89d12ae34746cff2 as refreshHitListObjects, $49fc9f948b8cbadc$export$5b5fa3829992783b as openHitListByIds, $49fc9f948b8cbadc$export$468316c75afcb0f3 as getFieldValueByInternal, $49fc9f948b8cbadc$export$b3ed74af647c74bd as getWorkflowVariableByName, $49fc9f948b8cbadc$export$50c2e2f825ad7b4b as setFieldValueByInternal, $49fc9f948b8cbadc$export$23c49f97b8cbcd5b as setWorkflowVariableByName, $49fc9f948b8cbadc$export$57570b1603cf6adb as getEnvironment, $49fc9f948b8cbadc$export$74da6a16c6928c4d as setDialogCaption, $49fc9f948b8cbadc$export$f290980283620b4a as closeModalDialog, $49fc9f948b8cbadc$export$c3d283c41bbe930c as resetSessionTimeout, $49fc9f948b8cbadc$export$e12a024d8ae2e5c as registerOnCanCancelCallback};
 //# sourceMappingURL=module.mjs.map

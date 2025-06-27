@@ -70,6 +70,11 @@ async function openHitListByIds(formData) {
     await lib.openHitListByIds(currentSelectedObjects, params.inNewTab, params.title, params.description, params.executeSingleHitAction);
 }
 
+async function resetSessionTimeout() {
+    await lib.resetSessionTimeout();
+    console.log('Session timeout has been reset');
+}
+
 function formatFormData(formData) {
     return Object.assign({}, ...formData);
 }
@@ -82,4 +87,5 @@ export {
     getSelectedObjects,
     refreshHitListObjects,
     openHitListByIds,
+    resetSessionTimeout
 };
