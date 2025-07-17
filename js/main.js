@@ -10,7 +10,11 @@ let dashletName = "Dashlet";
  * @param data an object which contains enaio® webclient properties that the dashlet can use to enrich itself.
  */
 function initDashlet(data) {
-    if (typeof window !== 'undefined' && !!window.process?.versions?.electron) {
+    if (typeof window !== 'undefined' && !!(typeof window !== 'undefined' && window.process?.versions?.electron) ||
+  (typeof window !== 'undefined' && (
+  (typeof window !== 'undefined' && window.process?.versions?.electron) ||
+  (typeof window !== 'undefined' && window.parent?.process?.versions?.electron)
+))) {
         // document.body.classList.add('electron-env');
         // console.log('✅ Running inside Electron');
         console.log('webclient: 🚀 ~ DashletInfo ~ data: ' + JSON.stringify(data, null, 2));    
