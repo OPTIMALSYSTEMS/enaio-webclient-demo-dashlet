@@ -10,8 +10,14 @@ let dashletName = "Dashlet";
  * @param data an object which contains enaio® webclient properties that the dashlet can use to enrich itself.
  */
 function initDashlet(data) {
-    // console.log("🚀 ~ DashletInfo ~ data:", data)
-    console.log('webclient: 🚀 ~ DashletInfo ~ data: ' + JSON.stringify(data, null, 2));
+    if (typeof window !== 'undefined' && !!window.process?.versions?.electron) {
+        // document.body.classList.add('electron-env');
+        // console.log('✅ Running inside Electron');
+        console.log('webclient: 🚀 ~ DashletInfo ~ data: ' + JSON.stringify(data, null, 2));    
+        } else {
+            // console.log('🌐 Running in a regular browser');
+            console.log("🚀 ~ DashletInfo ~ data:", data)
+    }
     dashletName = data.activeCustomDashlet["title_" + data.sessionInfo.language.toUpperCase()] || "Dashlet";
     currentSelectedObjects = data.selectedEntries.map((dmsInfo) => ({
       objectId: dmsInfo.osid,
