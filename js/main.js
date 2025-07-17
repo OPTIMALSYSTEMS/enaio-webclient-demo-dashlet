@@ -10,7 +10,8 @@ let dashletName = "Dashlet";
  * @param data an object which contains enaio® webclient properties that the dashlet can use to enrich itself.
  */
 function initDashlet(data) {
-    console.log("🚀 ~ DashletInfo ~ data:", data)
+    // console.log("🚀 ~ DashletInfo ~ data:", data)
+    console.log('webclient: 🚀 ~ DashletInfo ~ data: ' + JSON.stringify(data, null, 2));
     dashletName = data.activeCustomDashlet["title_" + data.sessionInfo.language.toUpperCase()] || "Dashlet";
     currentSelectedObjects = data.selectedEntries.map((dmsInfo) => ({
       objectId: dmsInfo.osid,
