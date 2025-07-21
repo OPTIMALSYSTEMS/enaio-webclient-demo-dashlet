@@ -22,6 +22,9 @@ function initDashlet(data) {
     // display selected objects
     const selectedObjects = document.getElementById("selectedObjects");
     selectedObjects.innerHTML = JSON.stringify(currentSelectedObjects);
+
+    const objectIds = document.getElementById("objectIds");
+    objectIds.innerHTML = "";
 }
 
 /**
@@ -54,11 +57,12 @@ async function getSelectedObjects() {
     const retVal = await lib.getSelectedObjects();
     let str = "";
 
-    for (const temp of retVal) {
-      str += `\n${temp.objectId}, ${temp.objectTypeId}`;
-    }
+    const objectIds = document.getElementById("objectIds");
 
-    alert(str);
+    for (const temp of retVal) {
+      str = `objectId: ${temp.objectId}, objectTypeId: ${temp.objectTypeId}`;
+      objectIds.innerHTML += `<div>${str}</div>`;
+    }
 }
 
 async function refreshHitListObjects() {
