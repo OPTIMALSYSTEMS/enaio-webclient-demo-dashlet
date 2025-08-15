@@ -25,6 +25,13 @@ function initDashlet(data) {
 
     const objectIds = document.getElementById("objectIds");
     objectIds.innerHTML = "";
+
+    const openLocationContainer = document.getElementById("openLocationContainer");
+    openLocationContainer.style = data.context == "hitlist.internalTray" ? "display: none;" : "";
+    const openHitListByIdsContainer = document.getElementById("openHitListByIdsContainer");
+    openHitListByIdsContainer.style = data.context == "hitlist.internalTray" ? "display: none;" : "";
+    const openIndexDataContainer = document.getElementById("openIndexDataContainer");
+    openIndexDataContainer.style = data.lastSelectedEntry.objectTypeId == "-1" ? "display: none;" : "";
 }
 
 /**
