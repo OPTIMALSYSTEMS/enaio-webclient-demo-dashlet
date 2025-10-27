@@ -1604,6 +1604,14 @@ var $2e6a9d9d8b3d7992$var$version = "2.0.5-rc4";
 console.log("=== COMMUNICATION LIBRARY LOADING ===");
 console.log("Version:", $2e6a9d9d8b3d7992$var$version);
 console.log("window.osClient:", window.osClient);
+console.log("window.parent:", window.parent);
+console.log("window.top:", window.top);
+console.log("window === window.parent:", window === window.parent);
+console.log("window === window.top:", window === window.top);
+// Check if running in iframe (dashlet/modal dialog in web client)
+// Even in rich client, dashlets run in iframes and should use postMessage
+var $2e6a9d9d8b3d7992$var$isInIframe = window !== window.parent || window !== window.top;
+console.log("isInIframe:", $2e6a9d9d8b3d7992$var$isInIframe);
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
@@ -1616,9 +1624,19 @@ console.log("window.osClient:", window.osClient);
     console.log("Current Communication library version number: ".concat($2e6a9d9d8b3d7992$var$version));
     console.log("registerOnInitCallback called with trustedOrigin:", trustedOrigin);
     console.log("window.osClient:", window.osClient);
+    console.log("isInIframe:", $2e6a9d9d8b3d7992$var$isInIframe);
     console.log("callback type:", typeof onInitCallback === "undefined" ? "undefined" : (0, $jBhhk._)(onInitCallback));
-    if (window.osClient) $e6000d5a971c7fbc$export$8f1480d0136598a3(onInitCallback);
-    else $0282955c6f0df84b$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
+    // If in iframe, always use web client mode (postMessage)
+    if ($2e6a9d9d8b3d7992$var$isInIframe) {
+        console.log("[communicationLibrary] Using WEB CLIENT mode (iframe detected)");
+        $0282955c6f0df84b$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
+    } else if (window.osClient) {
+        console.log("[communicationLibrary] Using RICH CLIENT mode");
+        $e6000d5a971c7fbc$export$8f1480d0136598a3(onInitCallback);
+    } else {
+        console.log("[communicationLibrary] Using WEB CLIENT mode (no osClient)");
+        $0282955c6f0df84b$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
+    }
 }
 /**
  * Registers an onUpdate callback which is executed if something changes in the client.
@@ -1629,7 +1647,9 @@ console.log("window.osClient:", window.osClient);
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
  */ function $2e6a9d9d8b3d7992$export$4172dbddf28736a3(onUpdateCallback) {
     var trustedOrigin = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "*";
-    if (window.osClient) $e6000d5a971c7fbc$export$4172dbddf28736a3(onUpdateCallback);
+    // If in iframe, always use web client mode (postMessage)
+    if ($2e6a9d9d8b3d7992$var$isInIframe) $0282955c6f0df84b$export$4172dbddf28736a3(onUpdateCallback, trustedOrigin);
+    else if (window.osClient) $e6000d5a971c7fbc$export$4172dbddf28736a3(onUpdateCallback);
     else $0282955c6f0df84b$export$4172dbddf28736a3(onUpdateCallback, trustedOrigin);
 }
 function $2e6a9d9d8b3d7992$export$c80888c0f1760f07(inNewTab, mode, objectId, objectTypeId) {
@@ -2035,7 +2055,12 @@ function $2e6a9d9d8b3d7992$var$_sendClientMessage() {
  */ (0, $4fee8be90a0e6999$export$71511d61b312f219)(function(payload) {
         return (0, $e0b9c47374f4af3f$export$71511d61b312f219)(this, function(_state) {
             try {
-                if (window.osClient) return [
+                // If in iframe, always use web client mode (postMessage)
+                if ($2e6a9d9d8b3d7992$var$isInIframe) return [
+                    2,
+                    $0282955c6f0df84b$export$7980e63f750e794e(payload)
+                ];
+                else if (window.osClient) return [
                     2,
                     $e6000d5a971c7fbc$export$1079770825fa94d6(payload)
                 ];
@@ -2072,7 +2097,9 @@ function $2e6a9d9d8b3d7992$var$_sendClientMessage() {
  * @private
  * @returns true if modal dialog, Otherwise false
  */ function $2e6a9d9d8b3d7992$export$cebb092bf393cc5() {
-    if (window.osClient) return $e6000d5a971c7fbc$export$cebb092bf393cc5();
+    // If in iframe, always use web client mode (postMessage)
+    if ($2e6a9d9d8b3d7992$var$isInIframe) return $0282955c6f0df84b$export$cebb092bf393cc5();
+    else if (window.osClient) return $e6000d5a971c7fbc$export$cebb092bf393cc5();
     return $0282955c6f0df84b$export$cebb092bf393cc5();
 }
 // This will store the value for the onCanCancel behavior.
