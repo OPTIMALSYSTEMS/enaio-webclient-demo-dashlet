@@ -1608,10 +1608,21 @@ console.log("window.parent:", window.parent);
 console.log("window.top:", window.top);
 console.log("window === window.parent:", window === window.parent);
 console.log("window === window.top:", window === window.top);
+console.log("window.location.href:", window.location.href);
+console.log("window.location.protocol:", window.location.protocol);
 // Check if running in iframe (dashlet/modal dialog in web client)
 // Even in rich client, dashlets run in iframes and should use postMessage
 var $2e6a9d9d8b3d7992$var$isInIframe = window !== window.parent || window !== window.top;
+// Check if loaded from web (http/https) - web-hosted dashlets should always use postMessage
+// Rich client loads local files with file:// protocol, web dashlets use http/https
+var $2e6a9d9d8b3d7992$var$isWebHosted = window.location.protocol === "http:" || window.location.protocol === "https:";
+// Use Web Client mode (postMessage) if:
+// 1. Running in iframe, OR
+// 2. Loaded from web (http/https) even if osClient exists (rich client browser can load web dashlets)
+var $2e6a9d9d8b3d7992$var$useWebClientMode = $2e6a9d9d8b3d7992$var$isInIframe || $2e6a9d9d8b3d7992$var$isWebHosted;
 console.log("isInIframe:", $2e6a9d9d8b3d7992$var$isInIframe);
+console.log("isWebHosted:", $2e6a9d9d8b3d7992$var$isWebHosted);
+console.log("useWebClientMode:", $2e6a9d9d8b3d7992$var$useWebClientMode);
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
@@ -1624,11 +1635,11 @@ console.log("isInIframe:", $2e6a9d9d8b3d7992$var$isInIframe);
     console.log("Current Communication library version number: ".concat($2e6a9d9d8b3d7992$var$version));
     console.log("registerOnInitCallback called with trustedOrigin:", trustedOrigin);
     console.log("window.osClient:", window.osClient);
-    console.log("isInIframe:", $2e6a9d9d8b3d7992$var$isInIframe);
+    console.log("useWebClientMode:", $2e6a9d9d8b3d7992$var$useWebClientMode);
     console.log("callback type:", typeof onInitCallback === "undefined" ? "undefined" : (0, $jBhhk._)(onInitCallback));
-    // If in iframe, always use web client mode (postMessage)
-    if ($2e6a9d9d8b3d7992$var$isInIframe) {
-        console.log("[communicationLibrary] Using WEB CLIENT mode (iframe detected)");
+    // If web-hosted or in iframe, always use web client mode (postMessage)
+    if ($2e6a9d9d8b3d7992$var$useWebClientMode) {
+        console.log("[communicationLibrary] Using WEB CLIENT mode (web-hosted or iframe)");
         $0282955c6f0df84b$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
     } else if (window.osClient) {
         console.log("[communicationLibrary] Using RICH CLIENT mode");
@@ -1647,8 +1658,8 @@ console.log("isInIframe:", $2e6a9d9d8b3d7992$var$isInIframe);
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
  */ function $2e6a9d9d8b3d7992$export$4172dbddf28736a3(onUpdateCallback) {
     var trustedOrigin = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "*";
-    // If in iframe, always use web client mode (postMessage)
-    if ($2e6a9d9d8b3d7992$var$isInIframe) $0282955c6f0df84b$export$4172dbddf28736a3(onUpdateCallback, trustedOrigin);
+    // If web-hosted or in iframe, always use web client mode (postMessage)
+    if ($2e6a9d9d8b3d7992$var$useWebClientMode) $0282955c6f0df84b$export$4172dbddf28736a3(onUpdateCallback, trustedOrigin);
     else if (window.osClient) $e6000d5a971c7fbc$export$4172dbddf28736a3(onUpdateCallback);
     else $0282955c6f0df84b$export$4172dbddf28736a3(onUpdateCallback, trustedOrigin);
 }
@@ -2055,8 +2066,8 @@ function $2e6a9d9d8b3d7992$var$_sendClientMessage() {
  */ (0, $4fee8be90a0e6999$export$71511d61b312f219)(function(payload) {
         return (0, $e0b9c47374f4af3f$export$71511d61b312f219)(this, function(_state) {
             try {
-                // If in iframe, always use web client mode (postMessage)
-                if ($2e6a9d9d8b3d7992$var$isInIframe) return [
+                // If web-hosted or in iframe, always use web client mode (postMessage)
+                if ($2e6a9d9d8b3d7992$var$useWebClientMode) return [
                     2,
                     $0282955c6f0df84b$export$7980e63f750e794e(payload)
                 ];
@@ -2097,8 +2108,8 @@ function $2e6a9d9d8b3d7992$var$_sendClientMessage() {
  * @private
  * @returns true if modal dialog, Otherwise false
  */ function $2e6a9d9d8b3d7992$export$cebb092bf393cc5() {
-    // If in iframe, always use web client mode (postMessage)
-    if ($2e6a9d9d8b3d7992$var$isInIframe) return $0282955c6f0df84b$export$cebb092bf393cc5();
+    // If web-hosted or in iframe, always use web client mode (postMessage)
+    if ($2e6a9d9d8b3d7992$var$useWebClientMode) return $0282955c6f0df84b$export$cebb092bf393cc5();
     else if (window.osClient) return $e6000d5a971c7fbc$export$cebb092bf393cc5();
     return $0282955c6f0df84b$export$cebb092bf393cc5();
 }
