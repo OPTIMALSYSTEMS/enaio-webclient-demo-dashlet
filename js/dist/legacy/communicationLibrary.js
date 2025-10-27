@@ -654,19 +654,30 @@ var $0282955c6f0df84b$var$onUpdateCallbackRegistered = false;
 // Listen to "message" type events from web client.
 window.addEventListener("message", $0282955c6f0df84b$export$221b191fcfaf22a, false);
 console.log("[libraryWebClient] Message event listener registered");
-// For rich client: Check if init data was already sent before listener was registered
-// Store any early messages in a queue
+// For rich client: Expose global callbacks that rich client can call directly
 if (window.osClient && window === window.parent) {
     console.log("[libraryWebClient] Rich client mode detected");
-    console.log("[libraryWebClient] Checking if init data already available...");
-    // Try sending a ready signal via postMessage (rich client might be listening)
-    setTimeout(function() {
-        console.log("[libraryWebClient] Sending ready signal to rich client via postMessage");
-        window.postMessage({
-            type: "dashletReady",
-            source: "enaio-communication-library"
-        }, "*");
-    }, 100);
+    console.log("[libraryWebClient] Exposing global osDashletInit() and onInit() for rich client");
+    // Rich client calls these global functions with init/update data
+    window.osDashletInit = function(data) {
+        console.log("[libraryWebClient] osDashletInit() called by rich client");
+        console.log("[libraryWebClient] Data:", data);
+        // Convert rich client data format to web client format if needed
+        var _handleWebclientMessage = $0282955c6f0df84b$var$handleWebclientMessage(data), type = _handleWebclientMessage.type, processedData = _handleWebclientMessage.data;
+        console.log("[libraryWebClient] Processed type:", type);
+        console.log("[libraryWebClient] Processed data:", processedData);
+        if (type === "onInit") {
+            $0282955c6f0df84b$var$detectDashletModalDialog(processedData);
+            console.log("[libraryWebClient] Calling onInitCallback...");
+            $0282955c6f0df84b$var$onInitCallback(processedData);
+        } else if (type === "onUpdate") {
+            console.log("[libraryWebClient] Calling onUpdateCallback...");
+            $0282955c6f0df84b$var$onUpdateCallback(processedData);
+        }
+    };
+    // Alias for compatibility
+    window.onInit = window.osDashletInit;
+    console.log("[libraryWebClient] Global callbacks registered, waiting for rich client to call...");
 }
 /**
  * A function responsible for processing all incoming "messages" from the enaio® webclient.
