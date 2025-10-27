@@ -16,6 +16,8 @@ let $c9edd23afdb7a7df$var$onUpdateCallbackRegistered = false;
  * Use "*" to allow every target origin. Example: https://enaio.company-name.de.
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
  */ function $c9edd23afdb7a7df$export$8f1480d0136598a3(callback, allowedOrigin) {
+    console.log("[libraryWebClient] registerOnInitCallback called");
+    console.log("[libraryWebClient] allowedOrigin:", allowedOrigin);
     $c9edd23afdb7a7df$var$onInitCallback = callback;
     $c9edd23afdb7a7df$var$trustedOrigin = allowedOrigin;
 }
@@ -36,12 +38,17 @@ let $c9edd23afdb7a7df$var$onUpdateCallbackRegistered = false;
 }
 // Listen to "message" type events from web client.
 window.addEventListener("message", $c9edd23afdb7a7df$export$221b191fcfaf22a, false);
+console.log("[libraryWebClient] Message event listener registered");
 /**
  * A function responsible for processing all incoming "messages" from the enaio® webclient.
  *
  * @param event the object passed from the other Window i.e. enaio® webclient.
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#the_dispatched_event
  */ function $c9edd23afdb7a7df$export$221b191fcfaf22a(event) {
+    console.log("[libraryWebClient] === RAW POSTMESSAGE RECEIVED ===");
+    console.log("[libraryWebClient] Origin:", event.origin);
+    console.log("[libraryWebClient] Data:", event.data);
+    console.log("[libraryWebClient] trustedOrigin:", $c9edd23afdb7a7df$var$trustedOrigin);
     // Todo: Why global?
     $c9edd23afdb7a7df$var$webclientOrigin = event.origin;
     /* Ensure "messages" come from a trusted source i.e. your own enaio® hosted domain.
@@ -54,21 +61,28 @@ window.addEventListener("message", $c9edd23afdb7a7df$export$221b191fcfaf22a, fal
         if ("file://" === $c9edd23afdb7a7df$var$webclientOrigin) $c9edd23afdb7a7df$var$trustedOrigin = "file://";
         const safeOrigin = $c9edd23afdb7a7df$var$trustedOrigin === $c9edd23afdb7a7df$var$webclientOrigin;
         if (safeOrigin === false) {
-            console.log(`webclientOrigin ${$c9edd23afdb7a7df$var$webclientOrigin} is different from srcOrigin ${$c9edd23afdb7a7df$var$trustedOrigin}`);
+            console.log(`[libraryWebClient] Origin mismatch! webclientOrigin ${$c9edd23afdb7a7df$var$webclientOrigin} is different from trustedOrigin ${$c9edd23afdb7a7df$var$trustedOrigin}`);
             return false;
         }
     }
+    console.log("[libraryWebClient] Origin check passed, processing message...");
     // "handleWebclientMessage" is a handler function which further processes all incoming "messages" from enaio® webclient (see implementation details in the communication-library.js file).
     // Extract the "type" and "data" properties for further processing.
     // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
     const { type: type, data: data } = $c9edd23afdb7a7df$var$handleWebclientMessage(event.data);
+    console.log("[libraryWebClient] Message type:", type);
+    console.log("[libraryWebClient] Message data:", data);
     delete data?.dapi; // abstraction layer is taking care of it.
     if (type === "onInit") {
         $c9edd23afdb7a7df$var$detectDashletModalDialog(data);
+        console.log("[libraryWebClient] Calling onInitCallback...");
         // Do initialization work here.
         $c9edd23afdb7a7df$var$onInitCallback(data);
-    } else if (type === "onUpdate") // React to osid selection changes here.
-    $c9edd23afdb7a7df$var$onUpdateCallback(data);
+    } else if (type === "onUpdate") {
+        console.log("[libraryWebClient] Calling onUpdateCallback...");
+        // React to osid selection changes here.
+        $c9edd23afdb7a7df$var$onUpdateCallback(data);
+    }
     return true;
 }
 /**
@@ -547,7 +561,10 @@ function $a60465f064f33458$var$getLocationInfo(data) {
 }
 
 
-const $cc9ca0b5a0def752$var$version = "2.0.5-rc3";
+const $cc9ca0b5a0def752$var$version = "2.0.5-rc4";
+console.log("=== COMMUNICATION LIBRARY LOADING ===");
+console.log("Version:", $cc9ca0b5a0def752$var$version);
+console.log("window.osClient:", window.osClient);
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
@@ -557,6 +574,9 @@ const $cc9ca0b5a0def752$var$version = "2.0.5-rc3";
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
  */ function $cc9ca0b5a0def752$export$8f1480d0136598a3(onInitCallback, trustedOrigin = "*") {
     console.log(`Current Communication library version number: ${$cc9ca0b5a0def752$var$version}`);
+    console.log("registerOnInitCallback called with trustedOrigin:", trustedOrigin);
+    console.log("window.osClient:", window.osClient);
+    console.log("callback type:", typeof onInitCallback);
     if (window.osClient) $a60465f064f33458$export$8f1480d0136598a3(onInitCallback);
     else $c9edd23afdb7a7df$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
 }
