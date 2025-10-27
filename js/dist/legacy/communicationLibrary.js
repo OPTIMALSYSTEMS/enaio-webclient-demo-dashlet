@@ -617,6 +617,13 @@ var $0282955c6f0df84b$var$onUpdateCallbackRegistered = false;
     console.log("[libraryWebClient] allowedOrigin:", allowedOrigin);
     $0282955c6f0df84b$var$onInitCallback = callback;
     $0282955c6f0df84b$var$trustedOrigin = allowedOrigin;
+    // Signal to parent that dashlet is ready to receive messages
+    if (window.parent && window.parent !== window) {
+        console.log("[libraryWebClient] Sending ready signal to parent");
+        window.parent.postMessage({
+            type: "dashletReady"
+        }, "*");
+    }
 }
 /**
  * Registers an onUpdate callback which is executed if something changes in the client.
