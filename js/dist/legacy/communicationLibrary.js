@@ -597,7 +597,6 @@ $parcel$export($2e6a9d9d8b3d7992$exports, "registerOnCanCancelCallback", functio
  * This library manage the communication between dashlet and web client.
  */ 
 
-
 var $0282955c6f0df84b$var$msgQueue = {};
 var $0282955c6f0df84b$var$alertQueue = [];
 var $0282955c6f0df84b$var$modalDialog = false;
@@ -616,31 +615,18 @@ var $0282955c6f0df84b$var$onUpdateCallbackRegistered = false;
  */ function $0282955c6f0df84b$export$8f1480d0136598a3(callback, allowedOrigin) {
     console.log("[libraryWebClient] registerOnInitCallback called");
     console.log("[libraryWebClient] allowedOrigin:", allowedOrigin);
+    console.log("[libraryWebClient] window.opener:", window.opener);
     $0282955c6f0df84b$var$onInitCallback = callback;
     $0282955c6f0df84b$var$trustedOrigin = allowedOrigin;
     // If window.osClient exists but we're NOT in an iframe, 
-    // the rich client might be loading web dashlets directly
-    // Try to query osClient for initialization data
+    // the rich client opened the dashlet directly
+    // The rich client STILL expects postMessage, but might inject the init data
+    // or expect us to request it
     if (window.osClient && window === window.parent) {
-        console.log("[libraryWebClient] Rich client detected (osClient exists, not in iframe)");
-        console.log("[libraryWebClient] Attempting to query osClient for init data...");
-        console.log("[libraryWebClient] window.osClient type:", (0, $jBhhk._)(window.osClient));
-        console.log("[libraryWebClient] window.osClient keys:", Object.keys(window.osClient || {}));
-        // Try common methods that might return initialization data
-        try {
-            if (typeof window.osClient === "function") {
-                console.log("[libraryWebClient] Trying to call window.osClient()...");
-                var result = window.osClient();
-                console.log("[libraryWebClient] osClient() result:", result);
-            }
-            if (window.osClient.getInitData) {
-                console.log("[libraryWebClient] Trying window.osClient.getInitData()...");
-                var initData = window.osClient.getInitData();
-                console.log("[libraryWebClient] getInitData() result:", initData);
-            }
-        } catch (err) {
-            console.error("[libraryWebClient] Error querying osClient:", err);
-        }
+        console.log("[libraryWebClient] Rich client detected (web-hosted dashlet)");
+        console.log("[libraryWebClient] Dashlet is likely embedded in rich client webview");
+        console.log("[libraryWebClient] Rich client should send postMessage with init data");
+        console.log("[libraryWebClient] Waiting for onInit message from rich client...");
     }
     // Signal to parent that dashlet is ready to receive messages (for iframe cases)
     if (window.parent && window.parent !== window) {
@@ -668,6 +654,20 @@ var $0282955c6f0df84b$var$onUpdateCallbackRegistered = false;
 // Listen to "message" type events from web client.
 window.addEventListener("message", $0282955c6f0df84b$export$221b191fcfaf22a, false);
 console.log("[libraryWebClient] Message event listener registered");
+// For rich client: Check if init data was already sent before listener was registered
+// Store any early messages in a queue
+if (window.osClient && window === window.parent) {
+    console.log("[libraryWebClient] Rich client mode detected");
+    console.log("[libraryWebClient] Checking if init data already available...");
+    // Try sending a ready signal via postMessage (rich client might be listening)
+    setTimeout(function() {
+        console.log("[libraryWebClient] Sending ready signal to rich client via postMessage");
+        window.postMessage({
+            type: "dashletReady",
+            source: "enaio-communication-library"
+        }, "*");
+    }, 100);
+}
 /**
  * A function responsible for processing all incoming "messages" from the enaio® webclient.
  *
