@@ -597,6 +597,7 @@ $parcel$export($2e6a9d9d8b3d7992$exports, "registerOnCanCancelCallback", functio
  * This library manage the communication between dashlet and web client.
  */ 
 
+
 var $0282955c6f0df84b$var$msgQueue = {};
 var $0282955c6f0df84b$var$alertQueue = [];
 var $0282955c6f0df84b$var$modalDialog = false;
@@ -617,9 +618,33 @@ var $0282955c6f0df84b$var$onUpdateCallbackRegistered = false;
     console.log("[libraryWebClient] allowedOrigin:", allowedOrigin);
     $0282955c6f0df84b$var$onInitCallback = callback;
     $0282955c6f0df84b$var$trustedOrigin = allowedOrigin;
-    // Signal to parent that dashlet is ready to receive messages
+    // If window.osClient exists but we're NOT in an iframe, 
+    // the rich client might be loading web dashlets directly
+    // Try to query osClient for initialization data
+    if (window.osClient && window === window.parent) {
+        console.log("[libraryWebClient] Rich client detected (osClient exists, not in iframe)");
+        console.log("[libraryWebClient] Attempting to query osClient for init data...");
+        console.log("[libraryWebClient] window.osClient type:", (0, $jBhhk._)(window.osClient));
+        console.log("[libraryWebClient] window.osClient keys:", Object.keys(window.osClient || {}));
+        // Try common methods that might return initialization data
+        try {
+            if (typeof window.osClient === "function") {
+                console.log("[libraryWebClient] Trying to call window.osClient()...");
+                var result = window.osClient();
+                console.log("[libraryWebClient] osClient() result:", result);
+            }
+            if (window.osClient.getInitData) {
+                console.log("[libraryWebClient] Trying window.osClient.getInitData()...");
+                var initData = window.osClient.getInitData();
+                console.log("[libraryWebClient] getInitData() result:", initData);
+            }
+        } catch (err) {
+            console.error("[libraryWebClient] Error querying osClient:", err);
+        }
+    }
+    // Signal to parent that dashlet is ready to receive messages (for iframe cases)
     if (window.parent && window.parent !== window) {
-        console.log("[libraryWebClient] Sending ready signal to parent");
+        console.log("[libraryWebClient] Sending ready signal to parent (iframe detected)");
         window.parent.postMessage({
             type: "dashletReady"
         }, "*");

@@ -20,9 +20,33 @@ let $c9edd23afdb7a7df$var$onUpdateCallbackRegistered = false;
     console.log("[libraryWebClient] allowedOrigin:", allowedOrigin);
     $c9edd23afdb7a7df$var$onInitCallback = callback;
     $c9edd23afdb7a7df$var$trustedOrigin = allowedOrigin;
-    // Signal to parent that dashlet is ready to receive messages
+    // If window.osClient exists but we're NOT in an iframe, 
+    // the rich client might be loading web dashlets directly
+    // Try to query osClient for initialization data
+    if (window.osClient && window === window.parent) {
+        console.log("[libraryWebClient] Rich client detected (osClient exists, not in iframe)");
+        console.log("[libraryWebClient] Attempting to query osClient for init data...");
+        console.log("[libraryWebClient] window.osClient type:", typeof window.osClient);
+        console.log("[libraryWebClient] window.osClient keys:", Object.keys(window.osClient || {}));
+        // Try common methods that might return initialization data
+        try {
+            if (typeof window.osClient === "function") {
+                console.log("[libraryWebClient] Trying to call window.osClient()...");
+                const result = window.osClient();
+                console.log("[libraryWebClient] osClient() result:", result);
+            }
+            if (window.osClient.getInitData) {
+                console.log("[libraryWebClient] Trying window.osClient.getInitData()...");
+                const initData = window.osClient.getInitData();
+                console.log("[libraryWebClient] getInitData() result:", initData);
+            }
+        } catch (err) {
+            console.error("[libraryWebClient] Error querying osClient:", err);
+        }
+    }
+    // Signal to parent that dashlet is ready to receive messages (for iframe cases)
     if (window.parent && window.parent !== window) {
-        console.log("[libraryWebClient] Sending ready signal to parent");
+        console.log("[libraryWebClient] Sending ready signal to parent (iframe detected)");
         window.parent.postMessage({
             type: "dashletReady"
         }, "*");
