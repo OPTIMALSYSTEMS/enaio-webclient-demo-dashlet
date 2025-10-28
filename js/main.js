@@ -1,6 +1,6 @@
 ﻿// Below is only for demo purposes. Github Pages only supports static site hosting.
 // In a production environment, import from the npm library as explained here https://www.npmjs.com/package/@enaio-client/communication-library
-import * as lib from './dist/modern/communicationLibrary.js';
+import * as lib from './module.js';
 
 let currentSelectedObjects = [];
 let dashletName = "Dashlet";
