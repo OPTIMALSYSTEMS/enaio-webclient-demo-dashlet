@@ -323,7 +323,7 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
             osGuid: data.userguid,
             userId: data.userid,
             wfGuid: null,
-            wfOrdId: $bd804e687d9fc823$var$dashletCache.wfOrgId
+            wfOrgId: $bd804e687d9fc823$var$dashletCache.wfOrgId
         },
         context: null
     };
@@ -569,7 +569,7 @@ function $bd804e687d9fc823$var$getLocationInfo(data) {
 }
 
 
-const $ee4aa6f009fdd7de$var$version = "2.0.5";
+const $ee4aa6f009fdd7de$var$version = "2.0.6-rc1";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
