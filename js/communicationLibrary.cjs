@@ -569,7 +569,7 @@ function $bd804e687d9fc823$var$getLocationInfo(data) {
 }
 
 
-const $ee4aa6f009fdd7de$var$version = "2.0.6-rc1";
+const $ee4aa6f009fdd7de$var$version = "2.0.6";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
