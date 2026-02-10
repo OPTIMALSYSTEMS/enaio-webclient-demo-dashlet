@@ -189,12 +189,19 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
     "19660800",
     "13107200"
 ];
+// We keep the latest mapped selection so we can detect changes and, if needed,
+// emit follow-up updates from the background monitor.
+let $bd804e687d9fc823$var$lastSelectionSignature = "";
+let $bd804e687d9fc823$var$selectionMonitorIntervalId = null;
+let $bd804e687d9fc823$var$selectionMonitorInFlight = false;
+let $bd804e687d9fc823$var$lastMappedDashletData = null;
 /**
  * Check if the given object type represents a typeless document
  * @param {string} objectTypeId - The objecttype ID to check
  * @returns {boolean} - True if this is a typeless document type
  */ function $bd804e687d9fc823$var$isTypelessDocument(objectTypeId) {
-    return $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS.includes(objectTypeId);
+    const isTypeless = $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS.includes(objectTypeId);
+    return isTypeless;
 }
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
@@ -210,6 +217,7 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
  */ function $bd804e687d9fc823$export$4172dbddf28736a3(callback) {
     if ($bd804e687d9fc823$var$modalDialog) throw "Modal dialogs does not trigger a update event. Please do not register one.";
     $bd804e687d9fc823$var$onUpdateCallback = callback;
+    $bd804e687d9fc823$var$startSelectionMonitor();
 }
 /**
  * Providing only necessary information for this rich client dashlet example.
@@ -218,11 +226,14 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
  * @param {Object} data initialize data from the rich client.
  * @private
  */ async function $bd804e687d9fc823$var$internalOnInitUpdate(data) {
+    // In rich client payloads, `selectedEntry` means "modal dialog context".
+    // Dashlet update payloads do not have this field.
     if (data.selectedEntry) {
         if ($bd804e687d9fc823$var$onUpdateCallback != null) {
             // Unregister onUpdateCallback because it is not available and write a message to console.
             console.error("Modal dialogs does not trigger a update event. Please do not register one.");
             $bd804e687d9fc823$var$onUpdateCallback = null;
+            $bd804e687d9fc823$var$stopSelectionMonitor();
         }
         $bd804e687d9fc823$var$modalDialog = true;
         $bd804e687d9fc823$var$internalOnInitModalDialog(data);
@@ -238,7 +249,9 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
  * @param {Object} data initialize data from the rich client.
  * @private
  */ async function $bd804e687d9fc823$var$internalOnInitUpdateDashlet(data) {
+    const isInitEvent = $bd804e687d9fc823$var$onInitCallback != null;
     if ($bd804e687d9fc823$var$dashletCache === null) {
+        // Static environment values are read once per dashlet lifetime.
         $bd804e687d9fc823$var$dashletCache = {};
         $bd804e687d9fc823$var$dashletCache.dashletCaption = window.osClient.osjxGetDashletCaption();
         $bd804e687d9fc823$var$dashletCache.uri = window.osClient.osjxGetDashletURL();
@@ -251,11 +264,7 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
         $bd804e687d9fc823$var$dashletCache.fullname = window.osClient.osjxGetEnvironment(14);
     }
     let selectedEntries = await $bd804e687d9fc823$var$getSelectedObjects();
-    let lastObjectType = {
-        mainType: 0,
-        objectType: "UNKNOWN"
-    };
-    if (selectedEntries == null || selectedEntries.length === 0 || selectedEntries[0].objectId === "" || selectedEntries[0].objectId === void 0) // On opening an index data mask for a different ECM object out of the dashlet the selectedEntries has one element
+    if (isInitEvent && (selectedEntries == null || selectedEntries.length === 0 || selectedEntries[0].objectId === "" || selectedEntries[0].objectId === void 0)) // On opening an index data mask for a different ECM object out of the dashlet the selectedEntries has one element
     // but the objectId and objectTypeId are empty. We fix this by assigning the information from the init event.
     selectedEntries = [
         {
@@ -265,10 +274,19 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
     ];
     // For search masks we have a selected object with objectId zero. There isn't a selected object.
     if (selectedEntries.length === 1 && selectedEntries[0].objectId === "0" && selectedEntries[0].objectTypeId === "0") selectedEntries = [];
+    // Some rich client updates can return stale multi-selection tuples after Ctrl+Click deselection.
+    // In this state, objectident/objecttype already contain the effective primary selection while
+    // osjxGetSelectedObjects still includes previously selected IDs, often with objectTypeId "0".
+    // We do short retries to wait for the stable post-click state.
+    selectedEntries = await $bd804e687d9fc823$var$normalizeStaleRichClientSelection(selectedEntries, data, isInitEvent);
+    let lastSelectedEntry = null;
     for (const selectedEntry of selectedEntries){
         $bd804e687d9fc823$var$addObjectTypeAndMainType(selectedEntry);
-        if (selectedEntry.objectId === data.objectident) lastObjectType = selectedEntry;
+        if (selectedEntry.objectId === data.objectident) lastSelectedEntry = selectedEntry;
     }
+    if (lastSelectedEntry === null && selectedEntries.length > 0) // Rich client can report a primary selection in the init/update payload
+    // that does not exist in the full selected object list anymore.
+    lastSelectedEntry = selectedEntries[0];
     // get base url
     if (typeof location.origin === "undefined") location.origin = location.protocol + "//" + location.host;
     // map data for webClient structure
@@ -285,11 +303,7 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
             groups: null
         },
         lastSelectedEntry: {
-            hasVariants: null,
-            mainType: lastObjectType.mainType,
-            objectTypeId: $bd804e687d9fc823$var$isTypelessDocument(data.objecttype) ? "-1" : data.objecttype,
-            osid: data.objectident,
-            objectType: lastObjectType.objectType
+            ...$bd804e687d9fc823$var$createMappedLastSelectedEntry(lastSelectedEntry)
         },
         osDashletInit: {
             objectident: data.objectident,
@@ -301,12 +315,7 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
             pagecount: data.pagecount,
             searchterm: data.searchterm
         },
-        selectedEntries: selectedEntries.map((selectedEntry)=>({
-                osid: selectedEntry.objectId,
-                objectTypeId: selectedEntry.objectTypeId,
-                objectType: selectedEntry.objectType,
-                mainType: selectedEntry.mainType
-            })),
+        selectedEntries: $bd804e687d9fc823$var$createMappedSelectedEntries(selectedEntries),
         locationInfo: $bd804e687d9fc823$var$getLocationInfo(data),
         sessionInfo: {
             language: $bd804e687d9fc823$var$dashletCache.languageGuiSelected.substring(0, 2),
@@ -327,6 +336,12 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
         },
         context: null
     };
+    const selectionSignature = mappedData.selectedEntries.map((entry)=>`${entry.osid},${entry.objectTypeId}`).join(";");
+    // Keep the latest signature even when no callback is fired.
+    // The monitor uses this to prevent duplicate synthetic updates.
+    if (selectionSignature !== $bd804e687d9fc823$var$lastSelectionSignature) $bd804e687d9fc823$var$lastSelectionSignature = selectionSignature;
+    else !isInitEvent && mappedData.selectedEntries.length;
+    $bd804e687d9fc823$var$lastMappedDashletData = mappedData;
     // execute registered events with mapped data.
     // onInitCallback is called once. Afterward we set it to null and then onUpdateCallback is called.
     if ($bd804e687d9fc823$var$onInitCallback != null) {
@@ -352,10 +367,12 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
  *
  * @private
  */ function $bd804e687d9fc823$export$c6ba16edd0a0ecfe() {
+    // Rich client calls global functions by name (`osDashletInit` / `onInit`).
+    // We route both to one internal handler.
     window.internalOnInitUpdate = $bd804e687d9fc823$var$internalOnInitUpdate;
     const script = document.createElement("script");
     script.type = "text/javascript";
-    script.innerText = "function osDashletInit(data) { window.internalOnInitUpdate(data); } function onInit(data) { window.internalOnInitUpdate(data); }";
+    script.innerText = "function osDashletInit(data) { return window.internalOnInitUpdate(data); } function onInit(data) { return window.internalOnInitUpdate(data); }";
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 /**
@@ -397,6 +414,8 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
             return $bd804e687d9fc823$var$setDialogCaption(payload);
         case "getWorkflowVariableByName":
             return $bd804e687d9fc823$var$getWorkflowVariableByName(payload);
+        default:
+            return undefined;
     }
 }
 /**
@@ -426,15 +445,26 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
  * @private
  */ async function $bd804e687d9fc823$var$getSelectedObjects() {
     const selectedObjects = await window.osClient.osjxGetSelectedObjects();
-    return selectedObjects.split(";").map((selectedObject)=>{
+    if (selectedObjects == null || selectedObjects.trim() === "") return [];
+    let ignoredEntries = 0;
+    const parsedObjects = selectedObjects.split(";").filter((selectedObject)=>selectedObject.trim() !== "").map((selectedObject)=>{
+        // Rich client format is "objectId,objectTypeId;objectId,objectTypeId;..."
         const split = selectedObject.split(",");
+        const objectId = split[0];
+        const objectTypeId = split[1];
+        if (!objectId || !objectTypeId) {
+            ignoredEntries++;
+            return null;
+        }
         const retVal = {
-            objectId: split[0],
-            objectTypeId: split[1]
+            objectId: objectId,
+            objectTypeId: objectTypeId
         };
         $bd804e687d9fc823$var$addObjectTypeAndMainType(retVal);
         return retVal;
-    });
+    }).filter((selectedObject)=>selectedObject !== null);
+    ignoredEntries;
+    return parsedObjects;
 }
 /**
  * Documentation see communication-library.js
@@ -467,28 +497,32 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
  *
  * @private
  */ async function $bd804e687d9fc823$var$getFieldValueByInternal(payload) {
-    return JSON.parse(await window.osClient.getFieldValueByInternal(payload[1][0]));
+    const response = JSON.parse(await window.osClient.getFieldValueByInternal(payload[1][0]));
+    return response;
 }
 /**
  * Documentation see communication-library.js
  *
  * @private
  */ async function $bd804e687d9fc823$var$setFieldValueByInternal(payload) {
-    return JSON.parse(await window.osClient.setFieldValueByInternal(payload[1][0]));
+    const response = JSON.parse(await window.osClient.setFieldValueByInternal(payload[1][0]));
+    return response;
 }
 /**
  * Documentation see communication-library.js
  *
  * @private
  */ async function $bd804e687d9fc823$var$setWorkflowVariableByName(payload) {
-    return JSON.parse(await window.osClient.setWorkflowVariableByName(payload[1][0]));
+    const response = JSON.parse(await window.osClient.setWorkflowVariableByName(payload[1][0]));
+    return response;
 }
 /**
  * Documentation see communication-library.js
  *
  * @private
  */ async function $bd804e687d9fc823$var$getEnvironment() {
-    return JSON.parse(await window.osClient.getEnvironment());
+    const response = JSON.parse(await window.osClient.getEnvironment());
+    return response;
 }
 /**
  * Documentation see communication-library.js
@@ -502,14 +536,16 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
  *
  * @private
  */ async function $bd804e687d9fc823$var$setDialogCaption(payload) {
-    return window.osClient.setDialogCaption(payload[1][0]);
+    const response = window.osClient.setDialogCaption(payload[1][0]);
+    return response;
 }
 /**
  * Documentation see communication-library.js
  *
  * @private
  */ async function $bd804e687d9fc823$var$getWorkflowVariableByName(payload) {
-    return JSON.parse(await window.osClient.getWorkflowVariableByName(payload[1][0]));
+    const response = JSON.parse(await window.osClient.getWorkflowVariableByName(payload[1][0]));
+    return response;
 }
 /**
  * Calculate the mainType and objectType from objectTypeId and add the properties to the
@@ -544,9 +580,14 @@ const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
     $bd804e687d9fc823$var$onInitCallback = ()=>{};
     $bd804e687d9fc823$var$onUpdateCallback = ()=>{};
     $bd804e687d9fc823$var$dashletCache = null;
+    $bd804e687d9fc823$var$lastSelectionSignature = "";
+    $bd804e687d9fc823$var$lastMappedDashletData = null;
+    $bd804e687d9fc823$var$stopSelectionMonitor();
     delete window.osClient;
 }
 function $bd804e687d9fc823$var$getLocationInfo(data) {
+    // Priority: register location if available, otherwise folder location,
+    // otherwise return empty object.
     // folder is at the root - no parent information available
     if (data.folderid === data.objectident && data.foldertype === data.objecttype) return {};
     // registers inside the root folder
@@ -567,9 +608,138 @@ function $bd804e687d9fc823$var$getLocationInfo(data) {
     // Fallback to empty object
     return {};
 }
+function $bd804e687d9fc823$var$createMappedLastSelectedEntry(lastSelectedEntry) {
+    if (!lastSelectedEntry) return {
+        hasVariants: null,
+        mainType: 0,
+        objectTypeId: "",
+        osid: "",
+        objectType: "UNKNOWN"
+    };
+    return {
+        hasVariants: null,
+        mainType: lastSelectedEntry.mainType,
+        objectTypeId: lastSelectedEntry.objectTypeId,
+        osid: lastSelectedEntry.objectId,
+        objectType: lastSelectedEntry.objectType
+    };
+}
+function $bd804e687d9fc823$var$createMappedSelectedEntries(selectedEntries) {
+    return selectedEntries.map((selectedEntry)=>({
+            osid: selectedEntry.objectId,
+            objectTypeId: selectedEntry.objectTypeId,
+            objectType: selectedEntry.objectType,
+            mainType: selectedEntry.mainType
+        }));
+}
+function $bd804e687d9fc823$var$getMappedSelectionSignature(mappedSelectedEntries) {
+    return mappedSelectedEntries.map((entry)=>`${entry.osid},${entry.objectTypeId}`).join(";");
+}
+function $bd804e687d9fc823$var$resolveFollowUpLastSelectedEntry(selectedEntries, previousMappedData) {
+    var _previousMappedData_lastSelectedEntry;
+    // On synthetic monitor updates there is no "clicked item" event payload.
+    // Keep the previous lastSelectedEntry if it is still selected.
+    const previousOsId = previousMappedData === null || previousMappedData === void 0 ? void 0 : (_previousMappedData_lastSelectedEntry = previousMappedData.lastSelectedEntry) === null || _previousMappedData_lastSelectedEntry === void 0 ? void 0 : _previousMappedData_lastSelectedEntry.osid;
+    if (previousOsId) {
+        const previousMatch = selectedEntries.find((entry)=>entry.objectId === previousOsId);
+        if (previousMatch) return previousMatch;
+    }
+    return selectedEntries.length > 0 ? selectedEntries[0] : null;
+}
+function $bd804e687d9fc823$var$mergeMappedDataWithSelection(previousMappedData, selectedEntries) {
+    // Reuse previous mapped payload and only replace selection-dependent fields.
+    // This keeps session/user/context fields stable for consumers.
+    const mappedSelectedEntries = $bd804e687d9fc823$var$createMappedSelectedEntries(selectedEntries);
+    const nextLastSelectedEntry = $bd804e687d9fc823$var$resolveFollowUpLastSelectedEntry(selectedEntries, previousMappedData);
+    const mappedLastSelectedEntry = $bd804e687d9fc823$var$createMappedLastSelectedEntry(nextLastSelectedEntry);
+    const mergedMappedData = {
+        ...previousMappedData,
+        selectedEntries: mappedSelectedEntries,
+        lastSelectedEntry: mappedLastSelectedEntry
+    };
+    if (mergedMappedData.osDashletInit && nextLastSelectedEntry) mergedMappedData.osDashletInit = {
+        ...mergedMappedData.osDashletInit,
+        objectident: nextLastSelectedEntry.objectId,
+        objecttype: nextLastSelectedEntry.objectTypeId
+    };
+    return mergedMappedData;
+}
+function $bd804e687d9fc823$var$isKarmaEnvironment() {
+    return typeof window !== "undefined" && window.__karma__ != null;
+}
+function $bd804e687d9fc823$var$startSelectionMonitor() {
+    if ($bd804e687d9fc823$var$selectionMonitorIntervalId != null || $bd804e687d9fc823$var$isKarmaEnvironment()) return;
+    // Safety net: rich client can miss or delay a deselection update.
+    // Polling keeps dashlet selection in sync without user action.
+    const MONITOR_INTERVAL_MS = 250;
+    $bd804e687d9fc823$var$selectionMonitorIntervalId = setInterval(async ()=>{
+        if ($bd804e687d9fc823$var$selectionMonitorInFlight || $bd804e687d9fc823$var$onUpdateCallback == null || $bd804e687d9fc823$var$modalDialog || !window.osClient || $bd804e687d9fc823$var$lastMappedDashletData == null) return;
+        $bd804e687d9fc823$var$selectionMonitorInFlight = true;
+        try {
+            const currentRead = await $bd804e687d9fc823$var$getSelectedObjects();
+            const currentSignature = $bd804e687d9fc823$var$getSelectionSignature(currentRead);
+            if (currentSignature === $bd804e687d9fc823$var$lastSelectionSignature) return;
+            const mergedMappedData = $bd804e687d9fc823$var$mergeMappedDataWithSelection($bd804e687d9fc823$var$lastMappedDashletData, currentRead);
+            const mergedSignature = $bd804e687d9fc823$var$getMappedSelectionSignature(mergedMappedData.selectedEntries);
+            if (mergedSignature === $bd804e687d9fc823$var$lastSelectionSignature) return;
+            $bd804e687d9fc823$var$lastSelectionSignature = mergedSignature;
+            $bd804e687d9fc823$var$lastMappedDashletData = mergedMappedData;
+            $bd804e687d9fc823$var$onUpdateCallback(mergedMappedData);
+        } catch  {} finally{
+            $bd804e687d9fc823$var$selectionMonitorInFlight = false;
+        }
+    }, MONITOR_INTERVAL_MS);
+}
+function $bd804e687d9fc823$var$stopSelectionMonitor() {
+    if ($bd804e687d9fc823$var$selectionMonitorIntervalId == null) return;
+    clearInterval($bd804e687d9fc823$var$selectionMonitorIntervalId);
+    $bd804e687d9fc823$var$selectionMonitorIntervalId = null;
+    $bd804e687d9fc823$var$selectionMonitorInFlight = false;
+}
+async function $bd804e687d9fc823$var$normalizeStaleRichClientSelection(selectedEntries, data, isInitEvent) {
+    if (isInitEvent || selectedEntries.length <= 1) // Init events and single-select events are usually stable immediately.
+    return selectedEntries;
+    // Rich-client selection can lag behind update events. A single follow-up read is often still stale.
+    // We perform short retries and use the latest stable snapshot.
+    const MAX_RETRIES = 4;
+    const MIN_RETRIES_BEFORE_STABLE = 2;
+    const RETRY_DELAY_MS = 35;
+    const reads = [
+        selectedEntries
+    ];
+    let previousSignature = $bd804e687d9fc823$var$getSelectionSignature(selectedEntries);
+    for(let attempt = 1; attempt <= MAX_RETRIES; attempt++){
+        await $bd804e687d9fc823$var$sleep(RETRY_DELAY_MS);
+        const read = await $bd804e687d9fc823$var$getSelectedObjects();
+        const signature = $bd804e687d9fc823$var$getSelectionSignature(read);
+        reads.push(read);
+        if (signature === previousSignature && attempt >= MIN_RETRIES_BEFORE_STABLE) {
+            const preferredStableRead = $bd804e687d9fc823$var$preferReadContainingPayload(reads, data.objectident);
+            return preferredStableRead;
+        }
+        previousSignature = signature;
+    }
+    const selectedRead = $bd804e687d9fc823$var$preferReadContainingPayload(reads, data.objectident);
+    return selectedRead;
+}
+function $bd804e687d9fc823$var$getSelectionSignature(selectedEntries) {
+    return selectedEntries.map((entry)=>`${entry.objectId},${entry.objectTypeId}`).join(";");
+}
+function $bd804e687d9fc823$var$preferReadContainingPayload(reads, payloadObjectId) {
+    // Prefer a snapshot that contains the payload primary object.
+    // If none match, use the newest snapshot.
+    for(let index = reads.length - 1; index >= 0; index--){
+        const read = reads[index];
+        if (read.some((entry)=>entry.objectId === payloadObjectId)) return read;
+    }
+    return reads[reads.length - 1];
+}
+function $bd804e687d9fc823$var$sleep(ms) {
+    return new Promise((resolve)=>setTimeout(resolve, ms));
+}
 
 
-const $ee4aa6f009fdd7de$var$version = "2.0.6";
+const $ee4aa6f009fdd7de$var$version = "2.0.7-rc1";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
