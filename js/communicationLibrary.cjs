@@ -739,7 +739,7 @@ function $bd804e687d9fc823$var$sleep(ms) {
 }
 
 
-const $ee4aa6f009fdd7de$var$version = "2.0.7-rc1";
+const $ee4aa6f009fdd7de$var$version = "2.0.7-rc3";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
