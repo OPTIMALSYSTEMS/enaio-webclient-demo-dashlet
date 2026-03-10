@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -125,266 +125,282 @@
           </div>
         </div>
         <div class="collapsible-container">
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading">Standort öffnen</span>
-          </legend>
-          <div class="content">
-            <p>
-              Mittels der Methode <b class="bolder">openLocation</b> wird die
-              Skripting-Methode Open Location des jeweiligen enaio® clients
-              aufgerufen, die den Standort (oder eine Standortauswahl bei
-              mehreren möglichen Standorten) für das als Parameter übergebene
-              DMS Objekt öffnet.
-            </p>
-            <div class="content-button-container">
-              <form id="openLocationForm">
-                <input
-                  type="checkbox"
-                  id="openLocationNewTab"
-                  name="openLocationNewTab"
-                  checked
-                />
-                <label for="openLocationNewTab"
-                  >In einem neuen Tab öffnen (Webclient)</label
-                >
-                <br /><br />
-                <button id="openLocation" class="inner-button">
-                  Standort öffnen
-                </button>
-              </form>
+          <div id="openLocationContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Standort öffnen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Mittels der Methode <b class="bolder">openLocation</b> wird die
+                Skripting-Methode Open Location des jeweiligen enaio® clients
+                aufgerufen, die den Standort (oder eine Standortauswahl bei
+                mehreren möglichen Standorten) für das als Parameter übergebene
+                DMS Objekt öffnet.
+              </p>
+              <div class="content-button-container">
+                <form id="openLocationForm">
+                  <input
+                    type="checkbox"
+                    id="openLocationNewTab"
+                    name="openLocationNewTab"
+                    checked
+                  />
+                  <label for="openLocationNewTab"
+                    >In einem neuen Tab öffnen (Webclient)</label
+                  >
+                  <br /><br />
+                  <button id="openLocation" class="inner-button">
+                    Standort öffnen
+                  </button>
+                </form>
+              </div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/U6FEAQ"
+                  >openLocation - Webclient Dokumentationsseite
+                </a>
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxOpenLocation - Richclient Dokumentationsseite
+                </a>
+              </p>
             </div>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/x/MACxB"
-                >openLocation - Webclient Dokumentationsseite
-              </a>
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxOpenLocation - Richclient Dokumentationsseite
-              </a>
-            </p>
           </div>
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading">Indexdaten öffnen</span>
-          </legend>
-          <div class="content">
-            <p>
-              Mittels der Methode <b class="bolder">openIndexData</b> wird die
-              Skripting-Methode Show Indexdata oder Edit Indexdata des
-              jeweiligen enaio® clients aufgerufen, die die Indexdatenmaske für
-              das als Parameter übergebene DMS Objekt öffnet.
-            </p>
+          <div id="openIndexDataContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Indexdaten öffnen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Mittels der Methode <b class="bolder">openIndexData</b> wird die
+                Skripting-Methode Show Indexdata oder Edit Indexdata des
+                jeweiligen enaio® clients aufgerufen, die die Indexdatenmaske für
+                das als Parameter übergebene DMS Objekt öffnet.
+              </p>
 
-            <div class="content-button-container">
-              <form id="openIndexDataFormForm">
-                <input
-                  type="checkbox"
-                  id="indexDataNewTab"
-                  name="inNewTab"
-                  checked
-                />
-                <label for="indexDataNewTab"
-                  >In einem neuen Tab öffnen (Webclient)</label
+              <div class="content-button-container">
+                <form id="openIndexDataFormForm">
+                  <input
+                    type="checkbox"
+                    id="indexDataNewTab"
+                    name="inNewTab"
+                    checked
+                  />
+                  <label for="indexDataNewTab"
+                    >In einem neuen Tab öffnen (Webclient)</label
+                  >
+                  <br /><br />
+                  <span>Mode:</span>
+                  <input
+                    type="radio"
+                    id="modeChoice1"
+                    name="mode"
+                    value="edit"
+                    checked
+                  />
+                  <label for="modeChoice1">Edit</label>
+                  <input type="radio" id="modeChoice2" name="mode" value="view" />
+                  <label for="modeChoice2">View</label>
+                  <br /><br />
+                  <button type="submit" id="openIndexData" class="inner-button">
+                    Indexdaten öffnen
+                  </button>
+                </form>
+              </div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/QqFEAQ"
+                  >openIndexData - Webclient Dokumentationsseite</a
                 >
-                <br /><br />
-                <span>Mode:</span>
-                <input
-                  type="radio"
-                  id="modeChoice1"
-                  name="mode"
-                  value="edit"
-                  checked
-                />
-                <label for="modeChoice1">Edit</label>
-                <input type="radio" id="modeChoice2" name="mode" value="view" />
-                <label for="modeChoice2">View</label>
-                <br /><br />
-                <button type="submit" id="openIndexData" class="inner-button">
-                  Indexdaten öffnen
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxOpenDataSheet - Richclient Dokumentationsseite
+                </a>
+              </p>
+            </div>
+          </div>
+          <div id="getSelectedObjectsContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Ausgewählte Objekte abfragen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Die Methode <b class="bolder">getSelectedObjects</b> wird
+                verwendet, um die aktuell ausgewählten Objekte abzufragen. Sollten
+                keine Objekte ausgewählt, oder keine Trefferliste aktuell
+                angezeigt sein, wird eine leere Liste zurückgegeben.
+              </p>
+              <div class="content-button-container">
+                <button id="getSelectedObjects" class="inner-button">
+                  Objekt-IDs anzeigen
                 </button>
-              </form>
-            </div>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/x/LwCxB"
-                >openIndexData - Webclient Dokumentationsseite</a
-              >
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxOpenDataSheet - Richclient Dokumentationsseite
-              </a>
-            </p>
-          </div>
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading">Ausgewählte Objekte abfragen</span>
-          </legend>
-          <div class="content">
-            <p>
-              Die Methode <b class="bolder">getSelectedObjects</b> wird
-              verwendet, um die aktuell ausgewählten Objekte abzufragen. Sollten
-              keine Objekte ausgewählt, oder keine Trefferliste aktuell
-              angezeigt sein, wird eine leere Liste zurückgegeben.
-            </p>
-            <div class="content-button-container">
-              <button id="getSelectedObjects" class="inner-button">
-                Objekt-IDs anzeigen
-              </button>
-            </div>
-            <p class="selected-objects" id="selectedObjectsContainer"></p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/x/LQCxB"
-                >getSelectedObjects - Webclient Dokumentationsseite</a
-              >
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxGetSelectedObjects - Richclient Dokumentationsseite
-              </a>
-            </p>
-          </div>
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading"
-              >Trefferlisten Objekte aktualisieren</span
-            >
-          </legend>
-          <div class="content">
-            <p>
-              Die Methode <b class="bolder">refreshHitListObjects</b> wird
-              verwendet, um ein (im Richclient und Webclient) oder auch mehrere
-              Objekte (im Webclient) in einer offenen Trefferliste zu
-              aktualisieren.
-            </p>
-            <b class="bolder">Zu testen</b>
-            <p>
-              Öffnen Sie eine Trefferliste. Öffnen Sie dann eine zweite
-              Registerkarte und ändern die Indexdaten eines Objekts, welches in
-              der geöffneten Trefferliste angezeigt wird. Gehen Sie zurück zur
-              Trefferliste und drücken Sie die Schaltfläche < Objekte
-              aktualisieren >.
-            </p>
-            <div class="content-button-container tooltip">
-              <button id="refreshHitListObjects" class="inner-button">
-                Objekte aktualisieren
-              </button>
-            </div>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/x/MQCxB"
-                >refreshHitListObjects - Webclient Dokumentationsseite</a
-              >
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxRefreshObjectInLists - Richclient Dokumentationsseite
-              </a>
-            </p>
-          </div>
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading">Trefferliste nach ID öffnen</span>
-          </legend>
-          <div class="content">
-            <p>
-              Die Methode <b class="bolder">openHitListByIds</b> wird verwendet,
-              um eine gemischte Trefferliste mit frei gewählten Objekten
-              darstellen zu können.
-            </p>
-            <div class="content-button-container">
-              <form id="openHitListByIdsForm">
-                <input type="checkbox" id="inNewTab" name="inNewTab" checked />
-                <label for="inNewTab"
-                  >In einem neuen Tab öffnen (Webclient)</label
+              </div>
+              <p>
+              <div class="output-container">
+                <p class="object-ids" id="objectIds"></p>
+              </div>
+              <p class="selected-objects" id="selectedObjectsContainer"></p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/L6FEAQ"
+                  >getSelectedObjects - Webclient Dokumentationsseite</a
                 >
-                <br /><br />
-                <input
-                  type="checkbox"
-                  id="executeSingleHitAction"
-                  name="executeSingleHitAction"
-                  checked
-                />
-                <label for="executeSingleHitAction"
-                  >SingleHitAction ausführen (Webclient)</label
-                >
-                <br /><br />
-                <label for="title">Titel:</label>
-                <input type="text" name="title" id="title" />
-                <br /><br />
-                <label for="description">Beschreibung (Webclient):</label>
-                <input type="text" name="description" id="description" />
-                <br /><br />
-                <button id="openHitListByIds" class="inner-button">
-                  Objekte öffnen
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxGetSelectedObjects - Richclient Dokumentationsseite
+                </a>
+              </p>
+            </div>
+          </div>
+          <div id="refreshHitListObjectsContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading"
+                >Trefferlisten Objekte aktualisieren</span
+              >
+            </legend>
+            <div class="content">
+              <p>
+                Die Methode <b class="bolder">refreshHitListObjects</b> wird
+                verwendet, um ein (im Richclient und Webclient) oder auch mehrere
+                Objekte (im Webclient) in einer offenen Trefferliste zu
+                aktualisieren.
+              </p>
+              <b class="bolder">Zu testen</b>
+              <p>
+                Öffnen Sie eine Trefferliste. Öffnen Sie dann eine zweite
+                Registerkarte und ändern die Indexdaten eines Objekts, welches in
+                der geöffneten Trefferliste angezeigt wird. Gehen Sie zurück zur
+                Trefferliste und drücken Sie die Schaltfläche < Objekte
+                aktualisieren >.
+              </p>
+              <div class="content-button-container tooltip">
+                <button id="refreshHitListObjects" class="inner-button">
+                  Objekte aktualisieren
                 </button>
-              </form>
+              </div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/kaFEAQ"
+                  >refreshHitListObjects - Webclient Dokumentationsseite</a
+                >
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxRefreshObjectInLists - Richclient Dokumentationsseite
+                </a>
+              </p>
             </div>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/x/LgCxB"
-                >openHitListByIds - Webclient Dokumentationsseite</a
-              >
-            </p>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
-                >osjxOpenResultList - Richclient Dokumentationsseite
-              </a>
-            </p>
           </div>
-          <legend onclick="collapse(event)">
-            <button class="collapsible"></button>
-            <span class="content-heading">Session Timeout zurücksetzen</span>
-          </legend>
-          <div class="content">
-            <p>
-              Die Methode <b class="bolder">resetSessionTimeout</b> wird verwendet,
-              um den Session-Timeout-Timer zurückzusetzen. Dies ist nützlich, wenn
-              Sie verhindern möchten, dass die Benutzersitzung während längerer
-              Aktivitäten im Dashlet abläuft.
-            </p>
-            <div class="content-button-container">
-              <button id="resetSessionTimeout" class="inner-button">
-                Session Timeout zurücksetzen
-              </button>
+          <div id="openHitListByIdsContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Trefferliste nach ID öffnen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Die Methode <b class="bolder">openHitListByIds</b> wird verwendet,
+                um eine gemischte Trefferliste mit frei gewählten Objekten
+                darstellen zu können.
+              </p>
+              <div class="content-button-container">
+                <form id="openHitListByIdsForm">
+                  <input type="checkbox" id="inNewTab" name="inNewTab" checked />
+                  <label for="inNewTab"
+                    >In einem neuen Tab öffnen (Webclient)</label
+                  >
+                  <br /><br />
+                  <input
+                    type="checkbox"
+                    id="executeSingleHitAction"
+                    name="executeSingleHitAction"
+                    checked
+                  />
+                  <label for="executeSingleHitAction"
+                    >SingleHitAction ausführen (Webclient)</label
+                  >
+                  <br /><br />
+                  <label for="title">Titel:</label>
+                  <input type="text" name="title" id="title" />
+                  <br /><br />
+                  <label for="description">Beschreibung (Webclient):</label>
+                  <input type="text" name="description" id="description" />
+                  <br /><br />
+                  <button id="openHitListByIds" class="inner-button">
+                    Objekte öffnen
+                  </button>
+                </form>
+              </div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/bqFEAQ"
+                  >openHitListByIds - Webclient Dokumentationsseite</a
+                >
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxOpenResultList - Richclient Dokumentationsseite
+                </a>
+              </p>
             </div>
-            <p>
-              <a
-                target="_blank"
-                class="content-link"
-                href="https://help.optimal-systems.com/enaio_develop/x/6oCKBw"
-                >resetSessionTimeout - Webclient Dokumentationsseite</a
-              >
-            </p>
+          </div>
+          <div id="resetSessionTimeoutContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Session Timeout zurücksetzen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Die Methode <b class="bolder">resetSessionTimeout</b> wird verwendet,
+                um den Session-Timeout-Timer zurückzusetzen. Dies ist nützlich, wenn
+                Sie verhindern möchten, dass die Benutzersitzung während längerer
+                Aktivitäten im Dashlet abläuft.
+              </p>
+              <div class="content-button-container">
+                <button id="resetSessionTimeout" class="inner-button">
+                  Session Timeout zurücksetzen
+                </button>
+              </div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/hbtEAQ"
+                  >resetSessionTimeout - Webclient Dokumentationsseite</a
+                >
+              </p>
+            </div>
           </div>
           <p>Gewählte Objekte:</p>
           <p class="selected-objects" id="selectedObjects"></p>
@@ -399,7 +415,7 @@
             und
             <a
               target="_blank"
-              href="https://help.optimal-systems.com/enaio_develop/pages/viewpage.action?pageId=10879118"
+              href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
               >des Richclients.</a
             >
           </p>
@@ -409,6 +425,7 @@
   </body>
   <footer>
     <script src="js/style.js"></script>
+    <script src="js/communicationLibrary.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/action.js"></script>
   </footer>

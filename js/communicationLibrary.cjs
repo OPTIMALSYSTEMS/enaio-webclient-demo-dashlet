@@ -1,13 +1,35 @@
+
+function $parcel$export(e, n, v, s) {
+  Object.defineProperty(e, n, {get: v, set: s, enumerable: true, configurable: true});
+}
+
+$parcel$export(module.exports, "registerOnInitCallback", () => $ee4aa6f009fdd7de$export$8f1480d0136598a3);
+$parcel$export(module.exports, "registerOnUpdateCallback", () => $ee4aa6f009fdd7de$export$4172dbddf28736a3);
+$parcel$export(module.exports, "openIndexData", () => $ee4aa6f009fdd7de$export$c80888c0f1760f07);
+$parcel$export(module.exports, "isModalDialog", () => $ee4aa6f009fdd7de$export$cebb092bf393cc5);
+$parcel$export(module.exports, "openLocation", () => $ee4aa6f009fdd7de$export$47c4a703efa8e61e);
+$parcel$export(module.exports, "getSelectedObjects", () => $ee4aa6f009fdd7de$export$96f907581d671890);
+$parcel$export(module.exports, "refreshHitListObjects", () => $ee4aa6f009fdd7de$export$89d12ae34746cff2);
+$parcel$export(module.exports, "openHitListByIds", () => $ee4aa6f009fdd7de$export$5b5fa3829992783b);
+$parcel$export(module.exports, "getFieldValueByInternal", () => $ee4aa6f009fdd7de$export$468316c75afcb0f3);
+$parcel$export(module.exports, "getWorkflowVariableByName", () => $ee4aa6f009fdd7de$export$b3ed74af647c74bd);
+$parcel$export(module.exports, "setFieldValueByInternal", () => $ee4aa6f009fdd7de$export$50c2e2f825ad7b4b);
+$parcel$export(module.exports, "setWorkflowVariableByName", () => $ee4aa6f009fdd7de$export$23c49f97b8cbcd5b);
+$parcel$export(module.exports, "getEnvironment", () => $ee4aa6f009fdd7de$export$57570b1603cf6adb);
+$parcel$export(module.exports, "setDialogCaption", () => $ee4aa6f009fdd7de$export$74da6a16c6928c4d);
+$parcel$export(module.exports, "closeModalDialog", () => $ee4aa6f009fdd7de$export$f290980283620b4a);
+$parcel$export(module.exports, "resetSessionTimeout", () => $ee4aa6f009fdd7de$export$c3d283c41bbe930c);
+$parcel$export(module.exports, "registerOnCanCancelCallback", () => $ee4aa6f009fdd7de$export$e12a024d8ae2e5c);
 /**
  * This library manage the communication between dashlet and web client.
- */ const $a98a2b9392e1c624$var$msgQueue = {};
-const $a98a2b9392e1c624$var$alertQueue = [];
-let $a98a2b9392e1c624$var$modalDialog = false;
-let $a98a2b9392e1c624$var$webclientOrigin;
-let $a98a2b9392e1c624$var$trustedOrigin;
-let $a98a2b9392e1c624$var$onInitCallback = ()=>{};
-let $a98a2b9392e1c624$var$onUpdateCallback = ()=>{};
-let $a98a2b9392e1c624$var$onUpdateCallbackRegistered = false;
+ */ const $c89a80de080932aa$var$msgQueue = {};
+const $c89a80de080932aa$var$alertQueue = [];
+let $c89a80de080932aa$var$modalDialog = false;
+let $c89a80de080932aa$var$webclientOrigin;
+let $c89a80de080932aa$var$trustedOrigin;
+let $c89a80de080932aa$var$onInitCallback = ()=>{};
+let $c89a80de080932aa$var$onUpdateCallback = ()=>{};
+let $c89a80de080932aa$var$onUpdateCallbackRegistered = false;
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  *
@@ -15,9 +37,9 @@ let $a98a2b9392e1c624$var$onUpdateCallbackRegistered = false;
  * @param {string} allowedOrigin origin which is allowed to send and receive messages. Should be the webclient uri.
  * Use "*" to allow every target origin. Example: https://enaio.company-name.de.
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
- */ function $a98a2b9392e1c624$export$8f1480d0136598a3(callback, allowedOrigin) {
-    $a98a2b9392e1c624$var$onInitCallback = callback;
-    $a98a2b9392e1c624$var$trustedOrigin = allowedOrigin;
+ */ function $c89a80de080932aa$export$8f1480d0136598a3(callback, allowedOrigin) {
+    $c89a80de080932aa$var$onInitCallback = callback;
+    $c89a80de080932aa$var$trustedOrigin = allowedOrigin;
 }
 /**
  * Registers an onUpdate callback which is executed if something changes in the client.
@@ -26,49 +48,49 @@ let $a98a2b9392e1c624$var$onUpdateCallbackRegistered = false;
  * @param {string} allowedOrigin origin which is allowed to send and receive messages. Should be the webclient uri.
  * Use "*" to allow every target origin. Example: https://enaio.company-name.de.
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
- */ function $a98a2b9392e1c624$export$4172dbddf28736a3(callback, allowedOrigin) {
-    if ($a98a2b9392e1c624$var$modalDialog) throw "Modal dialogs do not trigger a update event. Please do not register one.";
+ */ function $c89a80de080932aa$export$4172dbddf28736a3(callback, allowedOrigin) {
+    if ($c89a80de080932aa$var$modalDialog) throw "Modal dialogs do not trigger a update event. Please do not register one.";
     else {
-        $a98a2b9392e1c624$var$onUpdateCallbackRegistered = true;
-        $a98a2b9392e1c624$var$onUpdateCallback = callback;
-        $a98a2b9392e1c624$var$trustedOrigin = allowedOrigin;
+        $c89a80de080932aa$var$onUpdateCallbackRegistered = true;
+        $c89a80de080932aa$var$onUpdateCallback = callback;
+        $c89a80de080932aa$var$trustedOrigin = allowedOrigin;
     }
 }
 // Listen to "message" type events from web client.
-window.addEventListener("message", $a98a2b9392e1c624$export$221b191fcfaf22a, false);
+window.addEventListener("message", $c89a80de080932aa$export$221b191fcfaf22a, false);
 /**
  * A function responsible for processing all incoming "messages" from the enaio® webclient.
  *
  * @param event the object passed from the other Window i.e. enaio® webclient.
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#the_dispatched_event
- */ function $a98a2b9392e1c624$export$221b191fcfaf22a(event) {
+ */ function $c89a80de080932aa$export$221b191fcfaf22a(event) {
     // Todo: Why global?
-    $a98a2b9392e1c624$var$webclientOrigin = event.origin;
+    $c89a80de080932aa$var$webclientOrigin = event.origin;
     /* Ensure "messages" come from a trusted source i.e. your own enaio® hosted domain.
        Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage#security_concerns
 
        "srcOrigin" is the domain URL where enaio® webclient is served. Example: https://enaio.company-name.de
         Please note, in enaio desktop client, "srcOrigin" is represented as "file://" string.
-    */ if ($a98a2b9392e1c624$var$trustedOrigin !== null && $a98a2b9392e1c624$var$trustedOrigin !== undefined && $a98a2b9392e1c624$var$trustedOrigin.length > 0 && $a98a2b9392e1c624$var$trustedOrigin !== "*") {
+    */ if ($c89a80de080932aa$var$trustedOrigin !== null && $c89a80de080932aa$var$trustedOrigin !== undefined && $c89a80de080932aa$var$trustedOrigin.length > 0 && $c89a80de080932aa$var$trustedOrigin !== "*") {
         // client uses electron webclient so override origin
-        if ("file://" === $a98a2b9392e1c624$var$webclientOrigin) $a98a2b9392e1c624$var$trustedOrigin = "file://";
-        const safeOrigin = $a98a2b9392e1c624$var$trustedOrigin === $a98a2b9392e1c624$var$webclientOrigin;
+        if ("file://" === $c89a80de080932aa$var$webclientOrigin) $c89a80de080932aa$var$trustedOrigin = "file://";
+        const safeOrigin = $c89a80de080932aa$var$trustedOrigin === $c89a80de080932aa$var$webclientOrigin;
         if (safeOrigin === false) {
-            console.log(`webclientOrigin ${$a98a2b9392e1c624$var$webclientOrigin} is different from srcOrigin ${$a98a2b9392e1c624$var$trustedOrigin}`);
+            console.log(`webclientOrigin ${$c89a80de080932aa$var$webclientOrigin} is different from srcOrigin ${$c89a80de080932aa$var$trustedOrigin}`);
             return false;
         }
     }
     // "handleWebclientMessage" is a handler function which further processes all incoming "messages" from enaio® webclient (see implementation details in the communication-library.js file).
     // Extract the "type" and "data" properties for further processing.
     // Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
-    const { type: type, data: data } = $a98a2b9392e1c624$var$handleWebclientMessage(event.data);
-    delete data?.dapi; // abstraction layer is taking care of it.
+    const { type: type, data: data } = $c89a80de080932aa$var$handleWebclientMessage(event.data);
+    data === null || data === void 0 ? true : delete data.dapi; // abstraction layer is taking care of it.
     if (type === "onInit") {
-        $a98a2b9392e1c624$var$detectDashletModalDialog(data);
+        $c89a80de080932aa$var$detectDashletModalDialog(data);
         // Do initialization work here.
-        $a98a2b9392e1c624$var$onInitCallback(data);
+        $c89a80de080932aa$var$onInitCallback(data);
     } else if (type === "onUpdate") // React to osid selection changes here.
-    $a98a2b9392e1c624$var$onUpdateCallback(data);
+    $c89a80de080932aa$var$onUpdateCallback(data);
     return true;
 }
 /**
@@ -77,14 +99,14 @@ window.addEventListener("message", $a98a2b9392e1c624$export$221b191fcfaf22a, fal
  * to the developer as possible.
  *
  * @param data The init data structure from enaio® webclient.
- */ function $a98a2b9392e1c624$var$detectDashletModalDialog(data) {
+ */ function $c89a80de080932aa$var$detectDashletModalDialog(data) {
     if (data.selectedEntry) {
-        $a98a2b9392e1c624$var$modalDialog = true;
-        if ($a98a2b9392e1c624$var$onUpdateCallbackRegistered) {
+        $c89a80de080932aa$var$modalDialog = true;
+        if ($c89a80de080932aa$var$onUpdateCallbackRegistered) {
             // Unregister onUpdateCallback because it is not available and write a message to console.
             console.error("Modal dialogs do not trigger a update event. Please do not register one.");
-            $a98a2b9392e1c624$var$onUpdateCallbackRegistered = false;
-            $a98a2b9392e1c624$var$onUpdateCallback = ()=>{};
+            $c89a80de080932aa$var$onUpdateCallbackRegistered = false;
+            $c89a80de080932aa$var$onUpdateCallback = ()=>{};
         }
     }
 }
@@ -94,17 +116,17 @@ window.addEventListener("message", $a98a2b9392e1c624$export$221b191fcfaf22a, fal
  * @param payload an object with { type, data } as payload.
  * @returns an object with the same shape as the input payload i.e. { type, data }
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/5.2+Kommunikation
- */ function $a98a2b9392e1c624$var$handleWebclientMessage(payload) {
-    if (payload.msgId && $a98a2b9392e1c624$var$msgQueue[payload.msgId]) {
-        if (payload.data.error !== undefined) $a98a2b9392e1c624$var$msgQueue[payload.msgId].reject(payload.data.error);
-        else if (payload.data.result !== undefined) $a98a2b9392e1c624$var$msgQueue[payload.msgId].resolve(payload.data.result);
-        else $a98a2b9392e1c624$var$msgQueue[payload.msgId].resolve();
-        if ($a98a2b9392e1c624$var$alertQueue.includes(payload.msgId)) {
+ */ function $c89a80de080932aa$var$handleWebclientMessage(payload) {
+    if (payload.msgId && $c89a80de080932aa$var$msgQueue[payload.msgId]) {
+        if (payload.data.error !== undefined) $c89a80de080932aa$var$msgQueue[payload.msgId].reject(payload.data.error);
+        else if (payload.data.result !== undefined) $c89a80de080932aa$var$msgQueue[payload.msgId].resolve(payload.data.result);
+        else $c89a80de080932aa$var$msgQueue[payload.msgId].resolve();
+        if ($c89a80de080932aa$var$alertQueue.includes(payload.msgId)) {
             // display payload info
-            $a98a2b9392e1c624$var$alertQueue.splice($a98a2b9392e1c624$var$alertQueue.indexOf(payload.msgId), 1);
+            $c89a80de080932aa$var$alertQueue.splice($c89a80de080932aa$var$alertQueue.indexOf(payload.msgId), 1);
             alert(JSON.stringify(payload.data.result));
         }
-        delete $a98a2b9392e1c624$var$msgQueue[payload.msgId];
+        delete $c89a80de080932aa$var$msgQueue[payload.msgId];
     }
     return payload;
 }
@@ -114,40 +136,40 @@ window.addEventListener("message", $a98a2b9392e1c624$export$221b191fcfaf22a, fal
  * @param triggerAlert Boolean. If true, a browser alert (with payload results) will be displayed in the enaio® webclient.
  * @returns a JavaScript Promise. Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/5.2+Kommunikation
- */ async function $a98a2b9392e1c624$export$7980e63f750e794e(payload, triggerAlert = false) {
+ */ async function $c89a80de080932aa$export$7980e63f750e794e(payload, triggerAlert = false) {
     const msgId = Math.random().toString(36).substr(2, 8);
     payload.push({
         msgId: msgId
     });
-    if (triggerAlert) $a98a2b9392e1c624$var$alertQueue.push(msgId);
+    if (triggerAlert) $c89a80de080932aa$var$alertQueue.push(msgId);
     let _resolve, _reject;
     const promise = new Promise((resolve, reject)=>{
         _resolve = resolve;
         _reject = reject;
     });
-    $a98a2b9392e1c624$var$msgQueue[msgId] = {
+    $c89a80de080932aa$var$msgQueue[msgId] = {
         resolve: _resolve,
         reject: _reject
     };
     // "window" is the Dashlet's JavaScript Window object. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window
     // "parent" is the enaio® webclient Window object.
     // postMessage" is the browser API used to communicate between enaio® webclient and the Dashlet. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
-    if ($a98a2b9392e1c624$var$trustedOrigin !== null && $a98a2b9392e1c624$var$trustedOrigin !== undefined && $a98a2b9392e1c624$var$trustedOrigin.length > 0) window.parent.postMessage(payload, $a98a2b9392e1c624$var$trustedOrigin);
+    if ($c89a80de080932aa$var$trustedOrigin !== null && $c89a80de080932aa$var$trustedOrigin !== undefined && $c89a80de080932aa$var$trustedOrigin.length > 0) window.parent.postMessage(payload, $c89a80de080932aa$var$trustedOrigin);
     else window.parent.postMessage(payload, "*");
     return promise;
 }
 /**
  * Return true if we are running inside a modal dialog. If we are running inside a dashlet the return is false.
- */ function $a98a2b9392e1c624$export$cebb092bf393cc5() {
-    return $a98a2b9392e1c624$var$modalDialog;
+ */ function $c89a80de080932aa$export$cebb092bf393cc5() {
+    return $c89a80de080932aa$var$modalDialog;
 }
 /**
  * This function is only for the unit-tests to reset the webclient library to its original state
- */ function $a98a2b9392e1c624$export$aad8462122ac592b() {
-    $a98a2b9392e1c624$var$modalDialog = false;
-    $a98a2b9392e1c624$var$onInitCallback = ()=>{};
-    $a98a2b9392e1c624$var$onUpdateCallback = ()=>{};
-    $a98a2b9392e1c624$var$onUpdateCallbackRegistered = false;
+ */ function $c89a80de080932aa$export$aad8462122ac592b() {
+    $c89a80de080932aa$var$modalDialog = false;
+    $c89a80de080932aa$var$onInitCallback = ()=>{};
+    $c89a80de080932aa$var$onUpdateCallback = ()=>{};
+    $c89a80de080932aa$var$onUpdateCallbackRegistered = false;
 }
 
 
@@ -156,46 +178,46 @@ window.addEventListener("message", $a98a2b9392e1c624$export$221b191fcfaf22a, fal
  * the dashlet and the rich client, ensuring that dashlets can operate in a consistent way regardless of 
  * whether they are running in the web or rich client environment. It also includes mechanisms for testing
  * and for handling differences between modal dialogs and standard dashlets.
- */ let $98f3c34ecca6b01b$var$onInitCallback = null;
-let $98f3c34ecca6b01b$var$onUpdateCallback = null;
-let $98f3c34ecca6b01b$var$dashletCache = null; // static data from rich client only one time for a dashlet
-let $98f3c34ecca6b01b$var$modalDialog = false;
+ */ let $bd804e687d9fc823$var$onInitCallback = null;
+let $bd804e687d9fc823$var$onUpdateCallback = null;
+let $bd804e687d9fc823$var$dashletCache = null; // static data from rich client only one time for a dashlet
+let $bd804e687d9fc823$var$modalDialog = false;
 // DODO-26194: Typeless document objecttype IDs that should be mapped to "-1"
 // integer 13107200 >> -1 (internal tray)
 // integer 19660800 >> -1 (workflow tray)
-const $98f3c34ecca6b01b$var$TYPELESS_OBJECT_TYPE_IDS = [
+const $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS = [
     "19660800",
     "13107200"
 ];
 // We keep the latest mapped selection so we can detect changes and, if needed,
 // emit follow-up updates from the background monitor.
-let $98f3c34ecca6b01b$var$lastSelectionSignature = "";
-let $98f3c34ecca6b01b$var$selectionMonitorIntervalId = null;
-let $98f3c34ecca6b01b$var$selectionMonitorInFlight = false;
-let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
+let $bd804e687d9fc823$var$lastSelectionSignature = "";
+let $bd804e687d9fc823$var$selectionMonitorIntervalId = null;
+let $bd804e687d9fc823$var$selectionMonitorInFlight = false;
+let $bd804e687d9fc823$var$lastMappedDashletData = null;
 /**
  * Check if the given object type represents a typeless document
  * @param {string} objectTypeId - The objecttype ID to check
  * @returns {boolean} - True if this is a typeless document type
- */ function $98f3c34ecca6b01b$var$isTypelessDocument(objectTypeId) {
-    const isTypeless = $98f3c34ecca6b01b$var$TYPELESS_OBJECT_TYPE_IDS.includes(objectTypeId);
+ */ function $bd804e687d9fc823$var$isTypelessDocument(objectTypeId) {
+    const isTypeless = $bd804e687d9fc823$var$TYPELESS_OBJECT_TYPE_IDS.includes(objectTypeId);
     return isTypeless;
 }
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  *
  * @param {Function} callback
- */ function $98f3c34ecca6b01b$export$8f1480d0136598a3(callback) {
-    $98f3c34ecca6b01b$var$onInitCallback = callback;
+ */ function $bd804e687d9fc823$export$8f1480d0136598a3(callback) {
+    $bd804e687d9fc823$var$onInitCallback = callback;
 }
 /**
  * Registers an onUpdate callback which is executed if something changes in the client.
  *
  * @param {Function} callback The callback
- */ function $98f3c34ecca6b01b$export$4172dbddf28736a3(callback) {
-    if ($98f3c34ecca6b01b$var$modalDialog) throw "Modal dialogs does not trigger a update event. Please do not register one.";
-    $98f3c34ecca6b01b$var$onUpdateCallback = callback;
-    $98f3c34ecca6b01b$var$startSelectionMonitor();
+ */ function $bd804e687d9fc823$export$4172dbddf28736a3(callback) {
+    if ($bd804e687d9fc823$var$modalDialog) throw "Modal dialogs does not trigger a update event. Please do not register one.";
+    $bd804e687d9fc823$var$onUpdateCallback = callback;
+    $bd804e687d9fc823$var$startSelectionMonitor();
 }
 /**
  * Providing only necessary information for this rich client dashlet example.
@@ -203,19 +225,19 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  *
  * @param {Object} data initialize data from the rich client.
  * @private
- */ async function $98f3c34ecca6b01b$var$internalOnInitUpdate(data) {
+ */ async function $bd804e687d9fc823$var$internalOnInitUpdate(data) {
     // In rich client payloads, `selectedEntry` means "modal dialog context".
     // Dashlet update payloads do not have this field.
     if (data.selectedEntry) {
-        if ($98f3c34ecca6b01b$var$onUpdateCallback != null) {
+        if ($bd804e687d9fc823$var$onUpdateCallback != null) {
             // Unregister onUpdateCallback because it is not available and write a message to console.
             console.error("Modal dialogs does not trigger a update event. Please do not register one.");
-            $98f3c34ecca6b01b$var$onUpdateCallback = null;
-            $98f3c34ecca6b01b$var$stopSelectionMonitor();
+            $bd804e687d9fc823$var$onUpdateCallback = null;
+            $bd804e687d9fc823$var$stopSelectionMonitor();
         }
-        $98f3c34ecca6b01b$var$modalDialog = true;
-        $98f3c34ecca6b01b$var$internalOnInitModalDialog(data);
-    } else await $98f3c34ecca6b01b$var$internalOnInitUpdateDashlet(data);
+        $bd804e687d9fc823$var$modalDialog = true;
+        $bd804e687d9fc823$var$internalOnInitModalDialog(data);
+    } else await $bd804e687d9fc823$var$internalOnInitUpdateDashlet(data);
 }
 /**
  * Method which is called if the rich client send the initialize event for a dashlet.
@@ -226,22 +248,22 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  *
  * @param {Object} data initialize data from the rich client.
  * @private
- */ async function $98f3c34ecca6b01b$var$internalOnInitUpdateDashlet(data) {
-    const isInitEvent = $98f3c34ecca6b01b$var$onInitCallback != null;
-    if ($98f3c34ecca6b01b$var$dashletCache === null) {
+ */ async function $bd804e687d9fc823$var$internalOnInitUpdateDashlet(data) {
+    const isInitEvent = $bd804e687d9fc823$var$onInitCallback != null;
+    if ($bd804e687d9fc823$var$dashletCache === null) {
         // Static environment values are read once per dashlet lifetime.
-        $98f3c34ecca6b01b$var$dashletCache = {};
-        $98f3c34ecca6b01b$var$dashletCache.dashletCaption = window.osClient.osjxGetDashletCaption();
-        $98f3c34ecca6b01b$var$dashletCache.uri = window.osClient.osjxGetDashletURL();
-        $98f3c34ecca6b01b$var$dashletCache.languageGuiSelected = window.osClient.osjxGetEnvironment(24) || "de";
-        $98f3c34ecca6b01b$var$dashletCache.languageObjectDefinition = window.osClient.osjxGetEnvironment(33);
-        $98f3c34ecca6b01b$var$dashletCache.wfOrgId = window.osClient.osjxGetEnvironment(19);
-        $98f3c34ecca6b01b$var$dashletCache.mail = window.osClient.osjxGetEnvironment(16);
-        $98f3c34ecca6b01b$var$dashletCache.username = window.osClient.osjxGetEnvironment(3);
-        $98f3c34ecca6b01b$var$dashletCache.groups = window.osClient.osjxGetEnvironment(11);
-        $98f3c34ecca6b01b$var$dashletCache.fullname = window.osClient.osjxGetEnvironment(14);
+        $bd804e687d9fc823$var$dashletCache = {};
+        $bd804e687d9fc823$var$dashletCache.dashletCaption = window.osClient.osjxGetDashletCaption();
+        $bd804e687d9fc823$var$dashletCache.uri = window.osClient.osjxGetDashletURL();
+        $bd804e687d9fc823$var$dashletCache.languageGuiSelected = window.osClient.osjxGetEnvironment(24) || "de";
+        $bd804e687d9fc823$var$dashletCache.languageObjectDefinition = window.osClient.osjxGetEnvironment(33);
+        $bd804e687d9fc823$var$dashletCache.wfOrgId = window.osClient.osjxGetEnvironment(19);
+        $bd804e687d9fc823$var$dashletCache.mail = window.osClient.osjxGetEnvironment(16);
+        $bd804e687d9fc823$var$dashletCache.username = window.osClient.osjxGetEnvironment(3);
+        $bd804e687d9fc823$var$dashletCache.groups = window.osClient.osjxGetEnvironment(11);
+        $bd804e687d9fc823$var$dashletCache.fullname = window.osClient.osjxGetEnvironment(14);
     }
-    let selectedEntries = await $98f3c34ecca6b01b$var$getSelectedObjects();
+    let selectedEntries = await $bd804e687d9fc823$var$getSelectedObjects();
     if (isInitEvent && (selectedEntries == null || selectedEntries.length === 0 || selectedEntries[0].objectId === "" || selectedEntries[0].objectId === void 0)) // On opening an index data mask for a different ECM object out of the dashlet the selectedEntries has one element
     // but the objectId and objectTypeId are empty. We fix this by assigning the information from the init event.
     selectedEntries = [
@@ -256,10 +278,10 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
     // In this state, objectident/objecttype already contain the effective primary selection while
     // osjxGetSelectedObjects still includes previously selected IDs, often with objectTypeId "0".
     // We do short retries to wait for the stable post-click state.
-    selectedEntries = await $98f3c34ecca6b01b$var$normalizeStaleRichClientSelection(selectedEntries, data, isInitEvent);
+    selectedEntries = await $bd804e687d9fc823$var$normalizeStaleRichClientSelection(selectedEntries, data, isInitEvent);
     let lastSelectedEntry = null;
     for (const selectedEntry of selectedEntries){
-        $98f3c34ecca6b01b$var$addObjectTypeAndMainType(selectedEntry);
+        $bd804e687d9fc823$var$addObjectTypeAndMainType(selectedEntry);
         if (selectedEntry.objectId === data.objectident) lastSelectedEntry = selectedEntry;
     }
     if (lastSelectedEntry === null && selectedEntries.length > 0) // Rich client can report a primary selection in the init/update payload
@@ -272,20 +294,20 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
         activeCustomDashlet: {
             objectTypes: null,
             platforms: null,
-            uri: $98f3c34ecca6b01b$var$dashletCache.uri,
-            title_DE: $98f3c34ecca6b01b$var$dashletCache.dashletCaption,
-            title_EN: $98f3c34ecca6b01b$var$dashletCache.dashletCaption,
-            title_FR: $98f3c34ecca6b01b$var$dashletCache.dashletCaption,
+            uri: $bd804e687d9fc823$var$dashletCache.uri,
+            title_DE: $bd804e687d9fc823$var$dashletCache.dashletCaption,
+            title_EN: $bd804e687d9fc823$var$dashletCache.dashletCaption,
+            title_FR: $bd804e687d9fc823$var$dashletCache.dashletCaption,
             iconId: null,
             users: null,
             groups: null
         },
         lastSelectedEntry: {
-            ...$98f3c34ecca6b01b$var$createMappedLastSelectedEntry(lastSelectedEntry)
+            ...$bd804e687d9fc823$var$createMappedLastSelectedEntry(lastSelectedEntry)
         },
         osDashletInit: {
             objectident: data.objectident,
-            objecttype: $98f3c34ecca6b01b$var$isTypelessDocument(data.objecttype) ? "-1" : data.objecttype,
+            objecttype: $bd804e687d9fc823$var$isTypelessDocument(data.objecttype) ? "-1" : data.objecttype,
             userid: data.userid,
             userguid: data.userguid,
             sessionguid: data.sessionguid,
@@ -293,49 +315,49 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
             pagecount: data.pagecount,
             searchterm: data.searchterm
         },
-        selectedEntries: $98f3c34ecca6b01b$var$createMappedSelectedEntries(selectedEntries),
-        locationInfo: $98f3c34ecca6b01b$var$getLocationInfo(data),
+        selectedEntries: $bd804e687d9fc823$var$createMappedSelectedEntries(selectedEntries),
+        locationInfo: $bd804e687d9fc823$var$getLocationInfo(data),
         sessionInfo: {
-            language: $98f3c34ecca6b01b$var$dashletCache.languageGuiSelected.substring(0, 2),
-            languageObjectDefinition: $98f3c34ecca6b01b$var$dashletCache.languageObjectDefinition.split("_")[0],
+            language: $bd804e687d9fc823$var$dashletCache.languageGuiSelected.substring(0, 2),
+            languageObjectDefinition: $bd804e687d9fc823$var$dashletCache.languageObjectDefinition.split("_")[0],
             sessionGuid: data.sessionguid,
             clientType: "rich_client",
             baseUrl: location.origin
         },
         userInfo: {
-            email: $98f3c34ecca6b01b$var$dashletCache.mail,
-            fullname: $98f3c34ecca6b01b$var$dashletCache.fullname,
-            groups: $98f3c34ecca6b01b$var$dashletCache.groups.split(";"),
-            name: $98f3c34ecca6b01b$var$dashletCache.username,
+            email: $bd804e687d9fc823$var$dashletCache.mail,
+            fullname: $bd804e687d9fc823$var$dashletCache.fullname,
+            groups: $bd804e687d9fc823$var$dashletCache.groups.split(";"),
+            name: $bd804e687d9fc823$var$dashletCache.username,
             osGuid: data.userguid,
             userId: data.userid,
             wfGuid: null,
-            wfOrgId: $98f3c34ecca6b01b$var$dashletCache.wfOrgId
+            wfOrgId: $bd804e687d9fc823$var$dashletCache.wfOrgId
         },
         context: null
     };
     const selectionSignature = mappedData.selectedEntries.map((entry)=>`${entry.osid},${entry.objectTypeId}`).join(";");
     // Keep the latest signature even when no callback is fired.
     // The monitor uses this to prevent duplicate synthetic updates.
-    if (selectionSignature !== $98f3c34ecca6b01b$var$lastSelectionSignature) $98f3c34ecca6b01b$var$lastSelectionSignature = selectionSignature;
+    if (selectionSignature !== $bd804e687d9fc823$var$lastSelectionSignature) $bd804e687d9fc823$var$lastSelectionSignature = selectionSignature;
     else !isInitEvent && mappedData.selectedEntries.length;
-    $98f3c34ecca6b01b$var$lastMappedDashletData = mappedData;
+    $bd804e687d9fc823$var$lastMappedDashletData = mappedData;
     // execute registered events with mapped data.
     // onInitCallback is called once. Afterward we set it to null and then onUpdateCallback is called.
-    if ($98f3c34ecca6b01b$var$onInitCallback != null) {
-        $98f3c34ecca6b01b$var$onInitCallback(mappedData);
-        $98f3c34ecca6b01b$var$onInitCallback = null;
-    } else if ($98f3c34ecca6b01b$var$onUpdateCallback != null) $98f3c34ecca6b01b$var$onUpdateCallback(mappedData);
+    if ($bd804e687d9fc823$var$onInitCallback != null) {
+        $bd804e687d9fc823$var$onInitCallback(mappedData);
+        $bd804e687d9fc823$var$onInitCallback = null;
+    } else if ($bd804e687d9fc823$var$onUpdateCallback != null) $bd804e687d9fc823$var$onUpdateCallback(mappedData);
 }
 /**
  * Handle the onInit event for modal dialogs and call a callback function if one is registered.
  *
  * @param {Object} data initialize data from the rich client.
  * @private
- */ function $98f3c34ecca6b01b$var$internalOnInitModalDialog(data) {
-    if ($98f3c34ecca6b01b$var$onInitCallback != null) {
-        $98f3c34ecca6b01b$var$onInitCallback(data);
-        $98f3c34ecca6b01b$var$onInitCallback = null;
+ */ function $bd804e687d9fc823$var$internalOnInitModalDialog(data) {
+    if ($bd804e687d9fc823$var$onInitCallback != null) {
+        $bd804e687d9fc823$var$onInitCallback(data);
+        $bd804e687d9fc823$var$onInitCallback = null;
     }
 }
 /**
@@ -344,10 +366,10 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * instead of placing it directly into the html file.
  *
  * @private
- */ function $98f3c34ecca6b01b$export$c6ba16edd0a0ecfe() {
+ */ function $bd804e687d9fc823$export$c6ba16edd0a0ecfe() {
     // Rich client calls global functions by name (`osDashletInit` / `onInit`).
     // We route both to one internal handler.
-    window.internalOnInitUpdate = $98f3c34ecca6b01b$var$internalOnInitUpdate;
+    window.internalOnInitUpdate = $bd804e687d9fc823$var$internalOnInitUpdate;
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.innerText = "function osDashletInit(data) { return window.internalOnInitUpdate(data); } function onInit(data) { return window.internalOnInitUpdate(data); }";
@@ -357,7 +379,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Call the method directly to register ourselves directly on the window object.
  * A addEventListener("load", registerOnInitUpdate); would be nicer, but it is too late.
  * Then we miss the rich client call which we want to intercept.
- */ $98f3c34ecca6b01b$export$c6ba16edd0a0ecfe();
+ */ $bd804e687d9fc823$export$c6ba16edd0a0ecfe();
 /**
  * Entry method for sending commands to the rich client. The payload is the one for enaio web client.
  * It must be converted before sending it to rich client and the response must also be converted back.
@@ -366,32 +388,32 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  *
  * @param {*} payload web client format
  * @returns response in web client format
- */ async function $98f3c34ecca6b01b$export$1079770825fa94d6(payload) {
+ */ async function $bd804e687d9fc823$export$1079770825fa94d6(payload) {
     switch(payload[0]){
         case "openIndexData":
-            return $98f3c34ecca6b01b$var$openIndexData(payload);
+            return $bd804e687d9fc823$var$openIndexData(payload);
         case "openLocation":
-            return $98f3c34ecca6b01b$var$openLocation(payload);
+            return $bd804e687d9fc823$var$openLocation(payload);
         case "getSelectedObjects":
-            return $98f3c34ecca6b01b$var$getSelectedObjects(payload);
+            return $bd804e687d9fc823$var$getSelectedObjects(payload);
         case "refreshHitListObjects":
-            return $98f3c34ecca6b01b$var$refreshHitListObjects(payload);
+            return $bd804e687d9fc823$var$refreshHitListObjects(payload);
         case "openHitListByIds":
-            return $98f3c34ecca6b01b$var$openHitListByIds(payload);
+            return $bd804e687d9fc823$var$openHitListByIds(payload);
         case "getFieldValueByInternal":
-            return $98f3c34ecca6b01b$var$getFieldValueByInternal(payload);
+            return $bd804e687d9fc823$var$getFieldValueByInternal(payload);
         case "setFieldValueByInternal":
-            return $98f3c34ecca6b01b$var$setFieldValueByInternal(payload);
+            return $bd804e687d9fc823$var$setFieldValueByInternal(payload);
         case "setWorkflowVariableByName":
-            return $98f3c34ecca6b01b$var$setWorkflowVariableByName(payload);
+            return $bd804e687d9fc823$var$setWorkflowVariableByName(payload);
         case "getEnvironment":
-            return $98f3c34ecca6b01b$var$getEnvironment();
+            return $bd804e687d9fc823$var$getEnvironment();
         case "closeModalDialog":
-            return $98f3c34ecca6b01b$var$closeModalDialog(payload);
+            return $bd804e687d9fc823$var$closeModalDialog(payload);
         case "setDialogCaption":
-            return $98f3c34ecca6b01b$var$setDialogCaption(payload);
+            return $bd804e687d9fc823$var$setDialogCaption(payload);
         case "getWorkflowVariableByName":
-            return $98f3c34ecca6b01b$var$getWorkflowVariableByName(payload);
+            return $bd804e687d9fc823$var$getWorkflowVariableByName(payload);
         default:
             return undefined;
     }
@@ -400,7 +422,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$openLocation(payload) {
+ */ async function $bd804e687d9fc823$var$openLocation(payload) {
     // const inNewTab = payload[1][0]; // Only as reminder but not supported by the rich client.
     const osId = Number(payload[1][1]);
     const objectTypeId = Number(payload[1][2]);
@@ -411,7 +433,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$openIndexData(payload) {
+ */ async function $bd804e687d9fc823$var$openIndexData(payload) {
     // const inNewTab = payload[1][0]; // Only as reminder but not supported by the rich client.
     const osId = Number(payload[1][2]);
     const readonly = payload[1][1].toLowerCase() === "view";
@@ -421,7 +443,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$getSelectedObjects() {
+ */ async function $bd804e687d9fc823$var$getSelectedObjects() {
     const selectedObjects = await window.osClient.osjxGetSelectedObjects();
     if (selectedObjects == null || selectedObjects.trim() === "") return [];
     let ignoredEntries = 0;
@@ -438,7 +460,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
             objectId: objectId,
             objectTypeId: objectTypeId
         };
-        $98f3c34ecca6b01b$var$addObjectTypeAndMainType(retVal);
+        $bd804e687d9fc823$var$addObjectTypeAndMainType(retVal);
         return retVal;
     }).filter((selectedObject)=>selectedObject !== null);
     ignoredEntries;
@@ -448,7 +470,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$refreshHitListObjects(payload) {
+ */ async function $bd804e687d9fc823$var$refreshHitListObjects(payload) {
     for (const objectToRefresh of payload[1]){
         const osId = Number(objectToRefresh[0]);
         await window.osClient.osjxRefreshObjectInLists(osId);
@@ -458,7 +480,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$openHitListByIds(payload) {
+ */ async function $bd804e687d9fc823$var$openHitListByIds(payload) {
     const ids = payload[1].objects;
     const title = payload[1].title.length === 0 ? "Gemischte Trefferliste" : payload[1].title;
     const request = {
@@ -474,7 +496,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$getFieldValueByInternal(payload) {
+ */ async function $bd804e687d9fc823$var$getFieldValueByInternal(payload) {
     const response = JSON.parse(await window.osClient.getFieldValueByInternal(payload[1][0]));
     return response;
 }
@@ -482,7 +504,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$setFieldValueByInternal(payload) {
+ */ async function $bd804e687d9fc823$var$setFieldValueByInternal(payload) {
     const response = JSON.parse(await window.osClient.setFieldValueByInternal(payload[1][0]));
     return response;
 }
@@ -490,7 +512,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$setWorkflowVariableByName(payload) {
+ */ async function $bd804e687d9fc823$var$setWorkflowVariableByName(payload) {
     const response = JSON.parse(await window.osClient.setWorkflowVariableByName(payload[1][0]));
     return response;
 }
@@ -498,7 +520,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$getEnvironment() {
+ */ async function $bd804e687d9fc823$var$getEnvironment() {
     const response = JSON.parse(await window.osClient.getEnvironment());
     return response;
 }
@@ -506,14 +528,14 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$closeModalDialog(payload) {
+ */ async function $bd804e687d9fc823$var$closeModalDialog(payload) {
     await window.osClient.closeModalDialog(payload[1][0]);
 }
 /**
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$setDialogCaption(payload) {
+ */ async function $bd804e687d9fc823$var$setDialogCaption(payload) {
     const response = window.osClient.setDialogCaption(payload[1][0]);
     return response;
 }
@@ -521,7 +543,7 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * Documentation see communication-library.js
  *
  * @private
- */ async function $98f3c34ecca6b01b$var$getWorkflowVariableByName(payload) {
+ */ async function $bd804e687d9fc823$var$getWorkflowVariableByName(payload) {
     const response = JSON.parse(await window.osClient.getWorkflowVariableByName(payload[1][0]));
     return response;
 }
@@ -530,8 +552,8 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
  * hand in object.
  *
  * @param selectedObject The object to extend
- */ function $98f3c34ecca6b01b$var$addObjectTypeAndMainType(selectedObject) {
-    if ($98f3c34ecca6b01b$var$isTypelessDocument(selectedObject.objectTypeId)) selectedObject.objectTypeId = "-1";
+ */ function $bd804e687d9fc823$var$addObjectTypeAndMainType(selectedObject) {
+    if ($bd804e687d9fc823$var$isTypelessDocument(selectedObject.objectTypeId)) selectedObject.objectTypeId = "-1";
     // In WebClient it is a string. Therefore toString();
     selectedObject.mainType = (selectedObject.objectTypeId >>> 16).toString();
     switch(selectedObject.mainType){
@@ -548,22 +570,22 @@ let $98f3c34ecca6b01b$var$lastMappedDashletData = null;
 }
 /**
  * Return true if we are running inside a modal dialog. If we are running inside a dashlet the return is false.
- */ function $98f3c34ecca6b01b$export$cebb092bf393cc5() {
-    return $98f3c34ecca6b01b$var$modalDialog;
+ */ function $bd804e687d9fc823$export$cebb092bf393cc5() {
+    return $bd804e687d9fc823$var$modalDialog;
 }
 /**
  * This function is only for the unit-tests to reset the rich client library to its original state
- */ function $98f3c34ecca6b01b$export$aad8462122ac592b() {
-    $98f3c34ecca6b01b$var$modalDialog = false;
-    $98f3c34ecca6b01b$var$onInitCallback = ()=>{};
-    $98f3c34ecca6b01b$var$onUpdateCallback = ()=>{};
-    $98f3c34ecca6b01b$var$dashletCache = null;
-    $98f3c34ecca6b01b$var$lastSelectionSignature = "";
-    $98f3c34ecca6b01b$var$lastMappedDashletData = null;
-    $98f3c34ecca6b01b$var$stopSelectionMonitor();
+ */ function $bd804e687d9fc823$export$aad8462122ac592b() {
+    $bd804e687d9fc823$var$modalDialog = false;
+    $bd804e687d9fc823$var$onInitCallback = ()=>{};
+    $bd804e687d9fc823$var$onUpdateCallback = ()=>{};
+    $bd804e687d9fc823$var$dashletCache = null;
+    $bd804e687d9fc823$var$lastSelectionSignature = "";
+    $bd804e687d9fc823$var$lastMappedDashletData = null;
+    $bd804e687d9fc823$var$stopSelectionMonitor();
     delete window.osClient;
 }
-function $98f3c34ecca6b01b$var$getLocationInfo(data) {
+function $bd804e687d9fc823$var$getLocationInfo(data) {
     // Priority: register location if available, otherwise folder location,
     // otherwise return empty object.
     // folder is at the root - no parent information available
@@ -586,7 +608,7 @@ function $98f3c34ecca6b01b$var$getLocationInfo(data) {
     // Fallback to empty object
     return {};
 }
-function $98f3c34ecca6b01b$var$createMappedLastSelectedEntry(lastSelectedEntry) {
+function $bd804e687d9fc823$var$createMappedLastSelectedEntry(lastSelectedEntry) {
     if (!lastSelectedEntry) return {
         hasVariants: null,
         mainType: 0,
@@ -602,7 +624,7 @@ function $98f3c34ecca6b01b$var$createMappedLastSelectedEntry(lastSelectedEntry) 
         objectType: lastSelectedEntry.objectType
     };
 }
-function $98f3c34ecca6b01b$var$createMappedSelectedEntries(selectedEntries) {
+function $bd804e687d9fc823$var$createMappedSelectedEntries(selectedEntries) {
     return selectedEntries.map((selectedEntry)=>({
             osid: selectedEntry.objectId,
             objectTypeId: selectedEntry.objectTypeId,
@@ -610,25 +632,26 @@ function $98f3c34ecca6b01b$var$createMappedSelectedEntries(selectedEntries) {
             mainType: selectedEntry.mainType
         }));
 }
-function $98f3c34ecca6b01b$var$getMappedSelectionSignature(mappedSelectedEntries) {
+function $bd804e687d9fc823$var$getMappedSelectionSignature(mappedSelectedEntries) {
     return mappedSelectedEntries.map((entry)=>`${entry.osid},${entry.objectTypeId}`).join(";");
 }
-function $98f3c34ecca6b01b$var$resolveFollowUpLastSelectedEntry(selectedEntries, previousMappedData) {
+function $bd804e687d9fc823$var$resolveFollowUpLastSelectedEntry(selectedEntries, previousMappedData) {
+    var _previousMappedData_lastSelectedEntry;
     // On synthetic monitor updates there is no "clicked item" event payload.
     // Keep the previous lastSelectedEntry if it is still selected.
-    const previousOsId = previousMappedData?.lastSelectedEntry?.osid;
+    const previousOsId = previousMappedData === null || previousMappedData === void 0 ? void 0 : (_previousMappedData_lastSelectedEntry = previousMappedData.lastSelectedEntry) === null || _previousMappedData_lastSelectedEntry === void 0 ? void 0 : _previousMappedData_lastSelectedEntry.osid;
     if (previousOsId) {
         const previousMatch = selectedEntries.find((entry)=>entry.objectId === previousOsId);
         if (previousMatch) return previousMatch;
     }
     return selectedEntries.length > 0 ? selectedEntries[0] : null;
 }
-function $98f3c34ecca6b01b$var$mergeMappedDataWithSelection(previousMappedData, selectedEntries) {
+function $bd804e687d9fc823$var$mergeMappedDataWithSelection(previousMappedData, selectedEntries) {
     // Reuse previous mapped payload and only replace selection-dependent fields.
     // This keeps session/user/context fields stable for consumers.
-    const mappedSelectedEntries = $98f3c34ecca6b01b$var$createMappedSelectedEntries(selectedEntries);
-    const nextLastSelectedEntry = $98f3c34ecca6b01b$var$resolveFollowUpLastSelectedEntry(selectedEntries, previousMappedData);
-    const mappedLastSelectedEntry = $98f3c34ecca6b01b$var$createMappedLastSelectedEntry(nextLastSelectedEntry);
+    const mappedSelectedEntries = $bd804e687d9fc823$var$createMappedSelectedEntries(selectedEntries);
+    const nextLastSelectedEntry = $bd804e687d9fc823$var$resolveFollowUpLastSelectedEntry(selectedEntries, previousMappedData);
+    const mappedLastSelectedEntry = $bd804e687d9fc823$var$createMappedLastSelectedEntry(nextLastSelectedEntry);
     const mergedMappedData = {
         ...previousMappedData,
         selectedEntries: mappedSelectedEntries,
@@ -641,39 +664,39 @@ function $98f3c34ecca6b01b$var$mergeMappedDataWithSelection(previousMappedData, 
     };
     return mergedMappedData;
 }
-function $98f3c34ecca6b01b$var$isKarmaEnvironment() {
+function $bd804e687d9fc823$var$isKarmaEnvironment() {
     return typeof window !== "undefined" && window.__karma__ != null;
 }
-function $98f3c34ecca6b01b$var$startSelectionMonitor() {
-    if ($98f3c34ecca6b01b$var$selectionMonitorIntervalId != null || $98f3c34ecca6b01b$var$isKarmaEnvironment()) return;
+function $bd804e687d9fc823$var$startSelectionMonitor() {
+    if ($bd804e687d9fc823$var$selectionMonitorIntervalId != null || $bd804e687d9fc823$var$isKarmaEnvironment()) return;
     // Safety net: rich client can miss or delay a deselection update.
     // Polling keeps dashlet selection in sync without user action.
     const MONITOR_INTERVAL_MS = 250;
-    $98f3c34ecca6b01b$var$selectionMonitorIntervalId = setInterval(async ()=>{
-        if ($98f3c34ecca6b01b$var$selectionMonitorInFlight || $98f3c34ecca6b01b$var$onUpdateCallback == null || $98f3c34ecca6b01b$var$modalDialog || !window.osClient || $98f3c34ecca6b01b$var$lastMappedDashletData == null) return;
-        $98f3c34ecca6b01b$var$selectionMonitorInFlight = true;
+    $bd804e687d9fc823$var$selectionMonitorIntervalId = setInterval(async ()=>{
+        if ($bd804e687d9fc823$var$selectionMonitorInFlight || $bd804e687d9fc823$var$onUpdateCallback == null || $bd804e687d9fc823$var$modalDialog || !window.osClient || $bd804e687d9fc823$var$lastMappedDashletData == null) return;
+        $bd804e687d9fc823$var$selectionMonitorInFlight = true;
         try {
-            const currentRead = await $98f3c34ecca6b01b$var$getSelectedObjects();
-            const currentSignature = $98f3c34ecca6b01b$var$getSelectionSignature(currentRead);
-            if (currentSignature === $98f3c34ecca6b01b$var$lastSelectionSignature) return;
-            const mergedMappedData = $98f3c34ecca6b01b$var$mergeMappedDataWithSelection($98f3c34ecca6b01b$var$lastMappedDashletData, currentRead);
-            const mergedSignature = $98f3c34ecca6b01b$var$getMappedSelectionSignature(mergedMappedData.selectedEntries);
-            if (mergedSignature === $98f3c34ecca6b01b$var$lastSelectionSignature) return;
-            $98f3c34ecca6b01b$var$lastSelectionSignature = mergedSignature;
-            $98f3c34ecca6b01b$var$lastMappedDashletData = mergedMappedData;
-            $98f3c34ecca6b01b$var$onUpdateCallback(mergedMappedData);
+            const currentRead = await $bd804e687d9fc823$var$getSelectedObjects();
+            const currentSignature = $bd804e687d9fc823$var$getSelectionSignature(currentRead);
+            if (currentSignature === $bd804e687d9fc823$var$lastSelectionSignature) return;
+            const mergedMappedData = $bd804e687d9fc823$var$mergeMappedDataWithSelection($bd804e687d9fc823$var$lastMappedDashletData, currentRead);
+            const mergedSignature = $bd804e687d9fc823$var$getMappedSelectionSignature(mergedMappedData.selectedEntries);
+            if (mergedSignature === $bd804e687d9fc823$var$lastSelectionSignature) return;
+            $bd804e687d9fc823$var$lastSelectionSignature = mergedSignature;
+            $bd804e687d9fc823$var$lastMappedDashletData = mergedMappedData;
+            $bd804e687d9fc823$var$onUpdateCallback(mergedMappedData);
         } catch  {} finally{
-            $98f3c34ecca6b01b$var$selectionMonitorInFlight = false;
+            $bd804e687d9fc823$var$selectionMonitorInFlight = false;
         }
     }, MONITOR_INTERVAL_MS);
 }
-function $98f3c34ecca6b01b$var$stopSelectionMonitor() {
-    if ($98f3c34ecca6b01b$var$selectionMonitorIntervalId == null) return;
-    clearInterval($98f3c34ecca6b01b$var$selectionMonitorIntervalId);
-    $98f3c34ecca6b01b$var$selectionMonitorIntervalId = null;
-    $98f3c34ecca6b01b$var$selectionMonitorInFlight = false;
+function $bd804e687d9fc823$var$stopSelectionMonitor() {
+    if ($bd804e687d9fc823$var$selectionMonitorIntervalId == null) return;
+    clearInterval($bd804e687d9fc823$var$selectionMonitorIntervalId);
+    $bd804e687d9fc823$var$selectionMonitorIntervalId = null;
+    $bd804e687d9fc823$var$selectionMonitorInFlight = false;
 }
-async function $98f3c34ecca6b01b$var$normalizeStaleRichClientSelection(selectedEntries, data, isInitEvent) {
+async function $bd804e687d9fc823$var$normalizeStaleRichClientSelection(selectedEntries, data, isInitEvent) {
     if (isInitEvent || selectedEntries.length <= 1) // Init events and single-select events are usually stable immediately.
     return selectedEntries;
     // Rich-client selection can lag behind update events. A single follow-up read is often still stale.
@@ -684,25 +707,25 @@ async function $98f3c34ecca6b01b$var$normalizeStaleRichClientSelection(selectedE
     const reads = [
         selectedEntries
     ];
-    let previousSignature = $98f3c34ecca6b01b$var$getSelectionSignature(selectedEntries);
+    let previousSignature = $bd804e687d9fc823$var$getSelectionSignature(selectedEntries);
     for(let attempt = 1; attempt <= MAX_RETRIES; attempt++){
-        await $98f3c34ecca6b01b$var$sleep(RETRY_DELAY_MS);
-        const read = await $98f3c34ecca6b01b$var$getSelectedObjects();
-        const signature = $98f3c34ecca6b01b$var$getSelectionSignature(read);
+        await $bd804e687d9fc823$var$sleep(RETRY_DELAY_MS);
+        const read = await $bd804e687d9fc823$var$getSelectedObjects();
+        const signature = $bd804e687d9fc823$var$getSelectionSignature(read);
         reads.push(read);
         if (signature === previousSignature && attempt >= MIN_RETRIES_BEFORE_STABLE) {
-            const preferredStableRead = $98f3c34ecca6b01b$var$preferReadContainingPayload(reads, data.objectident);
+            const preferredStableRead = $bd804e687d9fc823$var$preferReadContainingPayload(reads, data.objectident);
             return preferredStableRead;
         }
         previousSignature = signature;
     }
-    const selectedRead = $98f3c34ecca6b01b$var$preferReadContainingPayload(reads, data.objectident);
+    const selectedRead = $bd804e687d9fc823$var$preferReadContainingPayload(reads, data.objectident);
     return selectedRead;
 }
-function $98f3c34ecca6b01b$var$getSelectionSignature(selectedEntries) {
+function $bd804e687d9fc823$var$getSelectionSignature(selectedEntries) {
     return selectedEntries.map((entry)=>`${entry.objectId},${entry.objectTypeId}`).join(";");
 }
-function $98f3c34ecca6b01b$var$preferReadContainingPayload(reads, payloadObjectId) {
+function $bd804e687d9fc823$var$preferReadContainingPayload(reads, payloadObjectId) {
     // Prefer a snapshot that contains the payload primary object.
     // If none match, use the newest snapshot.
     for(let index = reads.length - 1; index >= 0; index--){
@@ -711,12 +734,12 @@ function $98f3c34ecca6b01b$var$preferReadContainingPayload(reads, payloadObjectI
     }
     return reads[reads.length - 1];
 }
-function $98f3c34ecca6b01b$var$sleep(ms) {
+function $bd804e687d9fc823$var$sleep(ms) {
     return new Promise((resolve)=>setTimeout(resolve, ms));
 }
 
 
-const $5bfac67df813e95a$var$version = "2.0.7-rc3";
+const $ee4aa6f009fdd7de$var$version = "2.0.7-rc3";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
@@ -724,10 +747,10 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @param {string} trustedOrigin origin which is allowed to send and receive messages. Should be the webclient uri.
  * Use "*" to allow every target origin. Example: https://enaio.company-name.de.
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
- */ function $5bfac67df813e95a$export$8f1480d0136598a3(onInitCallback, trustedOrigin = "*") {
-    console.log(`Current Communication library version number: ${$5bfac67df813e95a$var$version}`);
-    if (window.osClient) $98f3c34ecca6b01b$export$8f1480d0136598a3(onInitCallback);
-    else $a98a2b9392e1c624$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
+ */ function $ee4aa6f009fdd7de$export$8f1480d0136598a3(onInitCallback, trustedOrigin = "*") {
+    console.log(`Current Communication library version number: ${$ee4aa6f009fdd7de$var$version}`);
+    if (window.osClient) $bd804e687d9fc823$export$8f1480d0136598a3(onInitCallback);
+    else $c89a80de080932aa$export$8f1480d0136598a3(onInitCallback, trustedOrigin);
 }
 /**
  * Registers an onUpdate callback which is executed if something changes in the client.
@@ -736,9 +759,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @param {string} trustedOrigin origin which is allowed to send and receive messages. Should be the webclient uri.
  * Use "*" to allow every target origin. Example: https://enaio.company-name.de.
  * Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
- */ function $5bfac67df813e95a$export$4172dbddf28736a3(onUpdateCallback, trustedOrigin = "*") {
-    if (window.osClient) $98f3c34ecca6b01b$export$4172dbddf28736a3(onUpdateCallback);
-    else $a98a2b9392e1c624$export$4172dbddf28736a3(onUpdateCallback, trustedOrigin);
+ */ function $ee4aa6f009fdd7de$export$4172dbddf28736a3(onUpdateCallback, trustedOrigin = "*") {
+    if (window.osClient) $bd804e687d9fc823$export$4172dbddf28736a3(onUpdateCallback);
+    else $c89a80de080932aa$export$4172dbddf28736a3(onUpdateCallback, trustedOrigin);
 }
 /**
  * Opens the index data mask for the currently selected osId.
@@ -749,9 +772,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @param {string} objectTypeId the objectTypeId of the DMS object. This increases the performance when opening the index data view.
  * @returns {boolean} true if the objectId and objectTypeId are valid and the opening was successful. Otherwise, false.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/openIndexData
- */ async function $5bfac67df813e95a$export$c80888c0f1760f07(inNewTab, mode, objectId, objectTypeId) {
-    if ($5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
-    return $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$c80888c0f1760f07(inNewTab, mode, objectId, objectTypeId) {
+    if ($ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
+    return $ee4aa6f009fdd7de$var$sendClientMessage([
         "openIndexData",
         [
             inNewTab,
@@ -771,9 +794,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @param {string} [parentTypeId] the objectTypeId of the parent DMS object to open a specific location if the object has multiple locations.
  * @returns {Promise<void>} The method has no return value. In the event of an error, an error is triggered. This can be caught with a try-catch-block or error handler for the method.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/openLocation
- */ async function $5bfac67df813e95a$export$47c4a703efa8e61e(inNewTab, objectId, objectTypeId, parentId, parentTypeId) {
-    if ($5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
-    await $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$47c4a703efa8e61e(inNewTab, objectId, objectTypeId, parentId, parentTypeId) {
+    if ($ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
+    await $ee4aa6f009fdd7de$var$sendClientMessage([
         "openLocation",
         [
             inNewTab,
@@ -793,9 +816,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * 
  * @returns {Promise<string>} Semicolon separated string of tuples with objectId and objectTypeId.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/getSelectedObjects
- */ async function $5bfac67df813e95a$export$96f907581d671890() {
-    if ($5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
-    return $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$96f907581d671890() {
+    if ($ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
+    return $ee4aa6f009fdd7de$var$sendClientMessage([
         "getSelectedObjects",
         []
     ]);
@@ -806,9 +829,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @param {string[]} osIds of the DMS objects.
  * @return The method has no return value. In the event of an error, an error is triggered. This can be caught with a try-catch-block or error handler for the method.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/refreshHitListObjects
- */ async function $5bfac67df813e95a$export$89d12ae34746cff2(osIds) {
-    if ($5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
-    await $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$89d12ae34746cff2(osIds) {
+    if ($ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
+    await $ee4aa6f009fdd7de$var$sendClientMessage([
         "refreshHitListObjects",
         [
             osIds
@@ -825,9 +848,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @param {boolean} [executeSingleHitAction] specifies whether to execute the default action when there is a single hit
  * @return The method has no return value. In the event of an error, an error is triggered. This can be caught with a try-catch-block or error handler for the method.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds
- */ async function $5bfac67df813e95a$export$5b5fa3829992783b(objects, inNewTab = false, title = "", subTitle = "", executeSingleHitAction = false) {
-    if ($5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
-    await $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$5b5fa3829992783b(objects, inNewTab = false, title = "", subTitle = "", executeSingleHitAction = false) {
+    if ($ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
+    await $ee4aa6f009fdd7de$var$sendClientMessage([
         "openHitListByIds",
         {
             objects: objects,
@@ -847,12 +870,12 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @return {Promise<string|Array<Array<string>>>}
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/getFieldValueByInternal
  * @returns The answer of the client.
- */ async function $5bfac67df813e95a$export$468316c75afcb0f3(json) {
-    if (!$5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
-    return $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$468316c75afcb0f3(json) {
+    if (!$ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
+    return $ee4aa6f009fdd7de$var$sendClientMessage([
         "getFieldValueByInternal",
         [
-            $5bfac67df813e95a$var$jsonObjectToString(json)
+            $ee4aa6f009fdd7de$var$jsonObjectToString(json)
         ]
     ]);
 }
@@ -864,12 +887,12 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @return {Promise<string|Array<Array<string>>>} - A promise that resolves to the value of the workflow variable. The type of the return value can be a string or an array of arrays of strings, depending on the variable's type.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/getWorkflowVariableByName - For more information regarding the return value based on the field type.
  * @throws {string} - Throws an error message if the function is invoked outside of a modal dialog context, as it is not implemented for dashlets.
- */ async function $5bfac67df813e95a$export$b3ed74af647c74bd(json) {
-    if (!$5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
-    return $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$b3ed74af647c74bd(json) {
+    if (!$ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
+    return $ee4aa6f009fdd7de$var$sendClientMessage([
         "getWorkflowVariableByName",
         [
-            $5bfac67df813e95a$var$jsonObjectToString(json)
+            $ee4aa6f009fdd7de$var$jsonObjectToString(json)
         ]
     ]);
 }
@@ -881,12 +904,12 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @param json A json object with internalName and value.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/setFieldValueByInternal
  * @returns The answer of the client.
- */ async function $5bfac67df813e95a$export$50c2e2f825ad7b4b(json) {
-    if (!$5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
-    return $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$50c2e2f825ad7b4b(json) {
+    if (!$ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
+    return $ee4aa6f009fdd7de$var$sendClientMessage([
         "setFieldValueByInternal",
         [
-            $5bfac67df813e95a$var$jsonObjectToString(json)
+            $ee4aa6f009fdd7de$var$jsonObjectToString(json)
         ]
     ]);
 }
@@ -899,12 +922,12 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @throws {string} If the function is used outside of a modal dialog.
  * @returns The answer of the client.
  * @async
- */ async function $5bfac67df813e95a$export$23c49f97b8cbcd5b(json) {
-    if (!$5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
-    return $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$23c49f97b8cbcd5b(json) {
+    if (!$ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
+    return $ee4aa6f009fdd7de$var$sendClientMessage([
         "setWorkflowVariableByName",
         [
-            $5bfac67df813e95a$var$jsonObjectToString(json)
+            $ee4aa6f009fdd7de$var$jsonObjectToString(json)
         ]
     ]);
 }
@@ -913,9 +936,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  *
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/getEnvironment
  * @returns The environment values from the client.
- */ async function $5bfac67df813e95a$export$57570b1603cf6adb() {
-    if (!$5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
-    return $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$57570b1603cf6adb() {
+    if (!$ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
+    return $ee4aa6f009fdd7de$var$sendClientMessage([
         "getEnvironment",
         []
     ]);
@@ -926,9 +949,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @param {string} newDialogCaption - The caption to be set for the modal dialog. Defaults to an empty string if no value is provided.
  * @throws {string} Throws a string error message if the function is used outside of a modal dialog context.
  * @remarks The caption is set as an array for webclient compatibility. The rich client only accepts a string.
- */ function $5bfac67df813e95a$export$74da6a16c6928c4d(newDialogCaption = "") {
-    if (!$5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
-    return $5bfac67df813e95a$var$sendClientMessage([
+ */ function $ee4aa6f009fdd7de$export$74da6a16c6928c4d(newDialogCaption = "") {
+    if (!$ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
+    return $ee4aa6f009fdd7de$var$sendClientMessage([
         "setDialogCaption",
         [
             newDialogCaption
@@ -939,9 +962,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * Cancel the modal dialog
  *
  * @param buttonScriptReturnValue The numeric value which should be sent to the button script
- */ async function $5bfac67df813e95a$export$f290980283620b4a(buttonScriptReturnValue) {
-    if (!$5bfac67df813e95a$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
-    return $5bfac67df813e95a$var$sendClientMessage([
+ */ async function $ee4aa6f009fdd7de$export$f290980283620b4a(buttonScriptReturnValue) {
+    if (!$ee4aa6f009fdd7de$export$cebb092bf393cc5()) throw "Not implemented for dashlets";
+    return $ee4aa6f009fdd7de$var$sendClientMessage([
         "closeModalDialog",
         [
             buttonScriptReturnValue
@@ -953,9 +976,9 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * 
  * @returns {Promise<void>} The method has no return value. In the event of an error, an error is triggered. This can be caught with a try-catch-block or error handler for the method.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/resetSessionTimeout
- */ async function $5bfac67df813e95a$export$c3d283c41bbe930c() {
+ */ async function $ee4aa6f009fdd7de$export$c3d283c41bbe930c() {
     if (window.osClient) return; // there is no session timeout in the rich client
-    await $5bfac67df813e95a$var$sendClientMessage([
+    await $ee4aa6f009fdd7de$var$sendClientMessage([
         "resetSessionTimeout",
         []
     ]);
@@ -966,10 +989,10 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  * @private
  * @param {Object[]} payload The input parameter for the command
  * @returns The answer of the client
- */ async function $5bfac67df813e95a$var$sendClientMessage(payload) {
+ */ async function $ee4aa6f009fdd7de$var$sendClientMessage(payload) {
     try {
-        if (window.osClient) return $98f3c34ecca6b01b$export$1079770825fa94d6(payload);
-        return $a98a2b9392e1c624$export$7980e63f750e794e(payload);
+        if (window.osClient) return $bd804e687d9fc823$export$1079770825fa94d6(payload);
+        return $c89a80de080932aa$export$7980e63f750e794e(payload);
     } catch (error) {
         console.log(`dashlet says: error caught in ${payload[0]}`, error);
     }
@@ -980,7 +1003,7 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  *
  * @private
  * @returns {string} The stringify json object if it is not already a string.
- */ function $5bfac67df813e95a$var$jsonObjectToString(jsonObject) {
+ */ function $ee4aa6f009fdd7de$var$jsonObjectToString(jsonObject) {
     if (!(jsonObject instanceof String) && typeof jsonObject !== "string") {
         if (typeof jsonObject.value === "object" && !Array.isArray(jsonObject.value)) jsonObject.value = JSON.stringify(jsonObject.value);
         return JSON.stringify(jsonObject);
@@ -992,26 +1015,26 @@ const $5bfac67df813e95a$var$version = "2.0.7-rc3";
  *
  * @private
  * @returns true if modal dialog, Otherwise false
- */ function $5bfac67df813e95a$export$cebb092bf393cc5() {
-    if (window.osClient) return $98f3c34ecca6b01b$export$cebb092bf393cc5();
-    return $a98a2b9392e1c624$export$cebb092bf393cc5();
+ */ function $ee4aa6f009fdd7de$export$cebb092bf393cc5() {
+    if (window.osClient) return $bd804e687d9fc823$export$cebb092bf393cc5();
+    return $c89a80de080932aa$export$cebb092bf393cc5();
 }
 // This will store the value for the onCanCancel behavior.
 // It's initialized to a default value to ensure it's always callable.
-let $5bfac67df813e95a$var$onCanCancelValue = 1;
+let $ee4aa6f009fdd7de$var$onCanCancelValue = 1;
 /**
  * Registers the callback for the ESC key event.
  *
  * @param {Function} valueFunction - A function that returns the current value for the callback.
- */ function $5bfac67df813e95a$export$e12a024d8ae2e5c(valueFunction) {
+ */ function $ee4aa6f009fdd7de$export$e12a024d8ae2e5c(valueFunction) {
     return new Promise((resolve, reject)=>{
         // Delay is necessary to ensure the availability of the function.
         setTimeout(()=>{
-            if (!$5bfac67df813e95a$export$cebb092bf393cc5()) reject("Not implemented for dashlets");
+            if (!$ee4aa6f009fdd7de$export$cebb092bf393cc5()) reject("Not implemented for dashlets");
             else {
                 // We assign the function passed from main.js to onCanCancelValue.
                 // This allows the function to be updated dynamically from main.js.
-                $5bfac67df813e95a$var$onCanCancelValue = valueFunction;
+                $ee4aa6f009fdd7de$var$onCanCancelValue = valueFunction;
                 resolve();
             }
         }, 1000);
@@ -1020,15 +1043,14 @@ let $5bfac67df813e95a$var$onCanCancelValue = 1;
 // Event listener for the ESC key.
 window.addEventListener("keydown", function(event) {
     // Check if the ESC key was pressed, and the modal dialog is active.
-    if (event.key === "Escape" && !window.osClient && $5bfac67df813e95a$export$cebb092bf393cc5()) {
+    if (event.key === "Escape" && !window.osClient && $ee4aa6f009fdd7de$export$cebb092bf393cc5()) {
         // Retrieve the current onCanCancelValue by calling the function.
-        const currentValue = typeof $5bfac67df813e95a$var$onCanCancelValue == "function" ? $5bfac67df813e95a$var$onCanCancelValue() : $5bfac67df813e95a$var$onCanCancelValue;
+        const currentValue = typeof $ee4aa6f009fdd7de$var$onCanCancelValue == "function" ? $ee4aa6f009fdd7de$var$onCanCancelValue() : $ee4aa6f009fdd7de$var$onCanCancelValue;
         // If the value is not 2, we close the modal dialog.
-        if (currentValue !== 2) $5bfac67df813e95a$export$f290980283620b4a(currentValue);
+        if (currentValue !== 2) $ee4aa6f009fdd7de$export$f290980283620b4a(currentValue);
         else console.warn("ESC key event is disabled.");
     }
 });
 
 
-export {$5bfac67df813e95a$export$8f1480d0136598a3 as registerOnInitCallback, $5bfac67df813e95a$export$4172dbddf28736a3 as registerOnUpdateCallback, $5bfac67df813e95a$export$c80888c0f1760f07 as openIndexData, $5bfac67df813e95a$export$cebb092bf393cc5 as isModalDialog, $5bfac67df813e95a$export$47c4a703efa8e61e as openLocation, $5bfac67df813e95a$export$96f907581d671890 as getSelectedObjects, $5bfac67df813e95a$export$89d12ae34746cff2 as refreshHitListObjects, $5bfac67df813e95a$export$5b5fa3829992783b as openHitListByIds, $5bfac67df813e95a$export$468316c75afcb0f3 as getFieldValueByInternal, $5bfac67df813e95a$export$b3ed74af647c74bd as getWorkflowVariableByName, $5bfac67df813e95a$export$50c2e2f825ad7b4b as setFieldValueByInternal, $5bfac67df813e95a$export$23c49f97b8cbcd5b as setWorkflowVariableByName, $5bfac67df813e95a$export$57570b1603cf6adb as getEnvironment, $5bfac67df813e95a$export$74da6a16c6928c4d as setDialogCaption, $5bfac67df813e95a$export$f290980283620b4a as closeModalDialog, $5bfac67df813e95a$export$c3d283c41bbe930c as resetSessionTimeout, $5bfac67df813e95a$export$e12a024d8ae2e5c as registerOnCanCancelCallback};
-//# sourceMappingURL=module.mjs.map
+//# sourceMappingURL=communicationLibrary.cjs.map

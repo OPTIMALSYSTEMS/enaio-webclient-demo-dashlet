@@ -1,6 +1,9 @@
 ﻿// Below is only for demo purposes. Github Pages only supports static site hosting.
 // In a production environment, import from the npm library as explained here https://www.npmjs.com/package/@enaio-client/communication-library
-import * as lib from './module.mjs';
+const lib = window.CommunicationLibrary;
+if (!lib) {
+    throw new Error('CommunicationLibrary global not found. Ensure js/communicationLibrary.js is loaded before js/main.js');
+}
 
 let currentSelectedObjects = [];
 let dashletName = "Dashlet";
@@ -10,7 +13,7 @@ let dashletName = "Dashlet";
  * @param data an object which contains enaio® webclient properties that the dashlet can use to enrich itself.
  */
 function initDashlet(data) {
-    console.log("🚀 ~ initDashlet ~ data:", data)
+    console.log("🚀 ~ DashletInfo ~ data:", data)
     dashletName = data.activeCustomDashlet["title_" + data.sessionInfo.language.toUpperCase()] || "Dashlet";
     currentSelectedObjects = data.selectedEntries.map((dmsInfo) => ({
       objectId: dmsInfo.osid,
@@ -22,6 +25,16 @@ function initDashlet(data) {
     // display selected objects
     const selectedObjects = document.getElementById("selectedObjects");
     selectedObjects.innerHTML = JSON.stringify(currentSelectedObjects);
+
+    const objectIds = document.getElementById("objectIds");
+    objectIds.innerHTML = "";
+
+    const openLocationContainer = document.getElementById("openLocationContainer");
+    openLocationContainer.style = data.context == "hitlist.internalTray" ? "display: none;" : "";
+    const openHitListByIdsContainer = document.getElementById("openHitListByIdsContainer");
+    openHitListByIdsContainer.style = data.context == "hitlist.internalTray" ? "display: none;" : "";
+    const openIndexDataContainer = document.getElementById("openIndexDataContainer");
+    openIndexDataContainer.style = data.lastSelectedEntry.objectTypeId == "-1" ? "display: none;" : "";
 }
 
 /**
@@ -54,11 +67,12 @@ async function getSelectedObjects() {
     const retVal = await lib.getSelectedObjects();
     let str = "";
 
-    for (const temp of retVal) {
-      str += `\n${temp.objectId}, ${temp.objectTypeId}`;
-    }
+    const objectIds = document.getElementById("objectIds");
 
-    alert(str);
+    for (const temp of retVal) {
+      str = `objectId: ${temp.objectId}, objectTypeId: ${temp.objectTypeId}`;
+      objectIds.innerHTML += `<div>${str}</div>`;
+    }
 }
 
 async function refreshHitListObjects() {
