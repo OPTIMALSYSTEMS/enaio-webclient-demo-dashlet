@@ -1,0 +1,513 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>enaio® demo dashlet</title>
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <main class="main-container">
+      <div class="header-container">
+        <div class="header-banner">
+          <div class="header-banner-logo">
+            <img
+              alt="enaio®"
+              title="enaio®"
+              src="assets/enaio_blueline_white.png"
+            />
+          </div>
+          <div class="header-banner-text">
+            <span>Enterprise Content Management</span>
+            <span>© OPTIMAL SYSTEMS - all rights reserved</span>
+          </div>
+        </div>
+      </div>
+      <div class="section-container">
+        <div class="introduction">
+          <div>
+            <p class="section-heading">AbstractDemo Dashlet</p>
+            <p class="section-text">
+              Im enaio® client stellen wir Ihnen ab der Version 10.0 Service
+              Release 2 eine Möglichkeit zur Verfügung, kundenindividuelle und
+              frei gestaltbare Bereiche – sogenannte Dashlets - zu integrieren.
+              Dashlets unterstützen Sie bei der Umsetzung der
+              unterschiedlichsten Geschäftsprozesse und -szenarien, in dem sie
+              flexibel als weitere Informations- und Interaktionsmöglichkeit für
+              Benutzer kontextabhängig verfügbar gemacht werden können.
+              <br />
+              <br />
+              Für den Vorschaubereich, in dem aktuell bereits die Inhalts- und
+              Detailvorschau angezeigt werden, konfigurieren Sie individuelle
+              Dashlets, die zum Beispiel mithilfe sogenannter Dashlet-Services
+              weitere Informationsquellen einbinden (z. B. Internetseiten wie
+              Wikipedia oder Google Maps). Alternativ integrieren Sie komplette
+              Webanwendungen wie zum Beispiel den enaio® documentviewer.
+            </p>
+          </div>
+        </div>
+        <div class="events">
+          <div>
+            <p class="section-heading">Events</p>
+            <p class="section-text">
+              <b class="bolder">Hinweis:</b>
+              Der enaio® webclient arbeitet auf Event-Basis. In diesem Beispiel
+              haben wir im Dashlet für den enaio® richclient eine ähnliche
+              Event-Basis eingebaut.
+            </p>
+            <p class="notice">
+              <b class="bolder">Hinweis:</b>
+              Öffnen Sie in Ihrem Browser die Entwicklertools (Dev-Tools), um
+              ein Protokoll des Ereignisses anzuzeigen.
+            </p>
+            <p class="subheading">onInit</p>
+            <p>
+              Das onInit-Event wird jedes Mal ausgelöst, sobald das Dashlet
+              aktiviert und damit sichtbar geschaltet wird. Der Payload des
+              Events enthält Informationen über den aktuellen Zustand, die es
+              dem Dashlet direkt ermöglichen, sich zu Initialisieren ohne viele
+              Methoden im Nachgang aufzurufen.
+            </p>
+            <p>
+              Weitere Informationen zu diesem Event finden Sie auf unserer
+              <a
+                target="_blank"
+                href="https://help.optimal-systems.com/enaio_develop/x/KgCxB"
+                >Dokumentationsseite.</a
+              >
+            </p>
+            <p class="subheading">onUpdate</p>
+            <p>
+              Das onUpdate-Event wird jedes Mal ausgelöst, sobald sich die
+              Objekt-Auswahl im enaio® client geändert hat. Es beinhaltet
+              dieselben Properties wie das onInit-Event.
+            </p>
+            <p>
+              Weitere Informationen zu diesem Event finden Sie auf unserer
+              <a
+                target="_blank"
+                href="https://help.optimal-systems.com/enaio_develop/x/KwCxB"
+                >Dokumentationsseite.</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="methods">
+          <div>
+            <p class="section-heading">Methoden</p>
+            <p class="section-text">
+              Dashlets können den enaio® client steuern und Aktionen auslösen.
+              Für dieses Dashletbeispiel, haben wir nur Methoden verwendet, die
+              auch in beiden clients verwendet werden können. Die angebotenen
+              Methoden können sich also von client zu client unterscheiden.
+            </p>
+            <p class="subheading">Webclient</p>
+            <p>
+              Dies geschieht im enaio® webclient über die Browser-API
+              postMessage. Die Methode
+              <a
+                target="_blank"
+                href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage"
+                ><strong>window.postMessage()</strong></a
+              >
+              ermöglicht die sichere ursprungsübergreifende Kommunikation
+              zwischen Window-Objekten; z.B. zwischen einer Seite und einem von
+              ihr erzeugten Pop-up oder zwischen einer Seite und einem darin
+              eingebetteten iframe.
+            </p>
+            <p class="subheading">Richclient</p>
+            <p>
+              Für den enaio® richclient steht das Objekt
+              <strong>window.osClient</strong> dafür bereit.
+            </p>
+            <p>Aktuell stehen Ihnen folgenden Methoden zur Verfügung:</p>
+          </div>
+        </div>
+        <div class="collapsible-container">
+          <div id="openLocationContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Standort öffnen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Mittels der Methode <b class="bolder">openLocation</b> wird die
+                Skripting-Methode Open Location des jeweiligen enaio® clients
+                aufgerufen, die den Standort (oder eine Standortauswahl bei
+                mehreren möglichen Standorten) für das als Parameter übergebene
+                DMS Objekt öffnet.
+              </p>
+              <div class="content-button-container">
+                <form id="openLocationForm">
+                  <input
+                    type="checkbox"
+                    id="openLocationNewTab"
+                    name="openLocationNewTab"
+                    checked
+                  />
+                  <label for="openLocationNewTab"
+                    >In einem neuen Tab öffnen (Webclient)</label
+                  >
+                  <br /><br />
+                  <button id="openLocation" class="inner-button">
+                    Standort öffnen
+                  </button>
+                </form>
+              </div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/U6FEAQ"
+                  >openLocation - Webclient Dokumentationsseite
+                </a>
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxOpenLocation - Richclient Dokumentationsseite
+                </a>
+              </p>
+            </div>
+          </div>
+          <div id="openIndexDataContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Indexdaten öffnen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Mittels der Methode <b class="bolder">openIndexData</b> wird die
+                Skripting-Methode Show Indexdata oder Edit Indexdata des
+                jeweiligen enaio® clients aufgerufen, die die Indexdatenmaske für
+                das als Parameter übergebene DMS Objekt öffnet.
+              </p>
+
+              <div class="content-button-container">
+                <form id="openIndexDataFormForm">
+                  <input
+                    type="checkbox"
+                    id="indexDataNewTab"
+                    name="inNewTab"
+                    checked
+                  />
+                  <label for="indexDataNewTab"
+                    >In einem neuen Tab öffnen (Webclient)</label
+                  >
+                  <br /><br />
+                  <span>Mode:</span>
+                  <input
+                    type="radio"
+                    id="modeChoice1"
+                    name="mode"
+                    value="edit"
+                    checked
+                  />
+                  <label for="modeChoice1">Edit</label>
+                  <input type="radio" id="modeChoice2" name="mode" value="view" />
+                  <label for="modeChoice2">View</label>
+                  <br /><br />
+                  <button type="submit" id="openIndexData" class="inner-button">
+                    Indexdaten öffnen
+                  </button>
+                </form>
+              </div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/QqFEAQ"
+                  >openIndexData - Webclient Dokumentationsseite</a
+                >
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxOpenDataSheet - Richclient Dokumentationsseite
+                </a>
+              </p>
+            </div>
+          </div>
+          <div id="getSelectedObjectsContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Ausgewählte Objekte abfragen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Die Methode <b class="bolder">getSelectedObjects</b> wird
+                verwendet, um die aktuell ausgewählten Objekte abzufragen. Sollten
+                keine Objekte ausgewählt, oder keine Trefferliste aktuell
+                angezeigt sein, wird eine leere Liste zurückgegeben.
+              </p>
+              <div class="content-button-container">
+                <button id="getSelectedObjects" class="inner-button">
+                  Objekt-IDs anzeigen
+                </button>
+              </div>
+              <p>
+              <div class="output-container">
+                <p class="object-ids" id="objectIds"></p>
+              </div>
+              <p class="selected-objects" id="selectedObjectsContainer"></p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/L6FEAQ"
+                  >getSelectedObjects - Webclient Dokumentationsseite</a
+                >
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxGetSelectedObjects - Richclient Dokumentationsseite
+                </a>
+              </p>
+            </div>
+          </div>
+          <div id="refreshHitListObjectsContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading"
+                >Trefferlisten Objekte aktualisieren</span
+              >
+            </legend>
+            <div class="content">
+              <p>
+                Die Methode <b class="bolder">refreshHitListObjects</b> wird
+                verwendet, um ein (im Richclient und Webclient) oder auch mehrere
+                Objekte (im Webclient) in einer offenen Trefferliste zu
+                aktualisieren.
+              </p>
+              <b class="bolder">Zu testen</b>
+              <p>
+                Öffnen Sie eine Trefferliste. Öffnen Sie dann eine zweite
+                Registerkarte und ändern die Indexdaten eines Objekts, welches in
+                der geöffneten Trefferliste angezeigt wird. Gehen Sie zurück zur
+                Trefferliste und drücken Sie die Schaltfläche < Objekte
+                aktualisieren >.
+              </p>
+              <div class="content-button-container tooltip">
+                <button id="refreshHitListObjects" class="inner-button">
+                  Objekte aktualisieren
+                </button>
+              </div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/kaFEAQ"
+                  >refreshHitListObjects - Webclient Dokumentationsseite</a
+                >
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxRefreshObjectInLists - Richclient Dokumentationsseite
+                </a>
+              </p>
+            </div>
+          </div>
+          <div id="openHitListByIdsContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Trefferliste nach ID öffnen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Die Methode <b class="bolder">openHitListByIds</b> wird verwendet,
+                um eine gemischte Trefferliste mit frei gewählten Objekten
+                darstellen zu können.
+              </p>
+              <div class="content-button-container">
+                <form id="openHitListByIdsForm">
+                  <input type="checkbox" id="inNewTab" name="inNewTab" checked />
+                  <label for="inNewTab"
+                    >In einem neuen Tab öffnen (Webclient)</label
+                  >
+                  <br /><br />
+                  <input
+                    type="checkbox"
+                    id="executeSingleHitAction"
+                    name="executeSingleHitAction"
+                    checked
+                  />
+                  <label for="executeSingleHitAction"
+                    >SingleHitAction ausführen (Webclient)</label
+                  >
+                  <br /><br />
+                  <label for="title">Titel:</label>
+                  <input type="text" name="title" id="title" />
+                  <br /><br />
+                  <label for="description">Beschreibung (Webclient):</label>
+                  <input type="text" name="description" id="description" />
+                  <br /><br />
+                  <button id="openHitListByIds" class="inner-button">
+                    Objekte öffnen
+                  </button>
+                </form>
+              </div>
+              <p class="call-status" id="openHitListByIdsStatus"></p>
+              <p class="call-status" id="openHitListByIdsLastResult"></p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/bqFEAQ"
+                  >openHitListByIds - Webclient Dokumentationsseite</a
+                >
+              </p>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+                  >osjxOpenResultList - Richclient Dokumentationsseite
+                </a>
+              </p>
+            </div>
+          </div>
+          <div id="resetSessionTimeoutContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Session Timeout zurücksetzen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Die Methode <b class="bolder">resetSessionTimeout</b> wird verwendet,
+                um den Session-Timeout-Timer zurückzusetzen. Dies ist nützlich, wenn
+                Sie verhindern möchten, dass die Benutzersitzung während längerer
+                Aktivitäten im Dashlet abläuft.
+              </p>
+              <div class="content-button-container">
+                <button id="resetSessionTimeout" class="inner-button">
+                  Session Timeout zurücksetzen
+                </button>
+              </div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://enaiodevelop.atlassian.net/wiki/x/hbtEAQ"
+                  >resetSessionTimeout - Webclient Dokumentationsseite</a
+                >
+              </p>
+            </div>
+          </div>
+          <div id="createNewContainer">
+            <legend onclick="collapse(event)">
+              <button class="collapsible"></button>
+              <span class="content-heading">Neues Objekt anlegen</span>
+            </legend>
+            <div class="content">
+              <p>
+                Mit der Methode <b class="bolder">createNew</b> öffnet der
+                enaio® webclient die Maske „Neues Objekt anlegen“, vorbelegt mit
+                den übergebenen Werten. Die Antwort sagt, ob der Webclient den
+                Aufruf annimmt; das Ergebnis der Maske kommt danach als Ereignis.
+              </p>
+              <form id="createNewForm">
+                <div class="field-header">
+                  <label class="field-label" for="createNewCall"
+                    >Aufruf (JSON)</label
+                  >
+                  <button
+                    type="button"
+                    id="createNewUseLocation"
+                    class="secondary-button"
+                    title="Setzt parentId auf den geöffneten Ordner oder das Register"
+                    disabled
+                  >
+                    Standort übernehmen
+                  </button>
+                </div>
+                <textarea
+                  id="createNewCall"
+                  name="call"
+                  class="call-editor"
+                  spellcheck="false"
+                >{}</textarea>
+                <ul class="call-hint">
+                  <li><b>Ordner:</b> objectTypeId, ohne parentId</li>
+                  <li><b>Register:</b> objectTypeId und parentId</li>
+                  <li>
+                    <b>Dokument:</b> parentId, dazu objectTypeId, eine Datei
+                    oder beides
+                  </li>
+                </ul>
+                <span class="field-label">Datei (optional)</span>
+                <div class="file-picker">
+                  <input
+                    type="file"
+                    id="createNewFile"
+                    name="file"
+                    class="file-input"
+                  />
+                  <label for="createNewFile" class="secondary-button"
+                    >Datei auswählen</label
+                  >
+                  <span class="file-name" id="createNewFileName"
+                    >Keine Datei ausgewählt</span
+                  >
+                  <button
+                    type="button"
+                    id="createNewFileClear"
+                    class="link-button"
+                    hidden
+                  >
+                    Entfernen
+                  </button>
+                </div>
+                <button id="createNew" class="inner-button create-button">
+                  Neues Objekt anlegen
+                </button>
+              </form>
+              <div class="call-outcome" id="createNewOutcome"></div>
+              <p>
+                <a
+                  target="_blank"
+                  class="content-link"
+                  href="https://www.npmjs.com/package/@enaio-client/communication-library/v/2.0.8-rc3"
+                  >createNew - Communication Library Dokumentationsseite</a
+                >
+              </p>
+            </div>
+          </div>
+          <p>Gewählte Objekte:</p>
+          <p class="selected-objects" id="selectedObjects"></p>
+          <p>
+            Weitere Informationen zu den jeweiligen Methoden des jeweiligen
+            enaio® clients finden Sie auf unserer Dokumentationsseite
+            <a
+              target="_blank"
+              href="https://help.optimal-systems.com/enaio_develop/x/LACxB"
+              >des Webclients</a
+            >
+            und
+            <a
+              target="_blank"
+              href="https://enaiodevelop.atlassian.net/wiki/x/8gBCAQ"
+              >des Richclients.</a
+            >
+          </p>
+        </div>
+      </div>
+    </main>
+  </body>
+  <footer>
+    <script src="js/style.js"></script>
+    <script src="js/communicationLibrary.js"></script>
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/action.js"></script>
+  </footer>
+</html>

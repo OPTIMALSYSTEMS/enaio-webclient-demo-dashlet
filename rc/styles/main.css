@@ -1,0 +1,376 @@
+@font-face {
+  font-family: "enaioOpenSans";
+  src: url(./font/OpenSans-Regular-webfont.eot); /* IE9 Compat Modes */
+  src: url(./font/OpenSans-Regular-webfont.eot?#iefix)
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url(./font/OpenSans-Regular-webfont.woff) format("woff"),
+    /* Pretty Modern Browsers */ url(./font/OpenSans-Regular-webfont.ttf)
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url(./font/OpenSans-Regular-webfont.svg#robotolight) format("svg"); /* Legacy iOS */
+}
+
+:root {
+  --white: #ffffff;
+  --enaio-color-gradient1: #1a9ed4;
+  --enaio-color-gradient2: #0092e1;
+  --enaio-color-gradient3: #0083cb;
+}
+
+body {
+  margin: 0;
+}
+
+* {
+  font-family: "enaioOpenSans", Arial, Sans-Serif;
+  font-size: 12.5px;
+  font-style: normal;
+  color: #777;
+  font-weight: 400;
+}
+
+.header-banner {
+  background: var(--enaio-color-gradient1);
+  background: linear-gradient(
+    225deg,
+    var(--enaio-color-gradient1) 0%,
+    var(--enaio-color-gradient2) 66%,
+    var(--enaio-color-gradient3)
+  );
+  background: -webkit-linear-gradient(
+    225deg,
+    var(--enaio-color-gradient1) 0%,
+    var(--enaio-color-gradient2) 66%,
+    var(--enaio-color-gradient3)
+  );
+  color: var(--white);
+  display: flex;
+}
+
+.header-banner .header-banner-text {
+  display: flex;
+  flex-direction: column;
+  align-self: end;
+  text-align: right;
+  padding: 16px 32px;
+}
+
+.header-banner-text span {
+  color: var(--white);
+}
+
+.header-banner .header-banner-logo {
+  padding: 48px 32px 0 32px;
+}
+
+.main-container,
+.header-container,
+.header-banner,
+.section-container {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+}
+
+.main-container {
+  background: var(--white);
+}
+
+.header-container {
+  display: flex;
+}
+
+.section-container {
+  display: block;
+  box-sizing: border-box;
+  padding: 16px 32px 32px 32px;
+}
+
+.section-container .section-heading {
+  font-weight: bolder;
+  font-size: 16px;
+  margin: 16px 0 0 0;
+}
+
+.section-container section {
+  margin-bottom: 32px;
+}
+
+.section-container .section-text {
+  padding: 16px 0;
+  margin: 0;
+}
+
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.content p {
+  margin: 16px 0;
+}
+
+.content-button-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.content .content-link {
+  color: var(--enaio-color-gradient1);
+}
+
+.inner-button {
+  height: 32px;
+  background-color: var(--enaio-color-gradient3);
+  border: transparent;
+  color: var(--white);
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 1px 0 0 #dedede;
+  transition: background-color 0.2s ease-in-out;
+  display: inline-block;
+  padding: 0 16px;
+  margin-right: 8px;
+}
+
+.inner-button:hover {
+  background-color: var(--enaio-color-gradient1);
+}
+
+.collapsible {
+  background-color: var(--white);
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+  padding-left: 0;
+}
+
+.active,
+.collapsible:hover {
+  background-color: var(--white);
+}
+
+legend {
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 40px;
+  border-bottom: 1px solid #bbb;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.collapsible:after {
+  content: "˄";
+}
+
+legend.active .collapsible:after {
+  content: "˅";
+}
+
+.selected-objects,
+.bolder,
+.subheading {
+  font-weight: 800;
+}
+
+.notice {
+  margin: 6px 0px 22px;
+}
+
+/* Small info line below a panel's buttons, e.g. the outcome of a library call. */
+.content .call-status {
+  font-size: 11.5px;
+  margin: 4px 0 0 0;
+}
+
+.content .field-label {
+  display: block;
+  margin: 14px 0 6px;
+  color: #555;
+  font-weight: 600;
+}
+
+.content .field-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 14px 0 6px;
+}
+
+.content .field-header .field-label {
+  margin: 0;
+}
+
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--enaio-color-gradient3);
+  background-color: var(--white);
+  color: var(--enaio-color-gradient3);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.secondary-button:hover:not(:disabled) {
+  background-color: #eef6fb;
+}
+
+.secondary-button:disabled {
+  border-color: #c8c8c8;
+  color: #aaa;
+  cursor: default;
+}
+
+.link-button {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--enaio-color-gradient1);
+  font: inherit;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  text-decoration: underline;
+}
+
+.content .file-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.content .file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.content .file-input:focus-visible + .secondary-button {
+  outline: 2px solid var(--enaio-color-gradient1);
+  outline-offset: 2px;
+}
+
+.content .file-name {
+  color: #555;
+  overflow-wrap: anywhere;
+}
+
+.content .create-button {
+  margin-top: 16px;
+}
+
+.content .call-editor {
+  width: 100%;
+  height: 110px;
+  box-sizing: border-box;
+  border: 1px solid #c8c8c8;
+  padding: 6px;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  color: #333;
+  resize: vertical;
+}
+
+.content .call-hint {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  font-size: 11.5px;
+  color: #888;
+  line-height: 1.6;
+}
+
+.content .call-hint b {
+  color: #666;
+  font-weight: 600;
+}
+
+.inner-button:disabled {
+  background-color: #7fb9df;
+  cursor: default;
+}
+
+.call-outcome:not(:empty) {
+  margin-top: 12px;
+  border-top: 1px solid #e3e3e3;
+  padding-top: 8px;
+}
+
+.call-outcome .outcome-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 8px 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.call-outcome .outcome-row + .outcome-row {
+  border-top: 1px dashed #ececec;
+  padding-top: 8px;
+}
+
+.call-outcome .outcome-text {
+  display: block;
+  color: #555;
+}
+
+.call-outcome .outcome-detail {
+  display: block;
+  font-size: 11.5px;
+  color: #999;
+  overflow-wrap: anywhere;
+}
+
+.call-outcome .outcome-tag {
+  flex: 0 0 13em;
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  padding: 1px 6px;
+}
+
+.call-outcome .outcome-info {
+  background-color: #eef6fb;
+  color: #0b6aa2;
+}
+
+.call-outcome .outcome-ok {
+  background-color: #e6f4ec;
+  color: #1f7a4d;
+}
+
+.call-outcome .outcome-warn {
+  background-color: #fbf0d9;
+  color: #8a5a00;
+}
+
+.call-outcome .outcome-bad {
+  background-color: #fbe7e7;
+  color: #a12a2a;
+}
+
+.call-outcome code {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  color: #333;
+  background-color: #f3f4f6;
+  padding: 0 3px;
+  border-radius: 2px;
+}
