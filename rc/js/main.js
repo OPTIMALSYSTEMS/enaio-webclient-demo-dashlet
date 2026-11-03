@@ -6,7 +6,7 @@ if (!lib) {
 }
 
 let currentSelectedObjects = [];
-let dashletName = "?";
+let dashletName = "Dashlet";
 let currentContext = "";
 
 // Browser storage key holding the outcome of the last openHitListByIds call.
@@ -17,7 +17,7 @@ let createNewLocationId;
 const CREATE_NEW_ERROR_TEXTS = {
     INVALID_PARAMETERS: "Der Aufruf ist unvollständig oder widersprüchlich.",
     UNKNOWN_OBJECT_TYPE: "Den Objekttyp gibt es nicht, oder der Benutzer darf ihn nicht sehen.",
-    PARENT_NOT_FOUND: "Der Standort aus parentId wurde nicht gefunden.",
+    PARENT_NOT_FOUND: "Der Standort mit dieser parentId wurde nicht gefunden.",
     NOT_ALLOWED_AT_LOCATION: "An diesem Standort kann das Objekt nicht angelegt werden.",
     TYPE_NOT_IN_CABINET: "Der Objekttyp gehört nicht zum Schrank des Standorts.",
     MODAL_DIALOG_OPEN: "Im Webclient ist gerade ein Dialog geöffnet.",
@@ -236,7 +236,6 @@ function reachesCallback(error) {
 function showObjectCreation(objectCreation) {
     const {requestId, creationState} = objectCreation;
     const outcome = document.getElementById("createNewOutcome");
-    console.log(`objectCreation in "${dashletName}": requestId ${requestId}, creationState ${creationState}`);
 
     if (creationState === "success") {
         outcome.append(...successRows(objectCreation));

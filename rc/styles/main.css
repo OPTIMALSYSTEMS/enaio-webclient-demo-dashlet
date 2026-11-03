@@ -211,9 +211,9 @@ legend.active .collapsible:after {
   align-items: center;
   height: 26px;
   padding: 0 10px;
-  border: 1px solid var(--enaio-color-gradient3);
+  border: 1px solid #0b6aa2;
   background-color: var(--white);
-  color: var(--enaio-color-gradient3);
+  color: #0b6aa2;
   font: inherit;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
@@ -224,8 +224,8 @@ legend.active .collapsible:after {
 }
 
 .secondary-button:disabled {
-  border-color: #c8c8c8;
-  color: #aaa;
+  border-color: #949494;
+  color: #767676;
   cursor: default;
 }
 
