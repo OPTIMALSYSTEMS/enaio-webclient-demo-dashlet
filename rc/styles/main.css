@@ -346,6 +346,17 @@ legend.active .collapsible:after {
   padding: 1px 6px;
 }
 
+@media (max-width: 480px) {
+  .call-outcome .outcome-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .call-outcome .outcome-tag {
+    flex: none;
+  }
+}
+
 .call-outcome .outcome-info {
   background-color: #eef6fb;
   color: #0b6aa2;

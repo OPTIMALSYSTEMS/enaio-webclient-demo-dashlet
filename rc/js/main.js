@@ -254,7 +254,6 @@ function showObjectCreation(objectCreation) {
  */
 function useLocationAsParentId() {
     const editor = document.getElementById("createNewCall");
-    document.getElementById("createNewOutcome").replaceChildren();
     const params = parseCreateNewCall(editor.value);
 
     if (params !== undefined) {
@@ -263,14 +262,17 @@ function useLocationAsParentId() {
 }
 
 /**
- * The typed call as parsed JSON, or undefined after showing why it is not valid JSON.
+ * The typed call as parsed JSON, or undefined after showing why it is not valid JSON; the row of an earlier invalid call is removed first.
  */
 function parseCreateNewCall(callJson) {
+    document.getElementById("createNewInputError")?.remove();
+
     try {
         return JSON.parse(callJson);
     } catch (error) {
-        document.getElementById("createNewOutcome")
-            .append(outcomeRow("bad", "Eingabe", ...textLines("Der Aufruf ist kein gültiges JSON.", error.message)));
+        const row = outcomeRow("bad", "Eingabe", ...textLines("Der Aufruf ist kein gültiges JSON.", error.message));
+        row.id = "createNewInputError";
+        document.getElementById("createNewOutcome").append(row);
         return undefined;
     }
 }
