@@ -20,9 +20,9 @@ const CREATE_NEW_ERROR_TEXTS = {
     PARENT_NOT_FOUND: "Der Standort mit dieser parentId wurde nicht gefunden.",
     NOT_ALLOWED_AT_LOCATION: "An diesem Standort kann das Objekt nicht angelegt werden.",
     TYPE_NOT_IN_CABINET: "Der Objekttyp gehört nicht zum Schrank des Standorts.",
-    MODAL_DIALOG_OPEN: "Im Webclient ist gerade ein Dialog geöffnet.",
-    CREATE_IN_PROGRESS: "Eine Maske zum Anlegen ist schon offen, oder ein anderer Aufruf läuft noch.",
-    CREATE_FORM_NOT_OPENED: "Die Maske konnte nicht geöffnet werden.",
+    MODAL_DIALOG_OPEN: "Im Webclient ist gerade ein anderer Dialog geöffnet.",
+    CREATE_IN_PROGRESS: "Ein Neuanlage-Dialog ist schon offen, oder ein anderer Aufruf läuft noch.",
+    CREATE_FORM_NOT_OPENED: "Der Neuanlage-Dialog konnte nicht geöffnet werden.",
     NOT_SUPPORTED: "createNew ist hier nicht verfügbar, oder der Webclient hat nicht innerhalb von 10 Sekunden geantwortet."
 };
 
@@ -207,7 +207,7 @@ async function createNew(callJson) {
         const call = file ? {...params, file: {name: file.name, type: file.type, data: fileData}} : params;
         const {requestId} = await lib.createNew(call);
         outcome.append(outcomeRow("info", "Angenommen", ...idParts(["requestId", requestId]),
-            ...textLines("Der Webclient öffnet die Maske, das Ergebnis folgt als Ereignis.")));
+            ...textLines("Der Webclient öffnet den Neuanlage-Dialog, das Ergebnis folgt per Callback.")));
     } catch (error) {
         if (reachesCallback(error)) {
             return;
@@ -217,7 +217,7 @@ async function createNew(callJson) {
         outcome.append(outcomeRow(tone, tag, ...idParts(["requestId", error?.requestId], ["", error?.errorCode]), ...errorLines(error)));
     } finally {
         button.disabled = false;
-        button.textContent = "Neues Objekt anlegen";
+        button.textContent = "Neu anlegen";
     }
 }
 
@@ -241,7 +241,7 @@ function showObjectCreation(objectCreation) {
         outcome.append(...successRows(objectCreation));
     } else if (creationState === "cancelled") {
         outcome.append(outcomeRow("warn", "Abgebrochen", ...idParts(["requestId", requestId]),
-            ...textLines("Die Maske wurde ohne Speichern verlassen.")));
+            ...textLines("Die Neuanlage wurde ohne Speichern abgebrochen.")));
     } else if (creationState === "error") {
         outcome.append(outcomeRow("bad", "Fehler", ...idParts(["requestId", requestId], ["", objectCreation.errorCode]),
             ...errorLines(objectCreation)));

@@ -407,14 +407,18 @@
           <div id="createNewContainer">
             <legend onclick="collapse(event)">
               <button class="collapsible"></button>
-              <span class="content-heading">Neues Objekt anlegen</span>
+              <span class="content-heading">Neu anlegen</span>
             </legend>
             <div class="content">
               <p>
-                Mit der Methode <b class="bolder">createNew</b> öffnet der
-                enaio® webclient die Maske „Neues Objekt anlegen“, vorbelegt mit
-                den übergebenen Werten. Die Antwort sagt, ob der Webclient den
-                Aufruf annimmt; das Ergebnis der Maske kommt danach als Ereignis.
+                Mit <b class="bolder">createNew</b> öffnet ein Dashlet im enaio®
+                webclient im Arbeitsbereich den Neuanlage-Dialog für einen neuen
+                Ordner, ein neues Register oder ein neues Dokument. Der Dialog
+                zeigt die Indexdatenmaske sowie - bei Dokumenten - zusätzlich den
+                Inhaltsbereich an. Indexdatenfelder sowie Inhaltsbereich können
+                mit Werten bzw. Dateien vorbelegt werden. Benutzer bearbeiten die
+                Daten, speichern das Objekt oder brechen die Neuanlage ab. Das
+                Dashlet wird über das Ergebnis mittels Callback informiert.
               </p>
               <form id="createNewForm">
                 <div class="field-header">
@@ -438,11 +442,11 @@
                   spellcheck="false"
                 >{}</textarea>
                 <ul class="call-hint">
-                  <li><b>Ordner:</b> objectTypeId, ohne parentId</li>
-                  <li><b>Register:</b> objectTypeId und parentId</li>
+                  <li><b>Ordner anlegen:</b> objectTypeId, ohne parentId</li>
+                  <li><b>Register anlegen:</b> objectTypeId und parentId</li>
                   <li>
-                    <b>Dokument:</b> parentId, dazu objectTypeId, eine Datei
-                    oder beides
+                    <b>Dokument anlegen:</b> parentId, dazu objectTypeId, eine
+                    Datei oder beides
                   </li>
                 </ul>
                 <span class="field-label">Datei (optional)</span>
@@ -469,7 +473,7 @@
                   </button>
                 </div>
                 <button id="createNew" class="inner-button create-button">
-                  Neues Objekt anlegen
+                  Neu anlegen
                 </button>
               </form>
               <div class="call-outcome" id="createNewOutcome"></div>
