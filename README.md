@@ -76,7 +76,17 @@ Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_d
 
 The openHitListByIds method is used to be able to display a mixed hit list with freely selected objects.
 
+From communication library version 2.0.8 the hit list is opened in the current tab (`inNewTab: false`, which is also the default) without waiting for an answer from the enaio® webclient. The returned promise therefore resolves as soon as the request has been handed over, and errors reported by the webclient no longer reach the caller. The reason is that the view change can destroy the dashlet iframe before an answer could be delivered, which previously left the promise unresolved forever. Opening in a new tab (`inNewTab: true`) and the enaio® client are unchanged and still report errors. The panel „Trefferliste nach ID öffnen“ of this demo dashlet shows the outcome of the call and remembers the last call across the view change, so the behaviour can be observed without developer tools.
+
 Please visit our official [Dashlet API](https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds) documentation for more information about developing and integrating dashlets into enaio® webclient.
+
+### Create new
+
+The createNew method opens the enaio® webclient's form for a new folder, register or document, pre-filled with the values handed over. The user then checks the form and saves or cancels it. The returned promise only tells whether the webclient accepted the request; the outcome of the creation arrives later as an objectCreation event at the callback registered with registerOnObjectCreationCallback, carrying the requestId of the call. The method is available from communication library version 2.0.8 and only for dashlets in the enaio® webclient; the enaio® rich client, modal dialogs and older webclients answer with the errorCode `NOT_SUPPORTED`.
+
+The panel „Neu anlegen“ of this demo dashlet takes the call as editable JSON and an optional file for a document; the button „Standort übernehmen“ sets `parentId` to the folder or register the webclient currently reports. It shows whether the webclient accepted the call and every outcome the webclient sends, each with its requestId. A refused call rejects the promise and also arrives as an outcome with the creationState "error", so the demo shows it once, from the callback; rejections that never reach the callback, such as `NOT_SUPPORTED`, it shows from the promise. The webclient sends an outcome only to the dashlet that made the call, and a dashboard dashlet that is reloaded after the form receives it after its next onInit, so the dashlet needs neither storage nor its own matching. To see which copy received an outcome, register the demo twice with different titles, for example "Demo A" and "Demo B", and register the URI without "?": with a "?" the webclient reloads the dashlet with new URL parameters on every change of the selection instead of sending onUpdate, and the rows shown so far are lost.
+
+Until createNew is part of the official Dashlet API documentation, please visit the [readme of the communication library](https://www.npmjs.com/package/@enaio-client/communication-library/v/2.0.8) for its parameters and outcomes.
 
 ### Installation
 

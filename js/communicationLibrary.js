@@ -14,6 +14,8 @@ $parcel$export($ef141d0eea51192c$exports, "openLocation", () => $ef141d0eea51192
 $parcel$export($ef141d0eea51192c$exports, "getSelectedObjects", () => $ef141d0eea51192c$export$96f907581d671890);
 $parcel$export($ef141d0eea51192c$exports, "refreshHitListObjects", () => $ef141d0eea51192c$export$89d12ae34746cff2);
 $parcel$export($ef141d0eea51192c$exports, "openHitListByIds", () => $ef141d0eea51192c$export$5b5fa3829992783b);
+$parcel$export($ef141d0eea51192c$exports, "createNew", () => $ef141d0eea51192c$export$c3d14ad0cd7f735c);
+$parcel$export($ef141d0eea51192c$exports, "registerOnObjectCreationCallback", () => $ef141d0eea51192c$export$af7c4ba7da853f6);
 $parcel$export($ef141d0eea51192c$exports, "getFieldValueByInternal", () => $ef141d0eea51192c$export$468316c75afcb0f3);
 $parcel$export($ef141d0eea51192c$exports, "getWorkflowVariableByName", () => $ef141d0eea51192c$export$b3ed74af647c74bd);
 $parcel$export($ef141d0eea51192c$exports, "setFieldValueByInternal", () => $ef141d0eea51192c$export$50c2e2f825ad7b4b);
@@ -33,6 +35,14 @@ let $658dd4aad82ee593$var$trustedOrigin;
 let $658dd4aad82ee593$var$onInitCallback = ()=>{};
 let $658dd4aad82ee593$var$onUpdateCallback = ()=>{};
 let $658dd4aad82ee593$var$onUpdateCallbackRegistered = false;
+let $658dd4aad82ee593$var$onObjectCreationCallback;
+/**
+ * Caps the outcomes buffered before the dashlet registers its callback. The webclient keeps only one createNew call
+ * open at a time, so the cap only matters for a dashlet that never registers.
+ */ const $658dd4aad82ee593$var$MAX_PENDING_OBJECT_CREATION_EVENTS = 20;
+// objectCreation events which arrived before a callback was registered, oldest first.
+const $658dd4aad82ee593$var$pendingObjectCreationEvents = [];
+let $658dd4aad82ee593$var$objectCreationFlushTimer;
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  *
@@ -59,8 +69,73 @@ let $658dd4aad82ee593$var$onUpdateCallbackRegistered = false;
         $658dd4aad82ee593$var$trustedOrigin = allowedOrigin;
     }
 }
+/**
+ * Registers a callback which receives the outcome of an object creation started with createNew.
+ * Events which arrived before the registration (at most the last 20) are delivered to the callback
+ * afterwards in their order of arrival, on a new task and not inside this call.
+ *
+ * @param {Function} callback The callback
+ */ function $658dd4aad82ee593$export$af7c4ba7da853f6(callback) {
+    $658dd4aad82ee593$var$onObjectCreationCallback = callback;
+    if ($658dd4aad82ee593$var$pendingObjectCreationEvents.length > 0 && $658dd4aad82ee593$var$objectCreationFlushTimer === undefined) $658dd4aad82ee593$var$objectCreationFlushTimer = setTimeout($658dd4aad82ee593$var$flushPendingObjectCreationEvents, 0);
+}
+/**
+ * Delivers the buffered objectCreation events to the registered callback in their order of arrival.
+ * Events from an origin which is not trusted (any more) are dropped.
+ */ function $658dd4aad82ee593$var$flushPendingObjectCreationEvents() {
+    $658dd4aad82ee593$var$objectCreationFlushTimer = undefined;
+    for (const { origin: origin, data: data } of $658dd4aad82ee593$var$pendingObjectCreationEvents.splice(0)){
+        if (!$658dd4aad82ee593$var$isTrustedOrigin(origin)) {
+            console.log(`objectCreation event from ${origin} dropped, it is different from srcOrigin ${$658dd4aad82ee593$var$trustedOrigin}`);
+            continue;
+        }
+        $658dd4aad82ee593$var$deliverObjectCreationEvent(data);
+    }
+}
+/**
+ * Hands an objectCreation event to the registered callback. An error of the callback is thrown again on a new task,
+ * so that the remaining events are still delivered.
+ *
+ * @param data The outcome of the object creation.
+ */ function $658dd4aad82ee593$var$deliverObjectCreationEvent(data) {
+    try {
+        $658dd4aad82ee593$var$onObjectCreationCallback(data);
+    } catch (error) {
+        setTimeout(()=>{
+            throw error;
+        }, 0);
+    }
+}
+/**
+ * Hands an objectCreation event to the registered callback. Without a callback, or while buffered events
+ * are still waiting for their delivery, the event is buffered so that the order of arrival is kept.
+ * The origin is kept with it, because a trusted origin may only be set after the event arrived.
+ *
+ * @param data The outcome of the object creation.
+ * @param origin The origin the event came from.
+ */ function $658dd4aad82ee593$var$handleObjectCreationEvent(data, origin) {
+    if ($658dd4aad82ee593$var$onObjectCreationCallback && $658dd4aad82ee593$var$objectCreationFlushTimer === undefined) {
+        $658dd4aad82ee593$var$deliverObjectCreationEvent(data);
+        return;
+    }
+    $658dd4aad82ee593$var$pendingObjectCreationEvents.push({
+        origin: origin,
+        data: data
+    });
+    if ($658dd4aad82ee593$var$pendingObjectCreationEvents.length > $658dd4aad82ee593$var$MAX_PENDING_OBJECT_CREATION_EVENTS) $658dd4aad82ee593$var$pendingObjectCreationEvents.shift();
+}
 // Listen to "message" type events from web client.
 window.addEventListener("message", $658dd4aad82ee593$export$221b191fcfaf22a, false);
+/**
+ * Return true if a buffered objectCreation event from the given origin may be delivered, by the same acceptance rule
+ * as handlePostMessage, but without switching the trusted origin to "file://": every origin is allowed as long as no
+ * trusted origin is set or the trusted origin is "*", and "file://" of the enaio® desktop client is always allowed.
+ *
+ * @param origin The origin of the event.
+ */ function $658dd4aad82ee593$var$isTrustedOrigin(origin) {
+    if ($658dd4aad82ee593$var$trustedOrigin === null || $658dd4aad82ee593$var$trustedOrigin === undefined || !($658dd4aad82ee593$var$trustedOrigin.length > 0) || $658dd4aad82ee593$var$trustedOrigin === "*") return true;
+    return "file://" === origin || $658dd4aad82ee593$var$trustedOrigin === origin;
+}
 /**
  * A function responsible for processing all incoming "messages" from the enaio® webclient.
  *
@@ -94,6 +169,8 @@ window.addEventListener("message", $658dd4aad82ee593$export$221b191fcfaf22a, fal
         $658dd4aad82ee593$var$onInitCallback(data);
     } else if (type === "onUpdate") // React to osid selection changes here.
     $658dd4aad82ee593$var$onUpdateCallback(data);
+    else if (type === "objectCreation") // Outcome of an object creation started with createNew.
+    $658dd4aad82ee593$var$handleObjectCreationEvent(data, event.origin);
     return true;
 }
 /**
@@ -121,6 +198,7 @@ window.addEventListener("message", $658dd4aad82ee593$export$221b191fcfaf22a, fal
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/5.2+Kommunikation
  */ function $658dd4aad82ee593$var$handleWebclientMessage(payload) {
     if (payload.msgId && $658dd4aad82ee593$var$msgQueue[payload.msgId]) {
+        clearTimeout($658dd4aad82ee593$var$msgQueue[payload.msgId].timer);
         if (payload.data.error !== undefined) $658dd4aad82ee593$var$msgQueue[payload.msgId].reject(payload.data.error);
         else if (payload.data.result !== undefined) $658dd4aad82ee593$var$msgQueue[payload.msgId].resolve(payload.data.result);
         else $658dd4aad82ee593$var$msgQueue[payload.msgId].resolve();
@@ -134,12 +212,27 @@ window.addEventListener("message", $658dd4aad82ee593$export$221b191fcfaf22a, fal
     return payload;
 }
 /**
+ * Hands the payload over to the enaio® webclient. If a trusted origin is configured, the "message" is
+ * restricted to it, otherwise every target origin is allowed.
+ *
+ * "window" is the Dashlet's JavaScript Window object. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window
+ * "parent" is the enaio® webclient Window object.
+ * "postMessage" is the browser API used to communicate between enaio® webclient and the Dashlet. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
+ *
+ * @param payload an array with ["method-name", [arguments]] as payload.
+ */ function $658dd4aad82ee593$var$postToParent(payload) {
+    if ($658dd4aad82ee593$var$trustedOrigin !== null && $658dd4aad82ee593$var$trustedOrigin !== undefined && $658dd4aad82ee593$var$trustedOrigin.length > 0) window.parent.postMessage(payload, $658dd4aad82ee593$var$trustedOrigin);
+    else window.parent.postMessage(payload, "*");
+}
+/**
  * A function responsible for sending "messages" to the enaio® webclient.
  * @param payload an array with ["method-name", [arguments]] as payload. Ref: https://help.optimal-systems.com/enaio_develop/display/WEB/5.4+Dashlet-Methoden
  * @param triggerAlert Boolean. If true, a browser alert (with payload results) will be displayed in the enaio® webclient.
+ * @param {{ms: number, error: *}} [timeout] optional. If the webclient does not answer within timeout.ms milliseconds,
+ * the promise rejects with timeout.error and a later answer is ignored.
  * @returns a JavaScript Promise. Ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/5.2+Kommunikation
- */ async function $658dd4aad82ee593$export$7980e63f750e794e(payload, triggerAlert = false) {
+ */ async function $658dd4aad82ee593$export$7980e63f750e794e(payload, triggerAlert = false, timeout) {
     const msgId = Math.random().toString(36).substr(2, 8);
     payload.push({
         msgId: msgId
@@ -154,12 +247,31 @@ window.addEventListener("message", $658dd4aad82ee593$export$221b191fcfaf22a, fal
         resolve: _resolve,
         reject: _reject
     };
-    // "window" is the Dashlet's JavaScript Window object. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window
-    // "parent" is the enaio® webclient Window object.
-    // postMessage" is the browser API used to communicate between enaio® webclient and the Dashlet. Ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
-    if ($658dd4aad82ee593$var$trustedOrigin !== null && $658dd4aad82ee593$var$trustedOrigin !== undefined && $658dd4aad82ee593$var$trustedOrigin.length > 0) window.parent.postMessage(payload, $658dd4aad82ee593$var$trustedOrigin);
-    else window.parent.postMessage(payload, "*");
+    if (timeout) $658dd4aad82ee593$var$msgQueue[msgId].timer = setTimeout(()=>{
+        delete $658dd4aad82ee593$var$msgQueue[msgId];
+        _reject(timeout.error);
+    }, timeout.ms);
+    try {
+        $658dd4aad82ee593$var$postToParent(payload);
+    } catch (error) {
+        // Nothing was sent, so neither an answer nor the timeout may follow.
+        clearTimeout($658dd4aad82ee593$var$msgQueue[msgId]?.timer);
+        delete $658dd4aad82ee593$var$msgQueue[msgId];
+        if ($658dd4aad82ee593$var$alertQueue.includes(msgId)) $658dd4aad82ee593$var$alertQueue.splice($658dd4aad82ee593$var$alertQueue.indexOf(msgId), 1);
+        throw error;
+    }
     return promise;
+}
+/**
+ * Send a "message" to the enaio® webclient without waiting for an answer.
+ *
+ * No msgId is attached, so the webclient executes the method but skips the
+ * acknowledgment (it only answers when a msgId is present). Used for methods
+ * that navigate the current browser tab: depending on where the dashlet is
+ * embedded, that navigation destroys the dashlet iframe before the answer
+ * can be delivered, so a promise waiting for it could hang forever (DODO-27654).
+ */ function $658dd4aad82ee593$export$c664e46b29e63eee(payload) {
+    $658dd4aad82ee593$var$postToParent(payload);
 }
 /**
  * Return true if we are running inside a modal dialog. If we are running inside a dashlet the return is false.
@@ -173,6 +285,15 @@ window.addEventListener("message", $658dd4aad82ee593$export$221b191fcfaf22a, fal
     $658dd4aad82ee593$var$onInitCallback = ()=>{};
     $658dd4aad82ee593$var$onUpdateCallback = ()=>{};
     $658dd4aad82ee593$var$onUpdateCallbackRegistered = false;
+    $658dd4aad82ee593$var$onObjectCreationCallback = undefined;
+    $658dd4aad82ee593$var$pendingObjectCreationEvents.length = 0;
+    clearTimeout($658dd4aad82ee593$var$objectCreationFlushTimer);
+    $658dd4aad82ee593$var$objectCreationFlushTimer = undefined;
+    // Drop the messages waiting with a timeout, so that no timer outlives its test.
+    for(const msgId in $658dd4aad82ee593$var$msgQueue)if ($658dd4aad82ee593$var$msgQueue[msgId].timer !== undefined) {
+        clearTimeout($658dd4aad82ee593$var$msgQueue[msgId].timer);
+        delete $658dd4aad82ee593$var$msgQueue[msgId];
+    }
 }
 
 
@@ -741,7 +862,7 @@ function $afb4b18a79603b02$var$sleep(ms) {
 }
 
 
-const $ef141d0eea51192c$var$version = "2.0.7-rc3";
+const $ef141d0eea51192c$var$version = "2.0.8";
 /**
  * Registers an onInit callback which is executed once the dashlet is initialized.
  * 
@@ -848,11 +969,14 @@ const $ef141d0eea51192c$var$version = "2.0.7-rc3";
  * @param {string} [title] title of the hit list
  * @param {string} [subTitle] subtitle of the hit list
  * @param {boolean} [executeSingleHitAction] specifies whether to execute the default action when there is a single hit
- * @return The method has no return value. In the event of an error, an error is triggered. This can be caught with a try-catch-block or error handler for the method.
+ * @return The method has no return value. In the enaio® webclient with (inNewTab = false) the message is only handed
+ * over to the client without waiting for an acknowledgment, so the promise resolves immediately and errors of the
+ * client are not reported. For (inNewTab = true) and in the enaio® RichClient an error is triggered in the event of
+ * an error. This can be caught with a try-catch-block or error handler for the method.
  * @link https://help.optimal-systems.com/enaio_develop/display/WEB/openHitListByIds
  */ async function $ef141d0eea51192c$export$5b5fa3829992783b(objects, inNewTab = false, title = "", subTitle = "", executeSingleHitAction = false) {
     if ($ef141d0eea51192c$export$cebb092bf393cc5()) throw "Not implemented for modal dialog";
-    await $ef141d0eea51192c$var$sendClientMessage([
+    const payload = [
         "openHitListByIds",
         {
             objects: objects,
@@ -861,7 +985,82 @@ const $ef141d0eea51192c$var$version = "2.0.7-rc3";
             description: subTitle,
             executeSingleHitAction: executeSingleHitAction
         }
-    ]);
+    ];
+    // DODO-27654: inNewTab=false replaces the current webclient view. Depending on
+    // where the dashlet is embedded, that navigation destroys the dashlet iframe
+    // before the webclient's answer can be delivered, so waiting for it can hang
+    // forever. Send without waiting; the rich client path is unaffected.
+    if (!window.osClient && !inNewTab) {
+        $658dd4aad82ee593$export$c664e46b29e63eee(payload);
+        return;
+    }
+    await $ef141d0eea51192c$var$sendClientMessage(payload);
+}
+// Time to wait for the first reply of the webclient to createNew. Older webclients do not reply at all.
+const $ef141d0eea51192c$var$CREATE_NEW_TIMEOUT_MS = 10000;
+/**
+ * Opens the webclient's form for a new object, pre-filled with params. Only for dashlets in the enaio® webclient.
+ *
+ * @param {{
+ *   objectTypeId?: string,
+ *   parentId?: string,
+ *   mainType?: string,
+ *   indexData?: Array<{internalName: string, value: string|Array<Array<string>>}>,
+ *   file?: {name: string, type: string, data: ArrayBuffer}
+ * }} params handed over to the webclient as given, the fields are described in the readme.
+ * @returns {Promise<{requestId: string}>} once the webclient accepts; the outcome follows at registerOnObjectCreationCallback.
+ * @throws {{errorCode: string, message: string, requestId: string}} the webclient's refusal, or NOT_SUPPORTED in the
+ * rich client, in a modal dialog or without a reply within 10 seconds. Details in the readme.
+ */ async function $ef141d0eea51192c$export$c3d14ad0cd7f735c(params) {
+    // The requestId is internal: one passed in params is overwritten by the generated one.
+    const requestId = $ef141d0eea51192c$var$createRequestId();
+    const notSupported = (message)=>({
+            errorCode: "NOT_SUPPORTED",
+            message: message,
+            requestId: requestId
+        });
+    if (window.osClient) throw notSupported("createNew is not supported in the enaio rich client");
+    if ($ef141d0eea51192c$export$cebb092bf393cc5()) throw notSupported("createNew is not supported in a modal dialog");
+    // Called directly and not through sendClientMessage, because the timeout only exists for the webclient.
+    const result = await $658dd4aad82ee593$export$7980e63f750e794e([
+        "createNew",
+        {
+            ...params,
+            requestId: requestId
+        }
+    ], false, {
+        ms: $ef141d0eea51192c$var$CREATE_NEW_TIMEOUT_MS,
+        error: notSupported("createNew got no first reply from the enaio webclient within 10 seconds")
+    });
+    // Any other answer than our requestId comes from a client which does not know createNew,
+    // e.g. a modal dialog host answering with {errorCode: "METHOD_NOT_FOUND"}.
+    if (result?.requestId !== requestId) throw notSupported("createNew is not supported by this client");
+    return result;
+}
+/**
+ * Creates the requestId for a createNew call, unique across dashlet reloads.
+ *
+ * @private
+ * @returns {string} The requestId to send, e.g. "mvzdk75m3n1pgr9s": Date.now() in base 36, then random characters.
+ */ function $ef141d0eea51192c$var$createRequestId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+}
+/**
+ * Registers a callback which receives the outcome of an object creation started with createNew.
+ * The callback is called with {requestId, creationState, ...} where requestId is the id the library created for
+ * the createNew call and creationState is "success", "error" or "cancelled". The other fields depend on creationState:
+ * - "success": objectId, objectTypeId and parentId (missing for a folder) of the new object, all as strings;
+ *   ignoredFields, the internal names of the values the form did not apply, an empty list if it applied all;
+ *   contentWarning "FILE_REFUSED" if the handed-over file was not stored with the new object.
+ * - "error": errorCode and message.
+ * - "cancelled": no other fields.
+ *
+ * Only one callback is kept, a new registration replaces the previous one.
+ * Outcomes which arrived before the registration (at most the last 20) are delivered after it, in their order.
+ *
+ * @param {Function} onObjectCreationCallback The callback
+ */ function $ef141d0eea51192c$export$af7c4ba7da853f6(onObjectCreationCallback) {
+    $658dd4aad82ee593$export$af7c4ba7da853f6(onObjectCreationCallback);
 }
 /**
  * Only available for modal dialogs.

@@ -180,3 +180,208 @@ legend.active .collapsible:after {
 .notice {
   margin: 6px 0px 22px;
 }
+
+/* Small info line below a panel's buttons, e.g. the outcome of a library call. */
+.content .call-status {
+  font-size: 11.5px;
+  margin: 4px 0 0 0;
+}
+
+.content .field-label {
+  display: block;
+  margin: 14px 0 6px;
+  color: #555;
+  font-weight: 600;
+}
+
+.content .field-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 14px 0 6px;
+}
+
+.content .field-header .field-label {
+  margin: 0;
+}
+
+.secondary-button {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid #0b6aa2;
+  background-color: var(--white);
+  color: #0b6aa2;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.secondary-button:hover:not(:disabled) {
+  background-color: #eef6fb;
+}
+
+.secondary-button:disabled {
+  border-color: #949494;
+  color: #767676;
+  cursor: default;
+}
+
+.link-button {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--enaio-color-gradient1);
+  font: inherit;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  text-decoration: underline;
+}
+
+.content .file-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.content .file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.content .file-input:focus-visible + .secondary-button {
+  outline: 2px solid var(--enaio-color-gradient1);
+  outline-offset: 2px;
+}
+
+.content .file-name {
+  color: #555;
+  overflow-wrap: anywhere;
+}
+
+.content .create-button {
+  margin-top: 16px;
+}
+
+.content .call-editor {
+  width: 100%;
+  height: 110px;
+  box-sizing: border-box;
+  border: 1px solid #c8c8c8;
+  padding: 6px;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  color: #333;
+  resize: vertical;
+}
+
+.content .call-hint {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  font-size: 11.5px;
+  color: #888;
+  line-height: 1.6;
+}
+
+.content .call-hint b {
+  color: #666;
+  font-weight: 600;
+}
+
+.inner-button:disabled {
+  background-color: #7fb9df;
+  cursor: default;
+}
+
+.call-outcome:not(:empty) {
+  margin-top: 12px;
+  border-top: 1px solid #e3e3e3;
+  padding-top: 8px;
+}
+
+.call-outcome .outcome-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 8px 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.call-outcome .outcome-row + .outcome-row {
+  border-top: 1px dashed #ececec;
+  padding-top: 8px;
+}
+
+.call-outcome .outcome-text {
+  display: block;
+  color: #555;
+}
+
+.call-outcome .outcome-detail {
+  display: block;
+  font-size: 11.5px;
+  color: #999;
+  overflow-wrap: anywhere;
+}
+
+.call-outcome .outcome-tag {
+  flex: 0 0 13em;
+  box-sizing: border-box;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  padding: 1px 6px;
+}
+
+@media (max-width: 480px) {
+  .call-outcome .outcome-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .call-outcome .outcome-tag {
+    flex: none;
+  }
+}
+
+.call-outcome .outcome-info {
+  background-color: #eef6fb;
+  color: #0b6aa2;
+}
+
+.call-outcome .outcome-ok {
+  background-color: #e6f4ec;
+  color: #1f7a4d;
+}
+
+.call-outcome .outcome-warn {
+  background-color: #fbf0d9;
+  color: #8a5a00;
+}
+
+.call-outcome .outcome-bad {
+  background-color: #fbe7e7;
+  color: #a12a2a;
+}
+
+.call-outcome code {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  color: #333;
+  background-color: #f3f4f6;
+  padding: 0 3px;
+  border-radius: 2px;
+}
