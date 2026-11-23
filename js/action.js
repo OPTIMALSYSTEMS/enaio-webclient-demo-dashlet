@@ -26,7 +26,29 @@ document
   .getElementById("resetSessionTimeout")
   .addEventListener("click", action.resetSessionTimeout, false);
 
+document
+  .getElementById("createNew")
+  .addEventListener("click", processForm, false);
+
+document
+  .getElementById("createNewUseLocation")
+  .addEventListener("click", action.useLocationAsParentId, false);
+
+document
+  .getElementById("createNewFile")
+  .addEventListener("change", action.showChosenFile, false);
+
+document
+  .getElementById("createNewFileClear")
+  .addEventListener("click", action.clearChosenFile, false);
+
 function processForm(clicked) {
+  if (clicked.target.id === "createNew") {
+    clicked.preventDefault();
+    action.createNew(document.getElementById("createNewCall").value);
+    return;
+  }
+
   if (clicked.target.id === "openHitListByIds") {
     const openHitListByIdsForm = document.getElementById(
       "openHitListByIdsForm"
